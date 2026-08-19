@@ -790,20 +790,36 @@
 </head>
 <body class="selection:bg-yellow-400 selection:text-black">
 
-    <!-- NAVBAR TRANSPARAN RESMI HUSTLE HOUSE FAMILY -->
-    <nav class="w-full z-50 bg-black/40 backdrop-blur-md border-b border-yellow-400/20 sticky top-0">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-            <a href="index.html" class="flex items-center gap-3">
-                <img src="https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp" alt="HSHO Logo" class="h-9 md:h-11 object-contain">
-            </a>
-            <div class="space-x-6 text-sm font-semibold">
-                <a href="index.html" class="hover:text-yellow-400 transition">Home</a>
-                <a href="member.html" class="hover:text-yellow-400 transition">Member Gallery</a>
-                <a href="music.html" class="text-yellow-400 font-bold">HSHO Music</a>
-                <a href="index.html#register" class="hover:text-yellow-400 transition">Form Member</a>
-            </div>
-        </div>
-    </nav>
+   <!-- NAVBAR WITH MOBILE BURGER MENU -->
+  <nav class="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-yellow-400/20">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+      <!-- LOGO FAMILY -->
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp" alt="HSHO Logo" class="h-9 md:h-11 object-contain">
+      </a>
+
+      <!-- MENU DESKTOP (Tampil di Layar Sedang & Besar / md:) -->
+      <div class="hidden md:flex items-center space-x-6 text-sm font-semibold">
+        <a href="index.html" class="hover:text-yellow-400 transition">Home</a>
+        <a href="member.html" class="hover:text-yellow-400 transition">Member Gallery</a>
+        <a href="music.html" class="hover:text-yellow-400 transition">HSHO Music</a>
+        <a href="index.html#register" class="hover:text-yellow-400 transition">Form Member</a>
+      </div>
+
+      <!-- TOMBOL BURGER MENU (Hanya Tampil di Mobile) -->
+      <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden text-yellow-400 text-2xl focus:outline-none p-1">
+        <i class="fas fa-bars" id="menuIcon"></i>
+      </button>
+    </div>
+
+    <!-- MENU MOBILE DROPDOWN (Sembunyi secara default) -->
+    <div id="mobileMenu" class="hidden md:hidden bg-neutral-950/95 border-b border-yellow-400/20 px-4 pt-2 pb-4 space-y-3 font-semibold text-sm">
+      <a href="index.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">Home</a>
+      <a href="member.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">Member Gallery</a>
+      <a href="music.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">HSHO Music</a>
+      <a href="index.html#register" class="block py-2 hover:text-yellow-400 transition">Form Member</a>
+    </div>
+  </nav>
 
     <!-- Particle Background -->
     <canvas id="fireflyCanvas"></canvas>
@@ -1512,6 +1528,24 @@
             }
             animate();
         }
+
+
+        // Fungsi Toggle Mobile Burger Menu
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById("mobileMenu");
+      const menuIcon = document.getElementById("menuIcon");
+      
+      mobileMenu.classList.toggle("hidden");
+      
+      // Ubah ikon burger (fa-bars) menjadi silang (fa-xmark) saat terbuka
+      if (mobileMenu.classList.contains("hidden")) {
+        menuIcon.classList.remove("fa-xmark");
+        menuIcon.classList.add("fa-bars");
+      } else {
+        menuIcon.classList.remove("fa-bars");
+        menuIcon.classList.add("fa-xmark");
+      }
+    }
     </script>
 </body>
 </html>
