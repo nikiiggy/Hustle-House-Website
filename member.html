@@ -234,6 +234,24 @@
     // Jalankan Skrip
     renderAdmins();
     fetchActiveMembers();
+
+
+    // Fungsi Toggle Mobile Burger Menu
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById("mobileMenu");
+      const menuIcon = document.getElementById("menuIcon");
+      
+      mobileMenu.classList.toggle("hidden");
+      
+      // Ubah ikon burger (fa-bars) menjadi silang (fa-xmark) saat terbuka
+      if (mobileMenu.classList.contains("hidden")) {
+        menuIcon.classList.remove("fa-xmark");
+        menuIcon.classList.add("fa-bars");
+      } else {
+        menuIcon.classList.remove("fa-bars");
+        menuIcon.classList.add("fa-xmark");
+      }
+    }
   </script>
 
 </body>
