@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Member Directory - Hustle House Family</title>
+  <!-- Tailwind CSS & FontAwesome Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-black text-white font-sans antialiased min-h-screen selection:bg-yellow-400 selection:text-black">
+
+  <!-- NAVBAR -->
+  <nav class="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-yellow-400/20">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+      <!-- LOGO FAMILY -->
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp" alt="HSHO Logo" class="h-10 md:h-12 object-contain">
+      </a>
+      <div class="space-x-6 text-sm font-semibold">
+        <a href="index.html" class="hover:text-yellow-400 transition">Home</a>
+        <a href="member.html" class="text-yellow-400 font-bold">Member Gallery</a>
+        <a href="index.html#register" class="hover:text-yellow-400 transition">Form Member</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <section class="py-12 bg-neutral-950 text-center border-b border-neutral-900">
+    <div class="max-w-4xl mx-auto px-4">
+      <h1 class="text-3xl md:text-5xl font-black text-white mb-3 uppercase tracking-tight">
+        HUSTLE HOUSE <span class="text-yellow-400">FAMILY GALLERY</span>
+      </h1>
+      <p class="text-neutral-400 text-sm md:text-base">Daftar Anggota Aktif & Struktur Admin Hustle House Family</p>
+      
+      <!-- FITUR PENCARIAN -->
+      <div class="mt-8 flex justify-center max-w-md mx-auto">
+        <div class="relative w-full">
+          <i class="fas fa-search absolute left-4 top-3.5 text-neutral-500"></i>
+          <input type="text" id="searchInput" placeholder="Cari Nick / Username..." onkeyup="filterMembers()" 
+                 class="w-full bg-black border border-neutral-800 rounded-full pl-11 pr-4 py-3 text-sm text-white focus:outline-none focus:border-yellow-400 transition">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="max-w-7xl mx-auto px-4 py-12 space-y-16">
+    
+    <!-- SECTION ADMIN & OWNER (6 KOTAK MANUAL) -->
+    <section>
+      <div class="flex items-center gap-2 mb-6 border-b border-yellow-400/20 pb-3">
+        <i class="fas fa-crown text-yellow-400 text-xl"></i>
+        <h2 class="text-xl font-black text-white uppercase tracking-wider">Family Structures & Admins</h2>
+      </div>
+
+      <!-- Grid Admin (2 Owner & 4 Admin) -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4" id="adminGrid">
+        <!-- Disusun via JavaScript dari array ADMIN_DATA -->
+      </div>
+    </section>
+
+    <!-- SECTION MEMBER AKTIFF (DARI GOOGLE SHEETS MEMBER AKTIF) -->
+    <section>
+      <div class="flex items-center gap-2 mb-6 border-b border-neutral-800 pb-3">
+        <i class="fas fa-users text-neutral-400 text-xl"></i>
+        <h2 class="text-xl font-black text-white uppercase tracking-wider">Active Members</h2>
+      </div>
+
+      <!-- Indicator Loading -->
+      <div id="loading" class="text-center py-12">
+        <i class="fas fa-spinner fa-spin text-4xl text-yellow-400 mb-4"></i>
+        <p class="text-neutral-400">Memuat data dari sheet Member Aktif...</p>
+      </div>
+
+      <!-- Grid Gallery Kartu Member -->
+      <div id="galleryGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 hidden">
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="py-8 bg-black border-t border-neutral-900 text-center text-xs text-neutral-500">
+    <p>&copy; Hustle House Family. All rights reserved.</p>
+  </footer>
+
+  <!-- SCRIPT UTAMA MEMBER DIRECTORY -->
+  <script>
+    // 1. DATA ADMIN & OWNER (UPDATE USERNAME ROBLOX)
+    const ADMIN_DATA = [
+      { username: "USERNAME_OWNER_1", role: "Owner", tag: "OWNER" }, // <-- Ganti dengan Username Roblox Owner 1
+      { username: "Miraaachans2", role: "Owner", tag: "OWNER" },
+      { username: "Nodi_0610", role: "Admin", tag: "ADMIN" },
+      { username: "velynthea", role: "Admin", tag: "ADMIN" },
+      { username: "enallll666", role: "Admin", tag: "ADMIN" },
+      { username: "iniioinkk", role: "Admin", tag: "ADMIN" }
+    ];
+
+    // 2. LINK CSV PUBLIK SHEET MEMBER AKTIF
+    const SHEET_MEMBER_AKTIF_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQWajAtFnnLxFg5-PgrTgBMUSA2yWBaHfjTcJlOuSe_HaEtWG460L8SD60VJzxCrIlJMSo9ONhnpj4Y/pub?gid=338048431&single=true&output=csv";
+
+    // Fungsi Pengambil URL Avatar 2D Roblox via User ID
+    async function getRobloxAvatarUrl(username) {
+      if (!username || username.includes("USERNAME_OWNER")) {
+        return "https://tr.rbxcdn.com/30day-avatar-headshot-default";
+      }
+      
+      try {
+        const resUser = await fetch("https://users.roblox.com/v1/usernames/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ usernames: [username], excludeBannedUsers: false })
+        });
+        const dataUser = await resUser.json();
+        
+        if (dataUser.data && dataUser.data.length > 0) {
+          const userId = dataUser.data[0].id;
+          const resThumb = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=420x420&format=Png&isCircular=false`);
+          const dataThumb = await resThumb.json();
+          if (dataThumb.data && dataThumb.data.length > 0) {
+            return dataThumb.data[0].imageUrl;
+          }
+        }
+      } catch (err) {
+        console.error("Gagal mengambil avatar untuk " + username, err);
+      }
+      return "https://tr.rbxcdn.com/30day-avatar-headshot-default";
+    }
+
+    // Render Admin Grid Manual (2 Owner & 4 Admin)
+    async function renderAdmins() {
+      const adminContainer = document.getElementById("adminGrid");
+      adminContainer.innerHTML = "";
+
+      // Memuat seluruh foto avatar admin secara bersamaan (Parallel Fetch)
+      const adminPromises = ADMIN_DATA.map(async (adm) => {
+        const avatarUrl = await getRobloxAvatarUrl(adm.username);
+        return { ...adm, avatarUrl };
+      });
+
+      const adminsWithAvatars = await Promise.all(adminPromises);
+
+      adminsWithAvatars.forEach(adm => {
+        const isOwner = adm.tag === "OWNER";
+        const badgeColor = isOwner ? "bg-yellow-400 text-black font-black" : "bg-neutral-800 text-yellow-400 border border-yellow-400/30";
+
+        const cardHtml = `
+          <div class="member-card bg-neutral-900 border ${isOwner ? 'border-yellow-400' : 'border-neutral-800'} rounded-2xl overflow-hidden shadow-xl text-center p-3 relative group">
+            <span class="absolute top-2 right-2 px-2 py-0.5 rounded-full text-[9px] uppercase tracking-wider ${badgeColor}">
+              ${adm.tag}
+            </span>
+            <div class="bg-gradient-to-b from-neutral-800 to-black p-2 rounded-xl mb-3 flex justify-center mt-2">
+              <img src="${adm.avatarUrl}" alt="${adm.username}" 
+                   class="w-20 h-20 rounded-full object-cover border-2 border-yellow-400 shadow-md">
+            </div>
+            <h3 class="font-bold text-yellow-400 text-sm truncate member-name">${adm.username}</h3>
+            <p class="text-neutral-500 text-[11px] truncate member-usn">@${adm.username}</p>
+          </div>
+        `;
+        adminContainer.innerHTML += cardHtml;
+      });
+    }
+
+    // Fetch Data Member Aktif dari Google Sheets
+    async function fetchActiveMembers() {
+      try {
+        const response = await fetch(SHEET_MEMBER_AKTIF_CSV);
+        if (!response.ok) throw new Error("Gagal mengunduh data Member Aktif");
+        
+        const data = await response.text();
+        const rows = parseCSV(data);
+        
+        const grid = document.getElementById("galleryGrid");
+        grid.innerHTML = "";
+
+        for (let i = 1; i < rows.length; i++) {
+          const row = rows[i];
+          if (!row || row.length < 3) continue;
+
+          const usnRoblox = row[2] ? row[2].trim() : "";
+          const displayName = (row[5] && row[5].trim() !== "") ? row[5].trim() : usnRoblox;
+
+          if (!usnRoblox) continue;
+
+          const avatarUrl = await getRobloxAvatarUrl(usnRoblox);
+
+          const cardHtml = `
+            <div class="member-card bg-neutral-900 border border-neutral-800 hover:border-yellow-400/60 rounded-2xl overflow-hidden shadow-md transition duration-300 hover:-translate-y-1 group p-3 text-center">
+              <div class="bg-gradient-to-b from-neutral-800 to-black p-3 rounded-xl mb-3 flex justify-center">
+                <img src="${avatarUrl}" alt="${usnRoblox}" 
+                     class="w-20 h-20 rounded-full object-cover border-2 border-neutral-800 group-hover:border-yellow-400 transition">
+              </div>
+              <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
+              <p class="text-neutral-400 text-[11px] truncate member-usn">@${usnRoblox}</p>
+            </div>
+          `;
+          grid.innerHTML += cardHtml;
+        }
+
+        document.getElementById("loading").classList.add("hidden");
+        grid.classList.remove("hidden");
+
+      } catch (err) {
+        console.error("Detail Error:", err);
+        document.getElementById("loading").innerHTML = `
+          <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-xl max-w-md mx-auto text-center">
+            <p class="text-red-400 font-bold mb-1">Gagal memuat data dari Sheet Member Aktif.</p>
+            <p class="text-xs text-neutral-400">Pastikan link CSV sheet Member Aktif sudah benar dan dipublikasikan ke web.</p>
+          </div>`;
+      }
+    }
+
+    // Parser CSV Kompatibel
+    function parseCSV(text) {
+      const lines = text.split(/\r\n|\n/);
+      return lines.map(line => {
+        const result = [];
+        let cell = '';
+        let inQuotes = false;
+        
+        for (let i = 0; i < line.length; i++) {
+          const char = line[i];
+          if (char === '"') {
+            inQuotes = !inQuotes;
+          } else if (char === ',' && !inQuotes) {
+            result.push(cell);
+            cell = '';
+          } else {
+            cell += char;
+          }
+        }
+        result.push(cell);
+        return result;
+      });
+    }
+
+    // Fitur Cari
+    function filterMembers() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.getElementsByClassName('member-card');
+
+      Array.from(cards).forEach(card => {
+        const name = card.querySelector('.member-name').textContent.toLowerCase();
+        const usn = card.querySelector('.member-usn').textContent.toLowerCase();
+        
+        if (name.includes(input) || usn.includes(input)) {
+          card.style.display = "";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+
+    // Jalankan Skrip
+    renderAdmins();
+    fetchActiveMembers();
+  </script>
+
+</body>
+</html>

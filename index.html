@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hustle House Family</title>
+  <!-- Tailwind CSS & FontAwesome Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-black text-white font-sans antialiased selection:bg-yellow-400 selection:text-black">
+
+  <!-- NAVBAR -->
+  <nav class="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-yellow-400/20">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+      <!-- LOGO FAMILY -->
+      <a href="#home" class="flex items-center gap-3">
+        <img src="https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp" alt="HSHO Logo" class="h-10 md:h-12 object-contain">
+      </a>
+      <div class="space-x-6 text-sm font-semibold">
+        <a href="#home" class="hover:text-yellow-400 transition">Home</a>
+        <a href="member.html" class="hover:text-yellow-400 transition flex items-center gap-1.5 inline-flex">
+          Member Gallery <i class="fas fa-external-link-alt text-xs text-yellow-400"></i>
+        </a>
+        <a href="#register" class="hover:text-yellow-400 transition">Form Member</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SECTION 1: HOME (HERO SECTION) -->
+  <section id="home" class="relative min-h-screen flex items-center justify-center pt-10 pb-16 overflow-hidden">
+    <!-- Background Gradient Overlay -->
+    <div class="absolute inset-0 z-0 opacity-20">
+      <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1600" alt="HSHO Banner" class="w-full h-full object-cover grayscale">
+      <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+    </div>
+
+    <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
+      <!-- LOGO BESAR DI HERO SECTION -->
+      <div class="flex justify-center mb-6">
+        <img src="https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp" alt="Hustle House Family" class="h-20 md:h-28 object-contain">
+      </div>
+
+      <span class="px-4 py-1.5 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs font-bold uppercase tracking-widest mb-4 inline-block">
+        Roblox Community
+      </span>
+      
+      <!-- HEADING REVISI: HUSTLE HOUSE FAMILY -->
+      <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-4 text-white uppercase">
+        HUSTLE HOUSE <span class="text-yellow-400">FAMILY</span>
+      </h1>
+      <p class="text-lg md:text-xl text-neutral-400 mb-6 max-w-2xl mx-auto leading-relaxed">
+        Official Community Website & Directory. Join our crew, explore our official maps, and hustle together in Roblox.
+      </p>
+
+      <!-- SOSIAL MEDIA (TIKTOK) -->
+      <div class="flex justify-center mb-8">
+        <a href="https://tiktok.com/@YOUR_TIKTOK" target="_blank" class="flex items-center gap-2 bg-neutral-900 border border-yellow-400/30 px-5 py-2.5 rounded-full hover:bg-yellow-400 hover:text-black hover:border-yellow-400 transition duration-300 font-bold text-sm">
+          <i class="fab fa-tiktok text-lg"></i>
+          <span>Follow TikTok HSHO</span>
+        </a>
+      </div>
+
+      <!-- DISCORD SERVER (1 LINK) -->
+      <div class="max-w-md mx-auto mb-10">
+        <div class="bg-neutral-900/90 p-4 rounded-2xl border border-yellow-400/20 backdrop-blur-sm">
+          <a href="https://discord.gg/YOUR_DISCORD" target="_blank" class="bg-yellow-400 hover:bg-yellow-300 text-black px-5 py-3 rounded-xl font-black transition flex justify-between items-center group">
+            <span class="flex items-center gap-2"><i class="fab fa-discord text-xl"></i> Official Discord Server</span> 
+            <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3 ROBLOX MAPS WITH 1:1 THUMBNAILS -->
+      <div class="mt-8">
+        <h2 class="text-xs font-bold text-yellow-400 uppercase tracking-widest mb-4 flex items-center justify-center gap-2">
+          <i class="fas fa-gamepad text-base"></i> Official Roblox Maps
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          
+          <!-- Map 1 -->
+          <a href="https://www.roblox.com/games/YOUR_MAP_ID_1" target="_blank" class="bg-neutral-900 border border-neutral-800 hover:border-yellow-400 rounded-2xl overflow-hidden group transition duration-300 flex flex-col text-left">
+            <div class="aspect-square w-full bg-black overflow-hidden relative">
+              <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=500" alt="Map 1 Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+              <span class="absolute top-2 right-2 bg-yellow-400 text-black font-extrabold text-[10px] px-2 py-0.5 rounded-full uppercase">Play</span>
+            </div>
+            <div class="p-3.5 flex justify-between items-center bg-neutral-900">
+              <span class="font-bold text-sm text-neutral-200 group-hover:text-yellow-400 transition truncate">HSHO Main Map</span>
+              <i class="fas fa-play text-xs text-neutral-500 group-hover:text-yellow-400 transition"></i>
+            </div>
+          </a>
+
+          <!-- Map 2 -->
+          <a href="https://www.roblox.com/games/YOUR_MAP_ID_2" target="_blank" class="bg-neutral-900 border border-neutral-800 hover:border-yellow-400 rounded-2xl overflow-hidden group transition duration-300 flex flex-col text-left">
+            <div class="aspect-square w-full bg-black overflow-hidden relative">
+              <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=500" alt="Map 2 Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+              <span class="absolute top-2 right-2 bg-yellow-400 text-black font-extrabold text-[10px] px-2 py-0.5 rounded-full uppercase">Play</span>
+            </div>
+            <div class="p-3.5 flex justify-between items-center bg-neutral-900">
+              <span class="font-bold text-sm text-neutral-200 group-hover:text-yellow-400 transition truncate">HSHO Hangout Map</span>
+              <i class="fas fa-play text-xs text-neutral-500 group-hover:text-yellow-400 transition"></i>
+            </div>
+          </a>
+
+          <!-- Map 3 -->
+          <a href="https://www.roblox.com/games/YOUR_MAP_ID_3" target="_blank" class="bg-neutral-900 border border-neutral-800 hover:border-yellow-400 rounded-2xl overflow-hidden group transition duration-300 flex flex-col text-left">
+            <div class="aspect-square w-full bg-black overflow-hidden relative">
+              <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=500" alt="Map 3 Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+              <span class="absolute top-2 right-2 bg-yellow-400 text-black font-extrabold text-[10px] px-2 py-0.5 rounded-full uppercase">Play</span>
+            </div>
+            <div class="p-3.5 flex justify-between items-center bg-neutral-900">
+              <span class="font-bold text-sm text-neutral-200 group-hover:text-yellow-400 transition truncate">HSHO Event Stage</span>
+              <i class="fas fa-play text-xs text-neutral-500 group-hover:text-yellow-400 transition"></i>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: SLIDER FOTO / CAROUSEL -->
+  <section class="py-12 bg-neutral-950 border-y border-neutral-900 overflow-hidden">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="text-center text-xs font-bold text-yellow-400 uppercase tracking-widest mb-6">
+        <i class="fas fa-images mr-1"></i> Community Gallery Highlights
+      </h2>
+
+      <!-- Image Slider Container -->
+      <div class="relative group max-w-4xl mx-auto rounded-2xl overflow-hidden border border-yellow-400/20 shadow-2xl">
+        <div id="slider" class="flex transition-transform duration-500 ease-out">
+          <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200" class="w-full h-64 md:h-96 object-cover flex-shrink-0" alt="Slide 1">
+          <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200" class="w-full h-64 md:h-96 object-cover flex-shrink-0" alt="Slide 2">
+          <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=1200" class="w-full h-64 md:h-96 object-cover flex-shrink-0" alt="Slide 3">
+        </div>
+
+        <!-- Tombol Panah Slider -->
+        <button onclick="prevSlide()" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/80 hover:bg-yellow-400 hover:text-black text-white p-3 rounded-full transition border border-yellow-400/20">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button onclick="nextSlide()" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/80 hover:bg-yellow-400 hover:text-black text-white p-3 rounded-full transition border border-yellow-400/20">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: CALL TO ACTION (JOIN DISCORD NOW) -->
+  <section class="py-16 bg-black text-center border-b border-neutral-900">
+    <div class="max-w-2xl mx-auto px-4">
+      <div class="bg-neutral-900 border border-yellow-400/30 rounded-3xl p-8 backdrop-blur-md">
+        <i class="fab fa-discord text-5xl text-yellow-400 mb-4 inline-block"></i>
+        <h2 class="text-3xl font-black text-white mb-2">Ready to Join Hustle House?</h2>
+        
+        <!-- Keterangan Wajib Isi Form Dahulu -->
+        <p class="text-yellow-400 text-sm font-semibold mb-6 flex items-center justify-center gap-2">
+          <i class="fas fa-exclamation-circle"></i>
+          Harap isi form pendaftaran di bawah ini terlebih dahulu sebelum bergabung ke Discord.
+        </p>
+
+        <a href="https://discord.gg/YOUR_DISCORD" target="_blank" class="inline-flex items-center gap-3 bg-yellow-400 hover:bg-yellow-300 text-black font-black text-lg px-8 py-4 rounded-2xl transition duration-300 shadow-lg shadow-yellow-400/20 hover:scale-105">
+          <span>JOIN DISCORD NOW</span>
+          <i class="fas fa-arrow-right text-sm"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: GOOGLE FORM REMAKE -->
+  <section id="register" class="py-20 bg-neutral-950">
+    <div class="max-w-xl mx-auto px-4">
+      <div class="bg-neutral-900 border border-yellow-400/20 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-10 -top-10 w-32 h-32 bg-yellow-400/10 rounded-full blur-2xl pointer-events-none"></div>
+
+        <h2 class="text-3xl font-black text-white text-center mb-2">Formulir Pendaftaran Member</h2>
+        <p class="text-neutral-400 text-sm text-center mb-8">Isi data di bawah ini dengan benar untuk terdata di sistem HSHO</p>
+
+        <!-- FORM REMAKE TERHUBUNG KE GOOGLE FORM -->
+        <form action="https://docs.google.com/forms/d/e/1FAIpQLScqGp9ctodkl0qMGDd7K3LGzPX0kDIvKSD8mUxhB75uaSuwxw/formResponse" method="POST" target="_blank" class="space-y-5">
+          
+          <!-- Gender -->
+          <div>
+            <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Gender</label>
+            <select name="entry.111111" required class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white focus:outline-none focus:border-yellow-400 transition">
+              <option value="" disabled selected>Pilih Gender</option>
+              <option value="Laki-laki">Laki-laki</option>
+              <option value="Perempuan">Perempuan</option>
+            </select>
+          </div>
+
+          <!-- USN Roblox -->
+          <div>
+            <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Username Roblox</label>
+            <input type="text" name="entry.222222" placeholder="Masukkan Username Roblox" required 
+                   class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-yellow-400 transition">
+          </div>
+
+          <!-- USN Discord -->
+          <div>
+            <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Username Discord</label>
+            <input type="text" name="entry.333333" placeholder="Masukkan Username Discord" required 
+                   class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-yellow-400 transition">
+          </div>
+
+          <!-- Tanggal & Bulan Lahir -->
+          <div>
+            <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Tanggal & Bulan Lahir</label>
+            <input type="text" name="entry.444444" placeholder="Contoh: 15 Januari" required 
+                   class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-yellow-400 transition">
+          </div>
+
+          <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-black p-4 rounded-xl transition duration-300 shadow-lg shadow-yellow-400/10 mt-6 flex justify-center items-center gap-2">
+            <span>Kirim Pendaftaran</span>
+            <i class="fas fa-paper-plane text-xs"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-8 bg-black border-t border-neutral-900 text-center text-xs text-neutral-500">
+    <p>&copy; Hustle House Family. All rights reserved.</p>
+  </footer>
+
+  <!-- SCRIPT UNTUK SLIDER FOTO AUTOMATIS -->
+  <script>
+    let currentSlide = 0;
+    const slider = document.getElementById("slider");
+    const totalSlides = slider.children.length;
+
+    function showSlide(index) {
+      if (index >= totalSlides) currentSlide = 0;
+      else if (index < 0) currentSlide = totalSlides - 1;
+      else currentSlide = index;
+      slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+
+    function nextSlide() { showSlide(currentSlide + 1); }
+    function prevSlide() { showSlide(currentSlide - 1); }
+
+    // Auto-play slider setiap 4 detik
+    setInterval(nextSlide, 4000);
+  </script>
+
+</body>
+</html>
