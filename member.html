@@ -90,7 +90,7 @@
     const ADMIN_DATA = [
       { 
         displayName: "HSHOxMoraa", 
-        username: "PhoenixSoul02", // Ganti dengan USN Roblox asli jika ada
+        username: "PhoenixSoul02", // Ganti USN Roblox asli kamu di sini jika beda
         tag: "OWNER", 
         imgUrl: "https://i.ibb.co.com/rGjh03D2/HSHO-Dashboard.webp" 
       },
@@ -126,8 +126,12 @@
       }
     ];
 
-    // 2. LINK CSV PUBLIK KHUSUS SHEET "MEMBER AKTIF"
-    const SHEET_MEMBER_AKTIF_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQWajAtFnnLxFg5-PgrTgBMUSA2yWBaHfjTcJlOuSe_HaEtWG460L8SD60VJzxCrIlJMSo9ONhnpj4Y/pub?gid=338048431&single=true&output=csv";
+    // 2. GOOGLE SHEETS GVIZ ENDPOINT (REAL-TIME TANPA CACHE)
+    const SPREADSHEET_ID = "1ho6plozyfwxbtvkcFXFF6mRkc_rpW8IuXV_TIsXh6w4";
+    const SHEET_NAME = "Member Aktif";
+    
+    // Dipasang cachebuster timestamp (?t=...) agar selalu mengunduh data detik itu juga
+    const JSON_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&t=${new Date().getTime()}`;
 
     // Render Admin Grid (Foto Portrait 9:16)
     function renderAdmins() {
@@ -140,19 +144,16 @@
 
         const cardHtml = `
           <div class="member-card bg-neutral-900 border ${isOwner ? 'border-yellow-400' : 'border-neutral-800'} rounded-2xl overflow-hidden shadow-xl text-center relative group flex flex-col">
-            <!-- Badge Tag -->
             <span class="absolute top-2 right-2 z-10 px-2 py-0.5 rounded-full text-[9px] uppercase tracking-wider ${badgeColor}">
               ${adm.tag}
             </span>
             
-            <!-- Container Foto Portrait 9:16 -->
             <div class="aspect-[9/16] w-full bg-neutral-950 overflow-hidden relative">
               <img src="${adm.imgUrl}" alt="${adm.username}" 
                    onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=500'" 
                    class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
             </div>
 
-            <!-- Text Info (Display Name HSHO & Username Roblox) -->
             <div class="p-3 bg-neutral-900">
               <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${adm.displayName}">${adm.displayName}</h3>
               <p class="text-neutral-500 text-[11px] truncate member-usn">@${adm.username}</p>
@@ -163,26 +164,32 @@
       });
     }
 
-    // Fetch Data Member Aktif dari Sheet Member Aktif
+    // Fetch Data Member Aktif via Google Visualization API
     async function fetchActiveMembers() {
       try {
-        const response = await fetch(SHEET_MEMBER_AKTIF_CSV);
-        if (!response.ok) throw new Error("Gagal mengunduh data Member Aktif");
+        const response = await fetch(JSON_URL);
+        if (!response.ok) throw new Error("Gagal mengambil data dari Google Sheets");
         
-        const data = await response.text();
-        const rows = parseCSV(data);
+        const text = await response.text();
         
+        // Membersihkan wrapper bawaan Google (google.visualization.Query.setResponse)
+        const jsonString = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
+        const data = JSON.parse(jsonString);
+        const rows = data.table.rows;
+
         const grid = document.getElementById("galleryGrid");
         grid.innerHTML = "";
 
-        for (let i = 1; i < rows.length; i++) {
-          const row = rows[i];
-          if (!row || row.length < 3) continue;
+        rows.forEach(row => {
+          if (!row.c) return;
 
-          const usnRoblox = row[2] ? row[2].trim() : "";
-          const displayName = (row[5] && row[5].trim() !== "") ? row[5].trim() : usnRoblox;
+          // Pemetaan Kolom Sheet Member Aktif:
+          // Index 2 = Username Roblox (Kolom C)
+          // Index 5 = Display Name Roblox (Kolom F)
+          const usnRoblox = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
+          const displayName = row.c[5] && row.c[5].v ? row.c[5].v.toString().trim() : usnRoblox;
 
-          if (!usnRoblox) continue;
+          if (!usnRoblox) return;
 
           // Kartu Member Ringkas (Text Only)
           const cardHtml = `
@@ -192,7 +199,7 @@
             </div>
           `;
           grid.innerHTML += cardHtml;
-        }
+        });
 
         document.getElementById("loading").classList.add("hidden");
         grid.classList.remove("hidden");
@@ -202,33 +209,9 @@
         document.getElementById("loading").innerHTML = `
           <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-xl max-w-md mx-auto text-center">
             <p class="text-red-400 font-bold mb-1">Gagal memuat data dari Sheet Member Aktif.</p>
-            <p class="text-xs text-neutral-400">Pastikan link CSV sheet Member Aktif sudah benar dan dipublikasikan ke web.</p>
+            <p class="text-xs text-neutral-400">Pastikan akses spreadsheet disetel ke "Anyone with the link / Siapa saja yang memiliki link".</p>
           </div>`;
       }
-    }
-
-    // Parser CSV Kompatibel
-    function parseCSV(text) {
-      const lines = text.split(/\r\n|\n/);
-      return lines.map(line => {
-        const result = [];
-        let cell = '';
-        let inQuotes = false;
-        
-        for (let i = 0; i < line.length; i++) {
-          const char = line[i];
-          if (char === '"') {
-            inQuotes = !inQuotes;
-          } else if (char === ',' && !inQuotes) {
-            result.push(cell);
-            cell = '';
-          } else {
-            cell += char;
-          }
-        }
-        result.push(cell);
-        return result;
-      });
     }
 
     // Fitur Pencarian Real-Time
@@ -248,7 +231,7 @@
       });
     }
 
-    // Jalankan Skrip Saat Halaman Dimuat
+    // Jalankan Skrip
     renderAdmins();
     fetchActiveMembers();
   </script>
