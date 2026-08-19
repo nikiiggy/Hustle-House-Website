@@ -46,7 +46,7 @@
 
   <main class="max-w-7xl mx-auto px-4 py-12 space-y-16">
     
-    <!-- SECTION ADMIN & OWNER (6 KOTAK MANUAL) -->
+    <!-- SECTION ADMIN & OWNER (PORTRAIT 9:16 / 608x1080px) -->
     <section>
       <div class="flex items-center gap-2 mb-6 border-b border-yellow-400/20 pb-3">
         <i class="fas fa-crown text-yellow-400 text-xl"></i>
@@ -59,7 +59,7 @@
       </div>
     </section>
 
-    <!-- SECTION MEMBER AKTIFF (DARI GOOGLE SHEETS MEMBER AKTIF) -->
+    <!-- SECTION MEMBER AKTIF (TEXT ONLY) -->
     <section>
       <div class="flex items-center gap-2 mb-6 border-b border-neutral-800 pb-3">
         <i class="fas fa-users text-neutral-400 text-xl"></i>
@@ -72,8 +72,8 @@
         <p class="text-neutral-400">Memuat data dari sheet Member Aktif...</p>
       </div>
 
-      <!-- Grid Gallery Kartu Member -->
-      <div id="galleryGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 hidden">
+      <!-- Grid List Member (Text Only) -->
+      <div id="galleryGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 hidden">
       </div>
     </section>
 
@@ -84,84 +84,85 @@
     <p>&copy; Hustle House Family. All rights reserved.</p>
   </footer>
 
-  <!-- SCRIPT UTAMA MEMBER DIRECTORY -->
   <script>
-    // 1. DATA ADMIN & OWNER (UPDATE USERNAME ROBLOX)
+    // 1. DATA ADMIN & OWNER (WITH HSHO DISPLAY NAME & IMGBB)
     const ADMIN_DATA = [
-      { username: "USERNAME_OWNER_1", role: "Owner", tag: "OWNER" }, // <-- Ganti dengan Username Roblox Owner 1
-      { username: "Miraaachans2", role: "Owner", tag: "OWNER" },
-      { username: "Nodi_0610", role: "Admin", tag: "ADMIN" },
-      { username: "velynthea", role: "Admin", tag: "ADMIN" },
-      { username: "enallll666", role: "Admin", tag: "ADMIN" },
-      { username: "iniioinkk", role: "Admin", tag: "ADMIN" }
+      { 
+        displayName: "HSHOxMoraa", 
+        username: "PhoenixSoul02", // Ganti dengan USN Roblox asli jika ada
+        tag: "OWNER", 
+        imgUrl: "https://i.ibb.co.com/rGjh03D2/HSHO-Dashboard.webp" 
+      },
+      { 
+        displayName: "HSHOxMiraa", 
+        username: "Miraaachans2", 
+        tag: "OWNER", 
+        imgUrl: "https://i.ibb.co.com/TxrKtZHJ/HSHO-Dashboard-1.webp" 
+      },
+      { 
+        displayName: "HSHOxNodi", 
+        username: "Nodi_0610", 
+        tag: "ADMIN", 
+        imgUrl: "https://i.ibb.co.com/b085r21/HSHO-Dashboard-2.webp" 
+      },
+      { 
+        displayName: "HSHOxVelyn", 
+        username: "velynthea", 
+        tag: "ADMIN", 
+        imgUrl: "https://i.ibb.co.com/gMdP9vPC/HSHO-Dashboard-3.webp" 
+      },
+      { 
+        displayName: "HSHOxJoJo", 
+        username: "enallll666", 
+        tag: "ADMIN", 
+        imgUrl: "https://i.ibb.co.com/76rh7tT/HSHO-Dashboard-4.webp" 
+      },
+      { 
+        displayName: "HSHOxOink", 
+        username: "iniioinkk", 
+        tag: "ADMIN", 
+        imgUrl: "https://i.ibb.co.com/9m88QJZc/HSHO-Dashboard-5.webp" 
+      }
     ];
 
-    // 2. LINK CSV PUBLIK SHEET MEMBER AKTIF
+    // 2. LINK CSV PUBLIK KHUSUS SHEET "MEMBER AKTIF"
     const SHEET_MEMBER_AKTIF_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQWajAtFnnLxFg5-PgrTgBMUSA2yWBaHfjTcJlOuSe_HaEtWG460L8SD60VJzxCrIlJMSo9ONhnpj4Y/pub?gid=338048431&single=true&output=csv";
 
-    // Fungsi Pengambil URL Avatar 2D Roblox via User ID
-    async function getRobloxAvatarUrl(username) {
-      if (!username || username.includes("USERNAME_OWNER")) {
-        return "https://tr.rbxcdn.com/30day-avatar-headshot-default";
-      }
-      
-      try {
-        const resUser = await fetch("https://users.roblox.com/v1/usernames/users", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ usernames: [username], excludeBannedUsers: false })
-        });
-        const dataUser = await resUser.json();
-        
-        if (dataUser.data && dataUser.data.length > 0) {
-          const userId = dataUser.data[0].id;
-          const resThumb = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=420x420&format=Png&isCircular=false`);
-          const dataThumb = await resThumb.json();
-          if (dataThumb.data && dataThumb.data.length > 0) {
-            return dataThumb.data[0].imageUrl;
-          }
-        }
-      } catch (err) {
-        console.error("Gagal mengambil avatar untuk " + username, err);
-      }
-      return "https://tr.rbxcdn.com/30day-avatar-headshot-default";
-    }
-
-    // Render Admin Grid Manual (2 Owner & 4 Admin)
-    async function renderAdmins() {
+    // Render Admin Grid (Foto Portrait 9:16)
+    function renderAdmins() {
       const adminContainer = document.getElementById("adminGrid");
       adminContainer.innerHTML = "";
 
-      // Memuat seluruh foto avatar admin secara bersamaan (Parallel Fetch)
-      const adminPromises = ADMIN_DATA.map(async (adm) => {
-        const avatarUrl = await getRobloxAvatarUrl(adm.username);
-        return { ...adm, avatarUrl };
-      });
-
-      const adminsWithAvatars = await Promise.all(adminPromises);
-
-      adminsWithAvatars.forEach(adm => {
+      ADMIN_DATA.forEach(adm => {
         const isOwner = adm.tag === "OWNER";
         const badgeColor = isOwner ? "bg-yellow-400 text-black font-black" : "bg-neutral-800 text-yellow-400 border border-yellow-400/30";
 
         const cardHtml = `
-          <div class="member-card bg-neutral-900 border ${isOwner ? 'border-yellow-400' : 'border-neutral-800'} rounded-2xl overflow-hidden shadow-xl text-center p-3 relative group">
-            <span class="absolute top-2 right-2 px-2 py-0.5 rounded-full text-[9px] uppercase tracking-wider ${badgeColor}">
+          <div class="member-card bg-neutral-900 border ${isOwner ? 'border-yellow-400' : 'border-neutral-800'} rounded-2xl overflow-hidden shadow-xl text-center relative group flex flex-col">
+            <!-- Badge Tag -->
+            <span class="absolute top-2 right-2 z-10 px-2 py-0.5 rounded-full text-[9px] uppercase tracking-wider ${badgeColor}">
               ${adm.tag}
             </span>
-            <div class="bg-gradient-to-b from-neutral-800 to-black p-2 rounded-xl mb-3 flex justify-center mt-2">
-              <img src="${adm.avatarUrl}" alt="${adm.username}" 
-                   class="w-20 h-20 rounded-full object-cover border-2 border-yellow-400 shadow-md">
+            
+            <!-- Container Foto Portrait 9:16 -->
+            <div class="aspect-[9/16] w-full bg-neutral-950 overflow-hidden relative">
+              <img src="${adm.imgUrl}" alt="${adm.username}" 
+                   onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=500'" 
+                   class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
             </div>
-            <h3 class="font-bold text-yellow-400 text-sm truncate member-name">${adm.username}</h3>
-            <p class="text-neutral-500 text-[11px] truncate member-usn">@${adm.username}</p>
+
+            <!-- Text Info (Display Name HSHO & Username Roblox) -->
+            <div class="p-3 bg-neutral-900">
+              <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${adm.displayName}">${adm.displayName}</h3>
+              <p class="text-neutral-500 text-[11px] truncate member-usn">@${adm.username}</p>
+            </div>
           </div>
         `;
         adminContainer.innerHTML += cardHtml;
       });
     }
 
-    // Fetch Data Member Aktif dari Google Sheets
+    // Fetch Data Member Aktif dari Sheet Member Aktif
     async function fetchActiveMembers() {
       try {
         const response = await fetch(SHEET_MEMBER_AKTIF_CSV);
@@ -182,16 +183,11 @@
 
           if (!usnRoblox) continue;
 
-          const avatarUrl = await getRobloxAvatarUrl(usnRoblox);
-
+          // Kartu Member Ringkas (Text Only)
           const cardHtml = `
-            <div class="member-card bg-neutral-900 border border-neutral-800 hover:border-yellow-400/60 rounded-2xl overflow-hidden shadow-md transition duration-300 hover:-translate-y-1 group p-3 text-center">
-              <div class="bg-gradient-to-b from-neutral-800 to-black p-3 rounded-xl mb-3 flex justify-center">
-                <img src="${avatarUrl}" alt="${usnRoblox}" 
-                     class="w-20 h-20 rounded-full object-cover border-2 border-neutral-800 group-hover:border-yellow-400 transition">
-              </div>
+            <div class="member-card bg-neutral-900/90 border border-neutral-800/80 hover:border-yellow-400/60 rounded-xl p-3.5 shadow-md transition duration-200 hover:-translate-y-0.5 group text-center flex flex-col justify-center min-h-[75px]">
               <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
-              <p class="text-neutral-400 text-[11px] truncate member-usn">@${usnRoblox}</p>
+              <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
             </div>
           `;
           grid.innerHTML += cardHtml;
@@ -234,7 +230,7 @@
       });
     }
 
-    // Fitur Cari
+    // Fitur Pencarian Real-Time
     function filterMembers() {
       const input = document.getElementById('searchInput').value.toLowerCase();
       const cards = document.getElementsByClassName('member-card');
@@ -251,7 +247,7 @@
       });
     }
 
-    // Jalankan Skrip
+    // Jalankan Skrip Saat Halaman Dimuat
     renderAdmins();
     fetchActiveMembers();
   </script>
