@@ -415,6 +415,23 @@
             transition: background 0.3s ease;
         }
 
+        .genre-select {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--panel-border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            padding: 0 10px;
+            height: 42px;
+            font-size: 0.82rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .genre-select option {
+            background: #10121a;
+            color: var(--text-primary);
+        }
+
         .search-box {
             position: relative;
             flex: 1;
@@ -531,10 +548,27 @@
         .song-meta {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
             overflow: hidden;
             flex: 1;
             padding-right: 10px;
+        }
+
+        .song-details {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            gap: 2px;
+        }
+
+        .song-genre-tag {
+            font-size: 0.68rem;
+            color: var(--ember-soft);
+            background: rgba(255, 138, 76, 0.12);
+            padding: 1px 6px;
+            border-radius: 4px;
+            width: fit-content;
+            font-weight: 600;
         }
 
         .song-icon {
@@ -829,7 +863,7 @@
         <!-- PANEL KIRI: PLAYER & SOUND CONTROLS -->
         <div class="player-panel">
             <div class="brand-header">
-                <h1 id="brandTitle">Storysore</h1>
+                <h1 id="brandTitle">Hustle House</h1>
                 <p id="brandTagline">Malam di sekitar api</p>
             </div>
 
@@ -908,9 +942,14 @@
                     <button class="tab-btn" id="tabQueue" onclick="switchTab('queue')">Antrean <span class="badge" id="queueBadge">0</span></button>
                 </div>
 
+                <!-- Dropdown Filter Genre -->
+                <select id="genreSelect" class="genre-select" onchange="filterSongs()">
+                    <option value="all">Semua Genre</option>
+                </select>
+
                 <div class="search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchInput" placeholder="Cari lagu..." onkeyup="filterSongs()">
+                    <input type="text" id="searchInput" placeholder="Cari lagu / genre..." onkeyup="filterSongs()">
                 </div>
 
                 <div class="top-actions">
@@ -937,7 +976,6 @@
     <!-- Notification Toast -->
     <div class="toast" id="toastMsg">Pesanan Ditambahkan</div>
 
-    <!-- SCRIPT ASLI DARI KAMU 100% UNTOUCHED -->
     <script>
         // --- CONSTANTS & STATE ---
         const PLAYLIST_URL = "https://api.npoint.io/f24ffd31e695999ad25c";
@@ -952,7 +990,7 @@
         let repeatMode = 0; // 0: Off, 1: Repeat All, 2: Repeat One
         let isPartyMode = false;
         let isGalauMode = false;
-        let isLowPerfMode = false; // Status Mode Hemat Performa
+        let isLowPerfMode = false;
         let sleepTimerMinutes = 0;
         let sleepTimerTimeout = null;
 
@@ -972,6 +1010,7 @@
         const visualizerCanvas = document.getElementById('visualizer');
         const visCtx = visualizerCanvas ? visualizerCanvas.getContext('2d') : null;
         const brandTagline = document.getElementById('brandTagline');
+        const genreSelect = document.getElementById('genreSelect');
 
         // Web Audio API Elements
         let audioCtx, sourceNode, analyser, gainNode, eqFilter;
@@ -989,10 +1028,27 @@
             try {
                 const response = await fetch(PLAYLIST_URL);
                 songs = await response.json();
+                populateGenreDropdown();
                 renderSongList();
             } catch (err) {
                 showToast("Gagal memuat playlist dari server.");
             }
+        }
+
+        // Generate Opsi Dropdown Genre Secara Dinamis
+        function populateGenreDropdown() {
+            const genres = new Set();
+            songs.forEach(song => {
+                if (song.genre) genres.add(song.genre);
+            });
+
+            genreSelect.innerHTML = '<option value="all">Semua Genre</option>';
+            genres.forEach(genre => {
+                const opt = document.createElement('option');
+                opt.value = genre;
+                opt.textContent = genre;
+                genreSelect.appendChild(opt);
+            });
         }
 
         // --- WEB AUDIO ENGINE & VISUALIZER SETUP ---
@@ -1137,10 +1193,11 @@
             queueBadge.innerText = playQueue.length;
         }
 
-        // Render Song List UI dengan Tap Target Ergonomis
+        // Render Song List UI dengan Tag Genre & Filter
         function renderSongList() {
             songListEl.innerHTML = '';
             const query = document.getElementById('searchInput').value.toLowerCase();
+            const selectedGenre = genreSelect.value;
             const listToRender = currentTab === 'all' ? songs : playQueue;
 
             if (listToRender.length === 0) {
@@ -1149,7 +1206,13 @@
             }
 
             listToRender.forEach((song, idx) => {
-                if (!song.title.toLowerCase().includes(query)) return;
+                const songGenre = song.genre || "General";
+                
+                // Filter berdasarkan kata kunci pencarian dan dropdown genre
+                const matchesQuery = song.title.toLowerCase().includes(query) || songGenre.toLowerCase().includes(query);
+                const matchesGenre = selectedGenre === 'all' || songGenre === selectedGenre;
+
+                if (!matchesQuery || !matchesGenre) return;
 
                 const isCurrent = currentSong && currentSong.src === song.src;
                 const songItem = document.createElement('div');
@@ -1160,7 +1223,10 @@
                 songItem.innerHTML = `
                     <div class="song-meta">
                         <i class="fa-solid ${isCurrent ? 'fa-chart-simple' : 'fa-music'} song-icon"></i>
-                        <span class="song-title">${song.title}</span>
+                        <div class="song-details">
+                            <span class="song-title">${song.title}</span>
+                            <span class="song-genre-tag">${songGenre}</span>
+                        </div>
                     </div>
                     <div class="song-actions">
                         ${currentTab === 'all' ? `
@@ -1529,23 +1595,21 @@
             animate();
         }
 
-
         // Fungsi Toggle Mobile Burger Menu
-    function toggleMobileMenu() {
-      const mobileMenu = document.getElementById("mobileMenu");
-      const menuIcon = document.getElementById("menuIcon");
-      
-      mobileMenu.classList.toggle("hidden");
-      
-      // Ubah ikon burger (fa-bars) menjadi silang (fa-xmark) saat terbuka
-      if (mobileMenu.classList.contains("hidden")) {
-        menuIcon.classList.remove("fa-xmark");
-        menuIcon.classList.add("fa-bars");
-      } else {
-        menuIcon.classList.remove("fa-bars");
-        menuIcon.classList.add("fa-xmark");
-      }
-    }
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById("mobileMenu");
+            const menuIcon = document.getElementById("menuIcon");
+            
+            mobileMenu.classList.toggle("hidden");
+            
+            if (mobileMenu.classList.contains("hidden")) {
+                menuIcon.classList.remove("fa-xmark");
+                menuIcon.classList.add("fa-bars");
+            } else {
+                menuIcon.classList.remove("fa-bars");
+                menuIcon.classList.add("fa-xmark");
+            }
+        }
     </script>
 </body>
 </html>
