@@ -10,7 +10,7 @@
 </head>
 <body class="bg-black text-white font-sans antialiased min-h-screen selection:bg-yellow-400 selection:text-black">
 
-  <!-- NAVBAR WITH MOBILE BURGER MENU -->
+  <!-- NAVBAR -->
   <nav class="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-yellow-400/20">
     <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
       <!-- LOGO FAMILY -->
@@ -28,7 +28,7 @@
         <a href="index.html#register" class="hover:text-yellow-400 transition">Form Member</a>
       </div>
 
-      <!-- TOMBOL BURGER MENU -->
+      <!-- BURGER MENU BUTTON -->
       <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden text-yellow-400 text-2xl focus:outline-none p-1">
         <i class="fas fa-bars" id="menuIcon"></i>
       </button>
@@ -56,7 +56,7 @@
       </h1>
       <p class="text-neutral-400 text-sm md:text-base mb-8">Daftar Foto Profil & Avatar Roblox Anggota Active Hustle House Family</p>
 
-      <!-- CARD STATISTIK (JUMLAH MEMBER & UMUR FAMILY) -->
+      <!-- CARD STATISTIK -->
       <div class="grid grid-cols-2 gap-4 max-w-lg mx-auto mb-8">
         <!-- Card 1: Total Member -->
         <div class="bg-neutral-900/90 border border-yellow-400/30 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg">
@@ -73,7 +73,7 @@
         </div>
       </div>
 
-      <!-- FITUR PENCARIAN -->
+      <!-- PENCARIAN -->
       <div class="flex justify-center max-w-md mx-auto">
         <div class="relative w-full">
           <i class="fas fa-search absolute left-4 top-3.5 text-neutral-500"></i>
@@ -93,7 +93,6 @@
         <h2 class="text-xl font-black text-white uppercase tracking-wider">Family Structures & Admins</h2>
       </div>
 
-      <!-- Grid Admin -->
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4" id="adminGrid">
       </div>
     </section>
@@ -105,26 +104,22 @@
         <h2 class="text-xl font-black text-white uppercase tracking-wider">Active Member Avatars</h2>
       </div>
 
-      <!-- Indicator Loading -->
       <div id="loading" class="text-center py-12">
         <i class="fas fa-spinner fa-spin text-4xl text-yellow-400 mb-4"></i>
-        <p class="text-neutral-400">Memuat data & memproses avatar Roblox...</p>
+        <p class="text-neutral-400">Memuat data avatar Roblox member...</p>
       </div>
 
-      <!-- Grid List Member -->
       <div id="galleryGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 hidden">
       </div>
     </section>
 
   </main>
 
-  <!-- FOOTER -->
   <footer class="py-8 bg-black border-t border-neutral-900 text-center text-xs text-neutral-500">
     <p>&copy; Hustle House Family. All rights reserved.</p>
   </footer>
 
   <script>
-    // 1. DATA ADMIN & OWNER
     const ADMIN_DATA = [
       { displayName: "HSHOxMoraa", username: "PhoenixSoul02", tag: "OWNER", imgUrl: "https://i.ibb.co.com/rGjh03D2/HSHO-Dashboard.webp" },
       { displayName: "HSHOxMiraa", username: "Miraaachans2", tag: "OWNER", imgUrl: "https://i.ibb.co.com/TxrKtZHJ/HSHO-Dashboard-1.webp" },
@@ -134,13 +129,9 @@
       { displayName: "HSHOxOink", username: "iniioinkk", tag: "ADMIN", imgUrl: "https://i.ibb.co.com/9m88QJZc/HSHO-Dashboard-5.webp" }
     ];
 
-    // 2. GOOGLE SHEETS ENDPOINT
     const SPREADSHEET_ID = "1ho6plozyfwxbtvkcFXFF6mRkc_rpW8IuXV_TIsXh6w4";
     const SHEET_NAME = "Member Aktif";
     const JSON_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&headers=0&t=${new Date().getTime()}`;
-
-    // Gambar Avatar Default (Fallback)
-    const DEFAULT_AVATAR = "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3E244791C39AC3F092ECADCFDDF546B6-Png/150/150/AvatarHeadshot/Webp/noFilter";
 
     function calculateFamilyAge() {
       const startDate = new Date("2025-07-25");
@@ -178,7 +169,6 @@
       });
     }
 
-    // FUNGSI UTAMA: CONVERT USERNAMES KE AVATAR & PROFIL VIA API ROBLOX
     async function fetchActiveMembers() {
       try {
         const response = await fetch(JSON_URL);
@@ -189,62 +179,55 @@
         const data = JSON.parse(jsonString);
         const rows = data.table.rows;
 
-        let memberList = [];
+        const grid = document.getElementById("galleryGrid");
+        grid.innerHTML = "";
+
+        let validMemberCount = 0;
 
         rows.forEach(row => {
           if (!row.c) return;
+
+          // Index 2 = USN Roblox (Kolom C)
+          // Index 5 = Display Name (Kolom F)
+          // Index 6 = Status (Kolom G)
+          // Index 7 = User ID Roblox (Kolom H)
           const usnRoblox = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
           const displayName = (row.c[5] && row.c[5].v && row.c[5].v.toString().trim() !== "") 
                               ? row.c[5].v.toString().trim() 
                               : usnRoblox;
+          const userId = row.c[7] && row.c[7].v ? row.c[7].v.toString().trim() : "";
 
           if (!usnRoblox || usnRoblox.toLowerCase() === "username roblox" || usnRoblox.toLowerCase() === "usn roblox") return;
 
-          memberList.push({ usnRoblox, displayName });
-        });
+          validMemberCount++;
 
-        // Update Total Member
-        document.getElementById("totalMembersCount").innerText = memberList.length;
+          // Headshot Avatar Roblox CDN via User ID Dynamic
+          const avatarUrl = userId 
+            ? `https://tr.rbxcdn.com/30DAY-AvatarHeadshot-${userId}-Png/150/150/AvatarHeadshot/Webp/noFilter` 
+            : `https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3E244791C39AC3F092ECADCFDDF546B6-Png/150/150/AvatarHeadshot/Webp/noFilter`;
 
-        // Ambil User ID & Avatar dari API Roblox via POST Batch
-        const userMap = await fetchRobloxBatchData(memberList.map(m => m.usnRoblox));
-
-        const grid = document.getElementById("galleryGrid");
-        grid.innerHTML = "";
-
-        memberList.forEach((m, idx) => {
-          const robloxData = userMap[m.usnRoblox.toLowerCase()] || { id: null, avatar: DEFAULT_AVATAR };
-          
-          // Jika User ID ditemukan, buat link profil langsung
-          const profileLink = robloxData.id 
-            ? `https://www.roblox.com/users/${robloxData.id}/profile` 
-            : `https://www.roblox.com/search/users?keyword=${encodeURIComponent(m.usnRoblox)}`;
+          const profileLink = userId 
+            ? `https://www.roblox.com/users/${userId}/profile` 
+            : `https://www.roblox.com/search/users?keyword=${encodeURIComponent(usnRoblox)}`;
 
           const cardHtml = `
             <div class="member-card bg-neutral-900/90 border border-neutral-800/80 hover:border-yellow-400/60 rounded-2xl p-4 shadow-md transition duration-300 hover:-translate-y-1 group text-center flex flex-col items-center justify-between">
               
-              <!-- AVATAR CIRCLE CONTAINER -->
               <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-neutral-950 border-2 border-yellow-400/40 p-1 overflow-hidden my-1 flex-shrink-0 group-hover:border-yellow-400 group-hover:scale-105 transition duration-300 shadow-inner">
-                <img id="avatar-img-${idx}" 
-                     src="${robloxData.avatar}" 
-                     alt="${m.displayName}" 
-                     loading="lazy"
-                     onerror="this.src='${DEFAULT_AVATAR}'"
+                <img src="${avatarUrl}" 
+                     alt="${displayName}" 
+                     onerror="this.src='https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3E244791C39AC3F092ECADCFDDF546B6-Png/150/150/AvatarHeadshot/Webp/noFilter'"
                      class="w-full h-full object-cover rounded-full">
               </div>
 
-              <!-- USER INFO -->
               <div class="w-full mt-2">
-                <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${m.displayName}">${m.displayName}</h3>
-                <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${m.usnRoblox}</p>
+                <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
+                <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
               </div>
 
-              <!-- ROBLOX LINK BADGE (LANGSUNG KELUAR KE PROFIL USER) -->
-              <a href="${profileLink}" 
-                 target="_blank" 
-                 rel="noopener noreferrer"
+              <a href="${profileLink}" target="_blank" rel="noopener noreferrer" 
                  class="mt-3 text-[10px] font-extrabold text-neutral-400 hover:text-black bg-neutral-800 hover:bg-yellow-400 border border-neutral-700 hover:border-yellow-400 px-3 py-1 rounded-full transition duration-200 flex items-center gap-1.5">
-                <span>Lihat Profil</span>
+                <span>Profil</span>
                 <i class="fas fa-external-link-alt text-[8px]"></i>
               </a>
 
@@ -253,55 +236,13 @@
           grid.innerHTML += cardHtml;
         });
 
+        document.getElementById("totalMembersCount").innerText = validMemberCount;
         document.getElementById("loading").classList.add("hidden");
         grid.classList.remove("hidden");
 
       } catch (err) {
         console.error("Detail Error:", err);
       }
-    }
-
-    // FUNGSI CALL BATCH API ROBLOX (MENGATASI CORS & AMBIL FOTO HASH SECARA OTOMATIS)
-    async function fetchRobloxBatchData(usernames) {
-      const result = {};
-      try {
-        // Step 1: Dapatkan User ID dari Usernames
-        const resUser = await fetch("https://users.roblox.com/v1/usernames/users", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ usernames: usernames, excludeBannedUsers: false })
-        });
-
-        if (!resUser.ok) return result;
-        const userData = await resUser.json();
-        
-        const userIds = [];
-        const idToUnameMap = {};
-
-        userData.data.forEach(u => {
-          userIds.push(u.id);
-          idToUnameMap[u.id] = u.requestedUsername.toLowerCase();
-          result[u.requestedUsername.toLowerCase()] = { id: u.id, avatar: DEFAULT_AVATAR };
-        });
-
-        if (userIds.length === 0) return result;
-
-        // Step 2: Dapatkan URL Gambar CDN Asli menggunakan User IDs
-        const resThumb = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userIds.join(",")}&size=150x150&format=Png&isCircular=true`);
-        
-        if (resThumb.ok) {
-          const thumbData = await resThumb.json();
-          thumbData.data.forEach(t => {
-            const uname = idToUnameMap[t.targetId];
-            if (uname && result[uname] && t.imageUrl) {
-              result[uname].avatar = t.imageUrl; // Menyimpan link CDN asli dari Roblox
-            }
-          });
-        }
-      } catch (err) {
-        console.warn("API Roblox terbatas/gagal, menggunakan avatar fallback:", err);
-      }
-      return result;
     }
 
     function filterMembers() {
