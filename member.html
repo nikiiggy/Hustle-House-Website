@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Member Directory - Hustle House Family</title>
+  <title>Member Gallery - Hustle House Family</title>
   <!-- Tailwind CSS & FontAwesome Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-black text-white font-sans antialiased min-h-screen selection:bg-yellow-400 selection:text-black">
 
-  <!-- NAVBAR WITH MOBILE BURGER MENU -->
+  <!-- NAVBAR -->
   <nav class="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-yellow-400/20">
     <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
       <!-- LOGO FAMILY -->
@@ -22,11 +22,12 @@
       <div class="hidden md:flex items-center space-x-6 text-sm font-semibold">
         <a href="index.html" class="hover:text-yellow-400 transition">Home</a>
         <a href="member.html" class="text-yellow-400 transition">Member Gallery</a>
+        <a href="birthday.html" class="hover:text-yellow-400 transition">Birthday Reminder</a>
         <a href="music.html" class="hover:text-yellow-400 transition">HSHO Music</a>
         <a href="index.html#register" class="hover:text-yellow-400 transition">Form Member</a>
       </div>
 
-      <!-- TOMBOL BURGER MENU -->
+      <!-- BURGER MENU BUTTON -->
       <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden text-yellow-400 text-2xl focus:outline-none p-1">
         <i class="fas fa-bars" id="menuIcon"></i>
       </button>
@@ -36,6 +37,7 @@
     <div id="mobileMenu" class="hidden md:hidden bg-neutral-950/95 border-b border-yellow-400/20 px-4 pt-2 pb-4 space-y-3 font-semibold text-sm">
       <a href="index.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">Home</a>
       <a href="member.html" class="block py-2 border-b border-neutral-800 text-yellow-400 transition">Member Gallery</a>
+      <a href="birthday.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">Birthday Reminder</a>
       <a href="music.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">HSHO Music</a>
       <a href="index.html#register" class="block py-2 hover:text-yellow-400 transition">Form Member</a>
     </div>
@@ -44,14 +46,17 @@
   <!-- HEADER & STATS SECTION -->
   <section class="py-12 bg-neutral-950 text-center border-b border-neutral-900">
     <div class="max-w-4xl mx-auto px-4">
+      <span class="px-4 py-1.5 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs font-bold uppercase tracking-widest mb-4 inline-block">
+        <i class="fas fa-users mr-1"></i> Community Members
+      </span>
       <h1 class="text-3xl md:text-5xl font-black text-white mb-3 uppercase tracking-tight">
-        HUSTLE HOUSE <span class="text-yellow-400">FAMILY GALLERY</span>
+        HUSTLE HOUSE <span class="text-yellow-400">MEMBER GALLERY</span>
       </h1>
-      <p class="text-neutral-400 text-sm md:text-base mb-8">Daftar Anggota Aktif & Struktur Admin Hustle House Family</p>
+      <p class="text-neutral-400 text-sm md:text-base mb-8">Daftar Anggota Aktif & Struktur Kepengurusan Hustle House Family</p>
 
-      <!-- CARD STATISTIK (JUMLAH MEMBER & UMUR FAMILY) -->
+      <!-- CARD STATISTIK -->
       <div class="grid grid-cols-2 gap-4 max-w-lg mx-auto mb-8">
-        <!-- Card 1: Total Member (Murni dari Sheet, Tanpa Admin) -->
+        <!-- Card 1: Total Member -->
         <div class="bg-neutral-900/90 border border-yellow-400/30 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg">
           <i class="fas fa-users text-yellow-400 text-2xl mb-1"></i>
           <span id="totalMembersCount" class="text-2xl md:text-3xl font-black text-white">...</span>
@@ -66,7 +71,7 @@
         </div>
       </div>
 
-      <!-- FITUR PENCARIAN -->
+      <!-- PENCARIAN -->
       <div class="flex justify-center max-w-md mx-auto">
         <div class="relative w-full">
           <i class="fas fa-search absolute left-4 top-3.5 text-neutral-500"></i>
@@ -86,7 +91,6 @@
         <h2 class="text-xl font-black text-white uppercase tracking-wider">Family Structures & Admins</h2>
       </div>
 
-      <!-- Grid Admin -->
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4" id="adminGrid">
       </div>
     </section>
@@ -94,30 +98,26 @@
     <!-- SECTION MEMBER AKTIF -->
     <section>
       <div class="flex items-center gap-2 mb-6 border-b border-neutral-800 pb-3">
-        <i class="fas fa-users text-neutral-400 text-xl"></i>
+        <i class="fas fa-user-astronaut text-yellow-400 text-xl"></i>
         <h2 class="text-xl font-black text-white uppercase tracking-wider">Active Members</h2>
       </div>
 
-      <!-- Indicator Loading -->
       <div id="loading" class="text-center py-12">
         <i class="fas fa-spinner fa-spin text-4xl text-yellow-400 mb-4"></i>
-        <p class="text-neutral-400">Memuat data dari sheet Member Aktif...</p>
+        <p class="text-neutral-400">Memuat data member Hustle House...</p>
       </div>
 
-      <!-- Grid List Member -->
-      <div id="galleryGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 hidden">
+      <div id="galleryGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 hidden">
       </div>
     </section>
 
   </main>
 
-  <!-- FOOTER -->
   <footer class="py-8 bg-black border-t border-neutral-900 text-center text-xs text-neutral-500">
     <p>&copy; Hustle House Family. All rights reserved.</p>
   </footer>
 
   <script>
-    // 1. DATA ADMIN & OWNER
     const ADMIN_DATA = [
       { displayName: "HSHOxMoraa", username: "PhoenixSoul02", tag: "OWNER", imgUrl: "https://i.ibb.co.com/rGjh03D2/HSHO-Dashboard.webp" },
       { displayName: "HSHOxMiraa", username: "Miraaachans2", tag: "OWNER", imgUrl: "https://i.ibb.co.com/TxrKtZHJ/HSHO-Dashboard-1.webp" },
@@ -127,23 +127,18 @@
       { displayName: "HSHOxOink", username: "iniioinkk", tag: "ADMIN", imgUrl: "https://i.ibb.co.com/9m88QJZc/HSHO-Dashboard-5.webp" }
     ];
 
-    // 2. GOOGLE SHEETS ENDPOINT (headers=0 AGAR BARIS ATAS DIBACA SEMUA)
     const SPREADSHEET_ID = "1ho6plozyfwxbtvkcFXFF6mRkc_rpW8IuXV_TIsXh6w4";
     const SHEET_NAME = "Member Aktif";
     const JSON_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&headers=0&t=${new Date().getTime()}`;
 
-    // 3. FUNGSI HITUNG UMUR FAMILY (BERDIRI: 25 JULI 2025)
     function calculateFamilyAge() {
       const startDate = new Date("2025-07-25");
       const today = new Date();
-      
       const diffTime = Math.abs(today - startDate);
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      
       document.getElementById("familyAgeText").innerText = `${diffDays} Hari`;
     }
 
-    // Render Admin Grid
     function renderAdmins() {
       const adminContainer = document.getElementById("adminGrid");
       adminContainer.innerHTML = "";
@@ -157,13 +152,11 @@
             <span class="absolute top-2 right-2 z-10 px-2 py-0.5 rounded-full text-[9px] uppercase tracking-wider ${badgeColor}">
               ${adm.tag}
             </span>
-            
             <div class="aspect-[9/16] w-full bg-neutral-950 overflow-hidden relative">
               <img src="${adm.imgUrl}" alt="${adm.username}" 
                    onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=500'" 
                    class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
             </div>
-
             <div class="p-3 bg-neutral-900">
               <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${adm.displayName}">${adm.displayName}</h3>
               <p class="text-neutral-500 text-[11px] truncate member-usn">@${adm.username}</p>
@@ -174,7 +167,6 @@
       });
     }
 
-    // Fetch Data Member Aktif & Update Total Count (Tanpa Admin)
     async function fetchActiveMembers() {
       try {
         const response = await fetch(JSON_URL);
@@ -193,45 +185,68 @@
         rows.forEach(row => {
           if (!row.c) return;
 
-          // Kolom C (Index 2) = Username Roblox
+          // Index 2 = USN Roblox (Kolom C)
+          // Index 5 = Display Name (Kolom F)
+          // Index 6 = Status (Kolom G)
+          // Index 7 = User ID Roblox (Kolom H)
+          // Index 8 = Avatar CDN URL (Kolom I)
           const usnRoblox = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
-          
-          // Kolom F (Index 5) = Display Name Roblox (Fallback ke Username jika kosong)
           const displayName = (row.c[5] && row.c[5].v && row.c[5].v.toString().trim() !== "") 
                               ? row.c[5].v.toString().trim() 
                               : usnRoblox;
+          const userId = row.c[7] && row.c[7].v ? row.c[7].v.toString().trim() : "";
+          
+          // Link Foto Avatar CDN dari Kolom I
+          const avatarUrl = (row.c[8] && row.c[8].v && row.c[8].v.toString().trim() !== "")
+                            ? row.c[8].v.toString().trim()
+                            : "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3E244791C39AC3F092ECADCFDDF546B6-Png/150/150/AvatarHeadshot/Webp/noFilter";
 
-          // Abaikan jika USN kosong atau jika ini baris Header/Judul kolom
           if (!usnRoblox || usnRoblox.toLowerCase() === "username roblox" || usnRoblox.toLowerCase() === "usn roblox") return;
 
           validMemberCount++;
 
+          const profileLink = userId 
+            ? `https://www.roblox.com/users/${userId}/profile` 
+            : `https://www.roblox.com/search/users?keyword=${encodeURIComponent(usnRoblox)}`;
+
           const cardHtml = `
-            <div class="member-card bg-neutral-900/90 border border-neutral-800/80 hover:border-yellow-400/60 rounded-xl p-3.5 shadow-md transition duration-200 hover:-translate-y-0.5 group text-center flex flex-col justify-center min-h-[75px]">
-              <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
-              <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
+            <div class="member-card bg-neutral-900/90 border border-neutral-800/80 hover:border-yellow-400/60 rounded-2xl p-4 shadow-md transition duration-300 hover:-translate-y-1 group text-center flex flex-col items-center justify-between">
+              
+              <!-- AVATAR FOTO PROFIL -->
+              <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-neutral-950 border-2 border-yellow-400/40 p-1 overflow-hidden my-1 flex-shrink-0 group-hover:border-yellow-400 group-hover:scale-105 transition duration-300 shadow-inner">
+                <img src="${avatarUrl}" 
+                     alt="${displayName}" 
+                     onerror="this.src='https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3E244791C39AC3F092ECADCFDDF546B6-Png/150/150/AvatarHeadshot/Webp/noFilter'"
+                     class="w-full h-full object-cover rounded-full">
+              </div>
+
+              <!-- INFO NAMA -->
+              <div class="w-full mt-2">
+                <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
+                <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
+              </div>
+
+              <!-- LINK KE PROFIL ROBLOX -->
+              <a href="${profileLink}" target="_blank" rel="noopener noreferrer" 
+                 class="mt-3 text-[10px] font-extrabold text-neutral-400 hover:text-black bg-neutral-800 hover:bg-yellow-400 border border-neutral-700 hover:border-yellow-400 px-3 py-1 rounded-full transition duration-200 flex items-center gap-1.5">
+                <span>Profil</span>
+                <i class="fas fa-external-link-alt text-[8px]"></i>
+              </a>
+
             </div>
           `;
           grid.innerHTML += cardHtml;
         });
 
-        // HANYA MENGHITUNG MEMBER AKTIF DARI SHEET (TANPA TAMBAHAN ADMIN)
         document.getElementById("totalMembersCount").innerText = validMemberCount;
-
         document.getElementById("loading").classList.add("hidden");
         grid.classList.remove("hidden");
 
       } catch (err) {
         console.error("Detail Error:", err);
-        document.getElementById("loading").innerHTML = `
-          <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-xl max-w-md mx-auto text-center">
-            <p class="text-red-400 font-bold mb-1">Gagal memuat data dari Sheet Member Aktif.</p>
-            <p class="text-xs text-neutral-400">Pastikan akses spreadsheet disetel ke "Anyone with the link / Siapa saja yang memiliki link".</p>
-          </div>`;
       }
     }
 
-    // Fitur Pencarian Real-Time
     function filterMembers() {
       const input = document.getElementById('searchInput').value.toLowerCase();
       const cards = document.getElementsByClassName('member-card');
@@ -248,11 +263,9 @@
       });
     }
 
-    // Toggle Mobile Burger Menu
     function toggleMobileMenu() {
       const mobileMenu = document.getElementById("mobileMenu");
       const menuIcon = document.getElementById("menuIcon");
-      
       mobileMenu.classList.toggle("hidden");
       
       if (mobileMenu.classList.contains("hidden")) {
@@ -264,7 +277,6 @@
       }
     }
 
-    // Jalankan Skrip
     calculateFamilyAge();
     renderAdmins();
     fetchActiveMembers();
