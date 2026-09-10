@@ -190,56 +190,52 @@
 
   <!-- SECTION 4: GOOGLE FORM REMAKE -->
   <section id="register" class="py-20 bg-neutral-950">
-    <div class="max-w-xl mx-auto px-4">
-      <div class="bg-neutral-900 border border-yellow-400/20 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
-        <div class="absolute -right-10 -top-10 w-32 h-32 bg-yellow-400/10 rounded-full blur-2xl pointer-events-none"></div>
+  <div class="max-w-xl mx-auto px-4">
+    <div class="bg-neutral-900 border border-yellow-400/20 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+      <div class="absolute -right-10 -top-10 w-32 h-32 bg-yellow-400/10 rounded-full blur-2xl pointer-events-none"></div>
 
-        <h2 class="text-3xl font-black text-white text-center mb-2">Formulir Pendaftaran Member</h2>
-        <p class="text-neutral-400 text-sm text-center mb-8">Isi data di bawah ini dengan benar untuk terdata di sistem HSHO</p>
+      <h2 class="text-3xl font-black text-white text-center mb-2">Formulir Pendaftaran Member</h2>
+      <p class="text-neutral-400 text-sm text-center mb-8">Isi data di bawah ini dengan benar untuk terdata di sistem HSHO</p>
 
-        <!-- FORM REMAKE TERHUBUNG KE GOOGLE FORM -->
-        <form action="https://docs.google.com/forms/d/e/1FAIpQLScqGp9ctodkl0qMGDd7K3LGzPX0kDIvKSD8mUxhB75uaSuwxw/formResponse" method="POST" target="_blank" class="space-y-5">
-          
-          <!-- Gender -->
-          <div>
-            <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Gender</label>
-            <select name="entry.111111" required class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white focus:outline-none focus:border-yellow-400 transition">
-              <option value="" disabled selected>Pilih Gender</option>
-              <option value="Laki-laki">Laki-laki</option>
-              <option value="Perempuan">Perempuan</option>
-            </select>
-          </div>
+      <form action="https://docs.google.com/forms/d/e/1FAIpQLScqGp9ctodkl0qMGDd7K3LGzPX0kDIvKSD8mUxhB75uaSuwxw/formResponse" method="POST" target="_blank" class="space-y-5">
+        
+        <div>
+          <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Gender</label>
+          <select name="entry.614551911" required class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white focus:outline-none focus:border-yellow-400 transition">
+            <option value="" disabled selected>Pilih Gender</option>
+            <option value="Cowok">Cowok</option>
+            <option value="Cewek">Cewek</option>
+          </select>
+        </div>
 
-          <!-- USN Roblox -->
-          <div>
-            <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Username Roblox</label>
-            <input type="text" name="entry.222222" placeholder="Masukkan Username Roblox" required 
-                   class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-yellow-400 transition">
-          </div>
+        <div>
+          <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Username Roblox</label>
+          <input type="text" name="entry.380187341" placeholder="Masukkan Username Roblox" required 
+                 class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-yellow-400 transition">
+        </div>
 
-          <!-- USN Discord -->
-          <div>
-            <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Username Discord</label>
-            <input type="text" name="entry.333333" placeholder="Masukkan Username Discord" required 
-                   class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-yellow-400 transition">
-          </div>
+        <div>
+          <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Username Discord</label>
+          <input type="text" name="entry.822188879" placeholder="Masukkan Username Discord" required 
+                 class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-yellow-400 transition">
+        </div>
 
-          <!-- Tanggal & Bulan Lahir -->
-          <div>
-            <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Tanggal & Bulan Lahir</label>
-            <input type="text" name="entry.444444" placeholder="Contoh: 15 Januari" required 
-                   class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-yellow-400 transition">
-          </div>
+        <div>
+          <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Tanggal dan Bulan Lahir</label>
+          <input type="date" name="entry.1925608994" required 
+                 class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white focus:outline-none focus:border-yellow-400 transition">
+          <p class="text-xs text-neutral-500 mt-1">*Untuk tahun isi dengan tahun saat ini</p>
+        </div>
 
-          <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-black p-4 rounded-xl transition duration-300 shadow-lg shadow-yellow-400/10 mt-6 flex justify-center items-center gap-2">
-            <span>Kirim Pendaftaran</span>
-            <i class="fas fa-paper-plane text-xs"></i>
-          </button>
-        </form>
-      </div>
+        <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-black p-4 rounded-xl transition duration-300 shadow-lg shadow-yellow-400/10 mt-6 flex justify-center items-center gap-2">
+          <span>Kirim Pendaftaran</span>
+          <i class="fas fa-paper-plane text-xs"></i>
+        </button>
+      </form>
     </div>
-  </section>
-
+  </div>
+</section>
+  
   <!-- FOOTER -->
   <footer class="py-8 bg-black border-t border-neutral-900 text-center text-xs text-neutral-500">
     <p>&copy; Hustle House Family. All rights reserved.</p>
