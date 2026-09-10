@@ -127,11 +127,13 @@
       { displayName: "HSHOxOink", username: "iniioinkk", tag: "ADMIN", imgUrl: "https://i.ibb.co.com/9m88QJZc/HSHO-Dashboard-5.webp" }
     ];
 
-    // 2. GOOGLE SHEETS ENDPOINT
-    const SPREADSHEET_ID = "1ho6plozyfwxbtvkcFXFF6mRkc_rpW8IuXV_TIsXh6w4";
-    const SHEET_NAME = "Member Aktif";
-    const JSON_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&t=${new Date().getTime()}`;
+    // GOOGLE SHEETS GVIZ ENDPOINT (DENGAN headers=0 AGAR BARIS PERTAMA DIBACA SEBAGAI DATA)
+const SPREADSHEET_ID = "1ho6plozyfwxbtvkcFXFF6mRkc_rpW8IuXV_TIsXh6w4";
+const SHEET_NAME = "Member Aktif";
 
+// Ditambahkan &headers=0 agar Google tidak melewatkan baris atas sebagai header
+const JSON_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&headers=0&t=${new Date().getTime()}`;
+    
     // 3. FUNGSI HITUNG UMUR FAMILY (BERDIRI: 25 JULI 2025)
     function calculateFamilyAge() {
       const startDate = new Date("2025-07-25");
@@ -191,29 +193,40 @@ async function fetchActiveMembers() {
     let validMemberCount = 0;
 
     rows.forEach(row => {
-  if (!row.c) return;
+      if (!row.c) return;
 
-  // Kolom C (Index 2) = Username Roblox
-  const usnRoblox = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
-  
-  // Jika Kolom F (Index 5) kosong/tidak ada, otomatis gunakan usnRoblox sebagai Display Name
-  const displayName = (row.c[5] && row.c[5].v && row.c[5].v.toString().trim() !== "") 
-                      ? row.c[5].v.toString().trim() 
-                      : usnRoblox;
+      // Kolom C (Index 2) = Username Roblox
+      const usnRoblox = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
+      
+      // Kolom F (Index 5) = Display Name Roblox
+      const displayName = (row.c[5] && row.c[5].v && row.c[5].v.toString().trim() !== "") 
+                          ? row.c[5].v.toString().trim() 
+                          : usnRoblox;
 
-  // Abaikan jika USN kosong atau jika ini baris Header
-  if (!usnRoblox || usnRoblox.toLowerCase() === "username roblox") return;
+      // Abaikan jika USN kosong atau jika ini baris Header/Judul kolom
+      if (!usnRoblox || usnRoblox.toLowerCase() === "username roblox" || usnRoblox.toLowerCase() === "usn roblox") return;
 
-  validMemberCount++;
+      validMemberCount++;
 
-  const cardHtml = `
-    <div class="member-card bg-neutral-900/90 border border-neutral-800/80 hover:border-yellow-400/60 rounded-xl p-3.5 shadow-md transition duration-200 hover:-translate-y-0.5 group text-center flex flex-col justify-center min-h-[75px]">
-      <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
-      <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
-    </div>
-  `;
-  grid.innerHTML += cardHtml;
-});
+      const cardHtml = `
+        <div class="member-card bg-neutral-900/90 border border-neutral-800/80 hover:border-yellow-400/60 rounded-xl p-3.5 shadow-md transition duration-200 hover:-translate-y-0.5 group text-center flex flex-col justify-center min-h-[75px]">
+          <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
+          <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
+        </div>
+      `;
+      grid.innerHTML += cardHtml;
+    });
+
+    // Update total angka di statistik
+    document.getElementById("totalMembersCount").innerText = validMemberCount;
+
+    document.getElementById("loading").classList.add("hidden");
+    grid.classList.remove("hidden");
+
+  } catch (err) {
+    console.error("Detail Error:", err);
+  }
+}
 
     // PILIHAN TOTAL MEMBER DI CARD STATISTIK:
     // Opsi A: Hanya menghitung member aktif dari sheet (Akurat dengan jumlah kartu di bawah)
