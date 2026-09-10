@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Birthday Reminder - Hustle House Family</title>
+  <!-- Tailwind CSS & FontAwesome Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-black text-white font-sans antialiased min-h-screen selection:bg-yellow-400 selection:text-black">
+
+  <!-- NAVBAR -->
+  <nav class="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-yellow-400/20">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+      <!-- LOGO FAMILY -->
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp" alt="HSHO Logo" class="h-9 md:h-11 object-contain">
+      </a>
+
+      <!-- MENU DESKTOP -->
+      <div class="hidden md:flex items-center space-x-6 text-sm font-semibold">
+        <a href="index.html" class="hover:text-yellow-400 transition">Home</a>
+        <a href="member.html" class="hover:text-yellow-400 transition">Member Gallery</a>
+        <a href="birthday.html" class="text-yellow-400 transition">Birthday Reminder</a>
+        <a href="music.html" class="hover:text-yellow-400 transition">HSHO Music</a>
+        <a href="index.html#register" class="hover:text-yellow-400 transition">Form Member</a>
+      </div>
+
+      <!-- TOMBOL BURGER MENU -->
+      <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden text-yellow-400 text-2xl focus:outline-none p-1">
+        <i class="fas fa-bars" id="menuIcon"></i>
+      </button>
+    </div>
+
+    <!-- MENU MOBILE DROPDOWN -->
+    <div id="mobileMenu" class="hidden md:hidden bg-neutral-950/95 border-b border-yellow-400/20 px-4 pt-2 pb-4 space-y-3 font-semibold text-sm">
+      <a href="index.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">Home</a>
+      <a href="member.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">Member Gallery</a>
+      <a href="birthday.html" class="block py-2 border-b border-neutral-800 text-yellow-400 transition">Birthday Reminder</a>
+      <a href="music.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">HSHO Music</a>
+      <a href="index.html#register" class="block py-2 hover:text-yellow-400 transition">Form Member</a>
+    </div>
+  </nav>
+
+  <!-- HEADER SECTION -->
+  <section class="py-12 bg-neutral-950 text-center border-b border-neutral-900">
+    <div class="max-w-4xl mx-auto px-4">
+      <span class="px-4 py-1.5 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs font-bold uppercase tracking-widest mb-4 inline-block">
+        <i class="fas fa-cake-candles mr-1"></i> Family Celebration
+      </span>
+      <h1 class="text-3xl md:text-5xl font-black text-white mb-3 uppercase tracking-tight">
+        HUSTLE HOUSE <span class="text-yellow-400">BIRTHDAY REMINDER</span>
+      </h1>
+      <p class="text-neutral-400 text-sm md:text-base">Jadwal Ulang Tahun Anggota Hustle House Family Berdasarkan Bulan</p>
+    </div>
+  </section>
+
+  <main class="max-w-7xl mx-auto px-4 py-12 space-y-12">
+
+    <!-- HIGHLIGHT: ULANG TAHUN BULAN INI & HARI INI -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <!-- Card Ulang Tahun Hari Ini -->
+      <div class="bg-neutral-900 border border-yellow-400/40 rounded-2xl p-6 shadow-xl relative overflow-hidden flex flex-col justify-between">
+        <div class="absolute -right-6 -top-6 w-24 h-24 bg-yellow-400/10 rounded-full blur-xl pointer-events-none"></div>
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-yellow-400 text-black flex items-center justify-center font-black text-lg">
+              <i class="fas fa-gift"></i>
+            </div>
+            <div>
+              <h2 class="text-lg font-black text-white uppercase tracking-wider">Ulang Tahun Hari Ini 🎉</h2>
+              <p class="text-xs text-neutral-400" id="currentDateText">...</p>
+            </div>
+          </div>
+          <div id="todayBirthdayList" class="space-y-2 mt-2">
+            <!-- Diisi via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Ulang Tahun Bulan Ini -->
+      <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-neutral-800 text-yellow-400 border border-yellow-400/30 flex items-center justify-center font-black text-lg">
+              <i class="fas fa-calendar-day"></i>
+            </div>
+            <div>
+              <h2 class="text-lg font-black text-white uppercase tracking-wider">Ulang Tahun Bulan Ini 🎂</h2>
+              <p class="text-xs text-neutral-400" id="currentMonthText">...</p>
+            </div>
+          </div>
+          <div id="thisMonthBirthdayList" class="flex flex-wrap gap-2 mt-2">
+            <!-- Diisi via JS -->
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- KELOMPOK DARI JANUARI - DESEMBER -->
+    <section>
+      <div class="flex items-center justify-between mb-8 border-b border-neutral-800 pb-4">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-layer-group text-yellow-400 text-xl"></i>
+          <h2 class="text-xl font-black text-white uppercase tracking-wider">Daftar Bulan Lahir</h2>
+        </div>
+      </div>
+
+      <!-- Indicator Loading -->
+      <div id="loading" class="text-center py-12">
+        <i class="fas fa-spinner fa-spin text-4xl text-yellow-400 mb-4"></i>
+        <p class="text-neutral-400">Memuat data ulang tahun member...</p>
+      </div>
+
+      <!-- Grid 12 Bulan -->
+      <div id="monthlyGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+        <!-- Generates 12 Bulan via JavaScript -->
+      </div>
+    </section>
+
+    <!-- SECTION TAMBAHAN: MEMBER TANPA TANGGAL LAHIR -->
+    <section id="unknownSection" class="hidden">
+      <div class="flex items-center gap-2 mb-6 border-b border-neutral-800 pb-4">
+        <i class="fas fa-question-circle text-neutral-500 text-xl"></i>
+        <div>
+          <h2 class="text-xl font-black text-white uppercase tracking-wider">Belum Mengisi Tanggal Lahir</h2>
+          <p class="text-xs text-neutral-500">Daftar member yang data tanggal lahirnya belum terdata di sistem</p>
+        </div>
+      </div>
+
+      <div class="bg-neutral-900 border border-neutral-800/80 rounded-2xl p-6 shadow-xl">
+        <div id="unknownBirthdayGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <!-- Diisi via JS -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="py-8 bg-black border-t border-neutral-900 text-center text-xs text-neutral-500">
+    <p>&copy; Hustle House Family. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const SPREADSHEET_ID = "1ho6plozyfwxbtvkcFXFF6mRkc_rpW8IuXV_TIsXh6w4";
+    const SHEET_NAME = "Member Aktif";
+    const JSON_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&headers=0&t=${new Date().getTime()}`;
+
+    const MONTH_NAMES = [
+      "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+      "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+    ];
+
+    // Penampung Data per Bulan (0-11)
+    const birthdayData = Array.from({ length: 12 }, () => []);
+    // Penampung Data Member Tanpa Tanggal Lahir
+    const unknownBirthdayData = [];
+
+    async function fetchBirthdays() {
+      try {
+        const response = await fetch(JSON_URL);
+        if (!response.ok) throw new Error("Gagal mengambil data dari Google Sheets");
+
+        const text = await response.text();
+        const jsonString = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
+        const data = JSON.parse(jsonString);
+        const rows = data.table.rows;
+
+        const now = new Date();
+        const currentDay = now.getDate();
+        const currentMonthIndex = now.getMonth(); // 0 - 11
+
+        document.getElementById("currentDateText").innerText = `${currentDay} ${MONTH_NAMES[currentMonthIndex]} ${now.getFullYear()}`;
+        document.getElementById("currentMonthText").innerText = `Bulan ${MONTH_NAMES[currentMonthIndex]}`;
+
+        let todayBirthdays = [];
+        let thisMonthBirthdays = [];
+
+        rows.forEach(row => {
+          if (!row.c) return;
+
+          // Pemetaan Kolom:
+          // Index 2 = Username Roblox (Kolom C)
+          // Index 4 = Tanggal Lahir (Kolom E)
+          // Index 5 = Display Name Roblox (Kolom F)
+          const usnRoblox = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
+          const rawDateStr = row.c[4] && row.c[4].v ? row.c[4].v.toString().trim() : "";
+          const displayName = (row.c[5] && row.c[5].v && row.c[5].v.toString().trim() !== "") 
+                              ? row.c[5].v.toString().trim() 
+                              : usnRoblox;
+
+          if (!usnRoblox || usnRoblox.toLowerCase() === "username roblox" || usnRoblox.toLowerCase() === "usn roblox") return;
+
+          // Jika tidak ada data tanggal lahir sama sekali
+          if (!rawDateStr) {
+            unknownBirthdayData.push({ displayName, usnRoblox });
+            return;
+          }
+
+          // Parsing Tanggal Lahir
+          let day = null;
+          let monthIndex = null;
+
+          if (rawDateStr.includes("Date(")) {
+            const matches = rawDateStr.match(/\d+/g);
+            if (matches && matches.length >= 3) {
+              monthIndex = parseInt(matches[1]);
+              day = parseInt(matches[2]);
+            }
+          } else {
+            MONTH_NAMES.forEach((mName, idx) => {
+              if (rawDateStr.toLowerCase().includes(mName.toLowerCase())) {
+                monthIndex = idx;
+              }
+            });
+
+            const dayMatch = rawDateStr.match(/\d+/);
+            if (dayMatch) {
+              day = parseInt(dayMatch[0]);
+            }
+          }
+
+          if (monthIndex !== null && monthIndex >= 0 && monthIndex < 12) {
+            const memberObj = { displayName, usnRoblox, day: day || "?" };
+            birthdayData[monthIndex].push(memberObj);
+
+            if (monthIndex === currentMonthIndex) {
+              thisMonthBirthdays.push(memberObj);
+              if (day === currentDay) {
+                todayBirthdays.push(memberObj);
+              }
+            }
+          } else {
+            // Jika format tanggal tidak berhasil diparse
+            unknownBirthdayData.push({ displayName, usnRoblox });
+          }
+        });
+
+        // Render Highlight
+        renderTodayHighlight(todayBirthdays);
+        renderThisMonthHighlight(thisMonthBirthdays);
+
+        // Render Grid 12 Bulan
+        renderMonthlyGrid(currentMonthIndex);
+
+        // Render Section Member Tanpa Tanggal Lahir
+        renderUnknownSection();
+
+        document.getElementById("loading").classList.add("hidden");
+        document.getElementById("monthlyGrid").classList.remove("hidden");
+
+      } catch (err) {
+        console.error("Error Loading Birthdays:", err);
+      }
+    }
+
+    function renderTodayHighlight(list) {
+      const container = document.getElementById("todayBirthdayList");
+      if (list.length === 0) {
+        container.innerHTML = `<p class="text-sm text-neutral-500 italic py-2">Tidak ada member yang ulang tahun hari ini.</p>`;
+        return;
+      }
+
+      container.innerHTML = list.map(m => `
+        <div class="flex items-center justify-between bg-yellow-400/10 border border-yellow-400/30 rounded-xl p-3">
+          <div>
+            <h4 class="font-bold text-yellow-400 text-sm">${m.displayName}</h4>
+            <p class="text-xs text-neutral-400">@${m.usnRoblox}</p>
+          </div>
+          <span class="px-3 py-1 bg-yellow-400 text-black text-xs font-black rounded-full uppercase">Happy Birthday! 🔥</span>
+        </div>
+      `).join("");
+    }
+
+    function renderThisMonthHighlight(list) {
+      const container = document.getElementById("thisMonthBirthdayList");
+      if (list.length === 0) {
+        container.innerHTML = `<p class="text-sm text-neutral-500 italic py-2">Tidak ada ulang tahun di bulan ini.</p>`;
+        return;
+      }
+
+      list.sort((a, b) => (a.day || 0) - (b.day || 0));
+
+      container.innerHTML = list.map(m => `
+        <div class="bg-black/60 border border-neutral-800 rounded-xl px-3 py-2 flex items-center gap-2">
+          <span class="text-xs font-bold text-yellow-400 bg-yellow-400/10 px-2 py-0.5 rounded-md">${m.day}</span>
+          <div>
+            <p class="font-bold text-xs text-white truncate max-w-[120px]">${m.displayName}</p>
+            <p class="text-[10px] text-neutral-500 truncate">@${m.usnRoblox}</p>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderMonthlyGrid(activeMonthIdx) {
+      const container = document.getElementById("monthlyGrid");
+      container.innerHTML = "";
+
+      MONTH_NAMES.forEach((mName, idx) => {
+        const isCurrentMonth = idx === activeMonthIdx;
+        const members = birthdayData[idx];
+
+        members.sort((a, b) => (a.day || 0) - (b.day || 0));
+
+        let membersListHtml = "";
+
+        if (members.length === 0) {
+          membersListHtml = `<p class="text-xs text-neutral-600 italic py-2">Belum ada data member</p>`;
+        } else {
+          membersListHtml = members.map(m => `
+            <div class="flex items-center justify-between py-1.5 border-b border-neutral-800/50 last:border-0">
+              <div class="truncate mr-2">
+                <p class="text-xs font-bold text-white truncate">${m.displayName}</p>
+                <p class="text-[10px] text-neutral-500 truncate">@${m.usnRoblox}</p>
+              </div>
+              <span class="text-xs font-bold text-yellow-400 bg-neutral-950 border border-yellow-400/20 px-2.5 py-1 rounded-lg flex-shrink-0">
+                ${m.day} ${mName.substring(0, 3)}
+              </span>
+            </div>
+          `).join("");
+        }
+
+        const monthCard = `
+          <div class="bg-neutral-900 border ${isCurrentMonth ? 'border-yellow-400/60 shadow-yellow-400/5' : 'border-neutral-800'} rounded-2xl p-5 shadow-lg flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4 border-b border-neutral-800 pb-2">
+                <h3 class="font-black text-base uppercase tracking-wider ${isCurrentMonth ? 'text-yellow-400' : 'text-white'}">
+                  ${mName}
+                </h3>
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full ${isCurrentMonth ? 'bg-yellow-400 text-black font-black' : 'bg-neutral-800 text-neutral-400'}">
+                  ${members.length} Member
+                </span>
+              </div>
+              <div class="space-y-1">
+                ${membersListHtml}
+              </div>
+            </div>
+          </div>
+        `;
+
+        container.innerHTML += monthCard;
+      });
+    }
+
+    // Render Section Member Tanpa Tanggal Lahir
+    function renderUnknownSection() {
+      const section = document.getElementById("unknownSection");
+      const container = document.getElementById("unknownBirthdayGrid");
+
+      if (unknownBirthdayData.length === 0) {
+        section.classList.add("hidden");
+        return;
+      }
+
+      container.innerHTML = unknownBirthdayData.map(m => `
+        <div class="bg-black/50 border border-neutral-800 rounded-xl p-3 text-center">
+          <p class="font-bold text-xs text-neutral-300 truncate" title="${m.displayName}">${m.displayName}</p>
+          <p class="text-[10px] text-neutral-500 truncate mt-0.5">@${m.usnRoblox}</p>
+        </div>
+      `).join("");
+
+      section.classList.remove("hidden");
+    }
+
+    // Toggle Mobile Menu
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById("mobileMenu");
+      const menuIcon = document.getElementById("menuIcon");
+      mobileMenu.classList.toggle("hidden");
+      
+      if (mobileMenu.classList.contains("hidden")) {
+        menuIcon.classList.remove("fa-xmark");
+        menuIcon.classList.add("fa-bars");
+      } else {
+        menuIcon.classList.remove("fa-bars");
+        menuIcon.classList.add("fa-xmark");
+      }
+    }
+
+    // Jalankan Skrip
+    fetchBirthdays();
+  </script>
+
+</body>
+</html>
