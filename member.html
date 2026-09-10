@@ -191,24 +191,29 @@ async function fetchActiveMembers() {
     let validMemberCount = 0;
 
     rows.forEach(row => {
-      if (!row.c) return;
+  if (!row.c) return;
 
-      const usnRoblox = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
-      const displayName = row.c[5] && row.c[5].v ? row.c[5].v.toString().trim() : usnRoblox;
+  // Kolom C (Index 2) = Username Roblox
+  const usnRoblox = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
+  
+  // Jika Kolom F (Index 5) kosong/tidak ada, otomatis gunakan usnRoblox sebagai Display Name
+  const displayName = (row.c[5] && row.c[5].v && row.c[5].v.toString().trim() !== "") 
+                      ? row.c[5].v.toString().trim() 
+                      : usnRoblox;
 
-      // Abaikan jika USN kosong atau jika ini baris Header (misal teksnya "Username Roblox")
-      if (!usnRoblox || usnRoblox.toLowerCase() === "username roblox") return;
+  // Abaikan jika USN kosong atau jika ini baris Header
+  if (!usnRoblox || usnRoblox.toLowerCase() === "username roblox") return;
 
-      validMemberCount++;
+  validMemberCount++;
 
-      const cardHtml = `
-        <div class="member-card bg-neutral-900/90 border border-neutral-800/80 hover:border-yellow-400/60 rounded-xl p-3.5 shadow-md transition duration-200 hover:-translate-y-0.5 group text-center flex flex-col justify-center min-h-[75px]">
-          <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
-          <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
-        </div>
-      `;
-      grid.innerHTML += cardHtml;
-    });
+  const cardHtml = `
+    <div class="member-card bg-neutral-900/90 border border-neutral-800/80 hover:border-yellow-400/60 rounded-xl p-3.5 shadow-md transition duration-200 hover:-translate-y-0.5 group text-center flex flex-col justify-center min-h-[75px]">
+      <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
+      <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
+    </div>
+  `;
+  grid.innerHTML += cardHtml;
+});
 
     // PILIHAN TOTAL MEMBER DI CARD STATISTIK:
     // Opsi A: Hanya menghitung member aktif dari sheet (Akurat dengan jumlah kartu di bawah)
