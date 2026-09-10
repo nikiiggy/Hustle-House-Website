@@ -10,7 +10,6 @@
 </head>
 <body class="bg-black text-white font-sans antialiased min-h-screen selection:bg-yellow-400 selection:text-black">
 
-  <!-- NAVBAR -->
   <!-- NAVBAR WITH MOBILE BURGER MENU -->
   <nav class="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-yellow-400/20">
     <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
@@ -19,39 +18,56 @@
         <img src="https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp" alt="HSHO Logo" class="h-9 md:h-11 object-contain">
       </a>
 
-      <!-- MENU DESKTOP (Tampil di Layar Sedang & Besar / md:) -->
+      <!-- MENU DESKTOP -->
       <div class="hidden md:flex items-center space-x-6 text-sm font-semibold">
         <a href="index.html" class="hover:text-yellow-400 transition">Home</a>
-        <a href="member.html" class="hover:text-yellow-400 transition">Member Gallery</a>
+        <a href="member.html" class="text-yellow-400 transition">Member Gallery</a>
         <a href="music.html" class="hover:text-yellow-400 transition">HSHO Music</a>
         <a href="index.html#register" class="hover:text-yellow-400 transition">Form Member</a>
       </div>
 
-      <!-- TOMBOL BURGER MENU (Hanya Tampil di Mobile) -->
+      <!-- TOMBOL BURGER MENU -->
       <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden text-yellow-400 text-2xl focus:outline-none p-1">
         <i class="fas fa-bars" id="menuIcon"></i>
       </button>
     </div>
 
-    <!-- MENU MOBILE DROPDOWN (Sembunyi secara default) -->
+    <!-- MENU MOBILE DROPDOWN -->
     <div id="mobileMenu" class="hidden md:hidden bg-neutral-950/95 border-b border-yellow-400/20 px-4 pt-2 pb-4 space-y-3 font-semibold text-sm">
       <a href="index.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">Home</a>
-      <a href="member.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">Member Gallery</a>
+      <a href="member.html" class="block py-2 border-b border-neutral-800 text-yellow-400 transition">Member Gallery</a>
       <a href="music.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">HSHO Music</a>
       <a href="index.html#register" class="block py-2 hover:text-yellow-400 transition">Form Member</a>
     </div>
   </nav>
 
-  <!-- HEADER -->
+  <!-- HEADER & STATS SECTION -->
   <section class="py-12 bg-neutral-950 text-center border-b border-neutral-900">
     <div class="max-w-4xl mx-auto px-4">
       <h1 class="text-3xl md:text-5xl font-black text-white mb-3 uppercase tracking-tight">
         HUSTLE HOUSE <span class="text-yellow-400">FAMILY GALLERY</span>
       </h1>
-      <p class="text-neutral-400 text-sm md:text-base">Daftar Anggota Aktif & Struktur Admin Hustle House Family</p>
-      
+      <p class="text-neutral-400 text-sm md:text-base mb-8">Daftar Anggota Aktif & Struktur Admin Hustle House Family</p>
+
+      <!-- CARD STATISTIK (JUMLAH MEMBER & UMUR FAMILY) -->
+      <div class="grid grid-cols-2 gap-4 max-w-lg mx-auto mb-8">
+        <!-- Card 1: Total Member -->
+        <div class="bg-neutral-900/90 border border-yellow-400/30 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg">
+          <i class="fas fa-users text-yellow-400 text-2xl mb-1"></i>
+          <span id="totalMembersCount" class="text-2xl md:text-3xl font-black text-white">...</span>
+          <span class="text-[11px] md:text-xs text-neutral-400 uppercase tracking-wider font-semibold">Total Member</span>
+        </div>
+
+        <!-- Card 2: Umur Family -->
+        <div class="bg-neutral-900/90 border border-yellow-400/30 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg">
+          <i class="fas fa-calendar-alt text-yellow-400 text-2xl mb-1"></i>
+          <span id="familyAgeText" class="text-2xl md:text-3xl font-black text-white">...</span>
+          <span class="text-[11px] md:text-xs text-neutral-400 uppercase tracking-wider font-semibold">Umur Family</span>
+        </div>
+      </div>
+
       <!-- FITUR PENCARIAN -->
-      <div class="mt-8 flex justify-center max-w-md mx-auto">
+      <div class="flex justify-center max-w-md mx-auto">
         <div class="relative w-full">
           <i class="fas fa-search absolute left-4 top-3.5 text-neutral-500"></i>
           <input type="text" id="searchInput" placeholder="Cari Nick / Username..." onkeyup="filterMembers()" 
@@ -63,20 +79,19 @@
 
   <main class="max-w-7xl mx-auto px-4 py-12 space-y-16">
     
-    <!-- SECTION ADMIN & OWNER (PORTRAIT 9:16 / 608x1080px) -->
+    <!-- SECTION ADMIN & OWNER -->
     <section>
       <div class="flex items-center gap-2 mb-6 border-b border-yellow-400/20 pb-3">
         <i class="fas fa-crown text-yellow-400 text-xl"></i>
         <h2 class="text-xl font-black text-white uppercase tracking-wider">Family Structures & Admins</h2>
       </div>
 
-      <!-- Grid Admin (2 Owner & 4 Admin) -->
+      <!-- Grid Admin -->
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4" id="adminGrid">
-        <!-- Disusun via JavaScript dari array ADMIN_DATA -->
       </div>
     </section>
 
-    <!-- SECTION MEMBER AKTIF (TEXT ONLY) -->
+    <!-- SECTION MEMBER AKTIF -->
     <section>
       <div class="flex items-center gap-2 mb-6 border-b border-neutral-800 pb-3">
         <i class="fas fa-users text-neutral-400 text-xl"></i>
@@ -89,7 +104,7 @@
         <p class="text-neutral-400">Memuat data dari sheet Member Aktif...</p>
       </div>
 
-      <!-- Grid List Member (Text Only) -->
+      <!-- Grid List Member -->
       <div id="galleryGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 hidden">
       </div>
     </section>
@@ -102,54 +117,33 @@
   </footer>
 
   <script>
-    // 1. DATA ADMIN & OWNER (WITH HSHO DISPLAY NAME & IMGBB)
+    // 1. DATA ADMIN & OWNER
     const ADMIN_DATA = [
-      { 
-        displayName: "HSHOxMoraa", 
-        username: "PhoenixSoul02", // Ganti USN Roblox asli kamu di sini jika beda
-        tag: "OWNER", 
-        imgUrl: "https://i.ibb.co.com/rGjh03D2/HSHO-Dashboard.webp" 
-      },
-      { 
-        displayName: "HSHOxMiraa", 
-        username: "Miraaachans2", 
-        tag: "OWNER", 
-        imgUrl: "https://i.ibb.co.com/TxrKtZHJ/HSHO-Dashboard-1.webp" 
-      },
-      { 
-        displayName: "HSHOxNodi", 
-        username: "Nodi_0610", 
-        tag: "ADMIN", 
-        imgUrl: "https://i.ibb.co.com/b085r21/HSHO-Dashboard-2.webp" 
-      },
-      { 
-        displayName: "HSHOxVelyn", 
-        username: "velynthea", 
-        tag: "ADMIN", 
-        imgUrl: "https://i.ibb.co.com/gMdP9vPC/HSHO-Dashboard-3.webp" 
-      },
-      { 
-        displayName: "HSHOxJoJo", 
-        username: "enallll666", 
-        tag: "ADMIN", 
-        imgUrl: "https://i.ibb.co.com/76rh7tT/HSHO-Dashboard-4.webp" 
-      },
-      { 
-        displayName: "HSHOxOink", 
-        username: "iniioinkk", 
-        tag: "ADMIN", 
-        imgUrl: "https://i.ibb.co.com/9m88QJZc/HSHO-Dashboard-5.webp" 
-      }
+      { displayName: "HSHOxMoraa", username: "PhoenixSoul02", tag: "OWNER", imgUrl: "https://i.ibb.co.com/rGjh03D2/HSHO-Dashboard.webp" },
+      { displayName: "HSHOxMiraa", username: "Miraaachans2", tag: "OWNER", imgUrl: "https://i.ibb.co.com/TxrKtZHJ/HSHO-Dashboard-1.webp" },
+      { displayName: "HSHOxNodi", username: "Nodi_0610", tag: "ADMIN", imgUrl: "https://i.ibb.co.com/b085r21/HSHO-Dashboard-2.webp" },
+      { displayName: "HSHOxVelyn", username: "velynthea", tag: "ADMIN", imgUrl: "https://i.ibb.co.com/gMdP9vPC/HSHO-Dashboard-3.webp" },
+      { displayName: "HSHOxJoJo", username: "enallll666", tag: "ADMIN", imgUrl: "https://i.ibb.co.com/76rh7tT/HSHO-Dashboard-4.webp" },
+      { displayName: "HSHOxOink", username: "iniioinkk", tag: "ADMIN", imgUrl: "https://i.ibb.co.com/9m88QJZc/HSHO-Dashboard-5.webp" }
     ];
 
-    // 2. GOOGLE SHEETS GVIZ ENDPOINT (REAL-TIME TANPA CACHE)
+    // 2. GOOGLE SHEETS ENDPOINT
     const SPREADSHEET_ID = "1ho6plozyfwxbtvkcFXFF6mRkc_rpW8IuXV_TIsXh6w4";
     const SHEET_NAME = "Member Aktif";
-    
-    // Dipasang cachebuster timestamp (?t=...) agar selalu mengunduh data detik itu juga
     const JSON_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&t=${new Date().getTime()}`;
 
-    // Render Admin Grid (Foto Portrait 9:16)
+    // 3. FUNGSI HITUNG UMUR FAMILY (BERDIRI: 25 JULI 2025)
+    function calculateFamilyAge() {
+      const startDate = new Date("2025-07-25");
+      const today = new Date();
+      
+      const diffTime = Math.abs(today - startDate);
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      
+      document.getElementById("familyAgeText").innerText = `${diffDays} Hari`;
+    }
+
+    // Render Admin Grid
     function renderAdmins() {
       const adminContainer = document.getElementById("adminGrid");
       adminContainer.innerHTML = "";
@@ -180,15 +174,13 @@
       });
     }
 
-    // Fetch Data Member Aktif via Google Visualization API
+    // Fetch Data Member Aktif & Update Total Count
     async function fetchActiveMembers() {
       try {
         const response = await fetch(JSON_URL);
         if (!response.ok) throw new Error("Gagal mengambil data dari Google Sheets");
         
         const text = await response.text();
-        
-        // Membersihkan wrapper bawaan Google (google.visualization.Query.setResponse)
         const jsonString = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
         const data = JSON.parse(jsonString);
         const rows = data.table.rows;
@@ -196,18 +188,18 @@
         const grid = document.getElementById("galleryGrid");
         grid.innerHTML = "";
 
+        let validMemberCount = 0;
+
         rows.forEach(row => {
           if (!row.c) return;
 
-          // Pemetaan Kolom Sheet Member Aktif:
-          // Index 2 = Username Roblox (Kolom C)
-          // Index 5 = Display Name Roblox (Kolom F)
           const usnRoblox = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
           const displayName = row.c[5] && row.c[5].v ? row.c[5].v.toString().trim() : usnRoblox;
 
           if (!usnRoblox) return;
 
-          // Kartu Member Ringkas (Text Only)
+          validMemberCount++;
+
           const cardHtml = `
             <div class="member-card bg-neutral-900/90 border border-neutral-800/80 hover:border-yellow-400/60 rounded-xl p-3.5 shadow-md transition duration-200 hover:-translate-y-0.5 group text-center flex flex-col justify-center min-h-[75px]">
               <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
@@ -216,6 +208,10 @@
           `;
           grid.innerHTML += cardHtml;
         });
+
+        // Hitung total member (Active Members + 6 Admin/Owner)
+        const totalAllMembers = validMemberCount + ADMIN_DATA.length;
+        document.getElementById("totalMembersCount").innerText = totalAllMembers;
 
         document.getElementById("loading").classList.add("hidden");
         grid.classList.remove("hidden");
@@ -247,19 +243,13 @@
       });
     }
 
-    // Jalankan Skrip
-    renderAdmins();
-    fetchActiveMembers();
-
-
-    // Fungsi Toggle Mobile Burger Menu
+    // Toggle Mobile Burger Menu
     function toggleMobileMenu() {
       const mobileMenu = document.getElementById("mobileMenu");
       const menuIcon = document.getElementById("menuIcon");
       
       mobileMenu.classList.toggle("hidden");
       
-      // Ubah ikon burger (fa-bars) menjadi silang (fa-xmark) saat terbuka
       if (mobileMenu.classList.contains("hidden")) {
         menuIcon.classList.remove("fa-xmark");
         menuIcon.classList.add("fa-bars");
@@ -268,6 +258,11 @@
         menuIcon.classList.add("fa-xmark");
       }
     }
+
+    // Jalankan Skrip
+    calculateFamilyAge();
+    renderAdmins();
+    fetchActiveMembers();
   </script>
 
 </body>
