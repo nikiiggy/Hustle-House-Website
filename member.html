@@ -51,7 +51,7 @@
 
       <!-- CARD STATISTIK (JUMLAH MEMBER & UMUR FAMILY) -->
       <div class="grid grid-cols-2 gap-4 max-w-lg mx-auto mb-8">
-        <!-- Card 1: Total Member -->
+        <!-- Card 1: Total Member (Murni dari Sheet, Tanpa Admin) -->
         <div class="bg-neutral-900/90 border border-yellow-400/30 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg">
           <i class="fas fa-users text-yellow-400 text-2xl mb-1"></i>
           <span id="totalMembersCount" class="text-2xl md:text-3xl font-black text-white">...</span>
@@ -127,13 +127,11 @@
       { displayName: "HSHOxOink", username: "iniioinkk", tag: "ADMIN", imgUrl: "https://i.ibb.co.com/9m88QJZc/HSHO-Dashboard-5.webp" }
     ];
 
-    // GOOGLE SHEETS GVIZ ENDPOINT (DENGAN headers=0 AGAR BARIS PERTAMA DIBACA SEBAGAI DATA)
-const SPREADSHEET_ID = "1ho6plozyfwxbtvkcFXFF6mRkc_rpW8IuXV_TIsXh6w4";
-const SHEET_NAME = "Member Aktif";
+    // 2. GOOGLE SHEETS ENDPOINT (headers=0 AGAR BARIS ATAS DIBACA SEMUA)
+    const SPREADSHEET_ID = "1ho6plozyfwxbtvkcFXFF6mRkc_rpW8IuXV_TIsXh6w4";
+    const SHEET_NAME = "Member Aktif";
+    const JSON_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&headers=0&t=${new Date().getTime()}`;
 
-// Ditambahkan &headers=0 agar Google tidak melewatkan baris atas sebagai header
-const JSON_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&headers=0&t=${new Date().getTime()}`;
-    
     // 3. FUNGSI HITUNG UMUR FAMILY (BERDIRI: 25 JULI 2025)
     function calculateFamilyAge() {
       const startDate = new Date("2025-07-25");
@@ -176,78 +174,62 @@ const JSON_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/
       });
     }
 
-    // Fetch Data Member Aktif & Update Total Count
-async function fetchActiveMembers() {
-  try {
-    const response = await fetch(JSON_URL);
-    if (!response.ok) throw new Error("Gagal mengambil data dari Google Sheets");
-    
-    const text = await response.text();
-    const jsonString = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
-    const data = JSON.parse(jsonString);
-    const rows = data.table.rows;
+    // Fetch Data Member Aktif & Update Total Count (Tanpa Admin)
+    async function fetchActiveMembers() {
+      try {
+        const response = await fetch(JSON_URL);
+        if (!response.ok) throw new Error("Gagal mengambil data dari Google Sheets");
+        
+        const text = await response.text();
+        const jsonString = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
+        const data = JSON.parse(jsonString);
+        const rows = data.table.rows;
 
-    const grid = document.getElementById("galleryGrid");
-    grid.innerHTML = "";
+        const grid = document.getElementById("galleryGrid");
+        grid.innerHTML = "";
 
-    let validMemberCount = 0;
+        let validMemberCount = 0;
 
-    rows.forEach(row => {
-      if (!row.c) return;
+        rows.forEach(row => {
+          if (!row.c) return;
 
-      // Kolom C (Index 2) = Username Roblox
-      const usnRoblox = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
-      
-      // Kolom F (Index 5) = Display Name Roblox
-      const displayName = (row.c[5] && row.c[5].v && row.c[5].v.toString().trim() !== "") 
-                          ? row.c[5].v.toString().trim() 
-                          : usnRoblox;
+          // Kolom C (Index 2) = Username Roblox
+          const usnRoblox = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
+          
+          // Kolom F (Index 5) = Display Name Roblox (Fallback ke Username jika kosong)
+          const displayName = (row.c[5] && row.c[5].v && row.c[5].v.toString().trim() !== "") 
+                              ? row.c[5].v.toString().trim() 
+                              : usnRoblox;
 
-      // Abaikan jika USN kosong atau jika ini baris Header/Judul kolom
-      if (!usnRoblox || usnRoblox.toLowerCase() === "username roblox" || usnRoblox.toLowerCase() === "usn roblox") return;
+          // Abaikan jika USN kosong atau jika ini baris Header/Judul kolom
+          if (!usnRoblox || usnRoblox.toLowerCase() === "username roblox" || usnRoblox.toLowerCase() === "usn roblox") return;
 
-      validMemberCount++;
+          validMemberCount++;
 
-      const cardHtml = `
-        <div class="member-card bg-neutral-900/90 border border-neutral-800/80 hover:border-yellow-400/60 rounded-xl p-3.5 shadow-md transition duration-200 hover:-translate-y-0.5 group text-center flex flex-col justify-center min-h-[75px]">
-          <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
-          <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
-        </div>
-      `;
-      grid.innerHTML += cardHtml;
-    });
+          const cardHtml = `
+            <div class="member-card bg-neutral-900/90 border border-neutral-800/80 hover:border-yellow-400/60 rounded-xl p-3.5 shadow-md transition duration-200 hover:-translate-y-0.5 group text-center flex flex-col justify-center min-h-[75px]">
+              <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
+              <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
+            </div>
+          `;
+          grid.innerHTML += cardHtml;
+        });
 
-    // Update total angka di statistik
-    document.getElementById("totalMembersCount").innerText = validMemberCount;
+        // HANYA MENGHITUNG MEMBER AKTIF DARI SHEET (TANPA TAMBAHAN ADMIN)
+        document.getElementById("totalMembersCount").innerText = validMemberCount;
 
-    document.getElementById("loading").classList.add("hidden");
-    grid.classList.remove("hidden");
+        document.getElementById("loading").classList.add("hidden");
+        grid.classList.remove("hidden");
 
-  } catch (err) {
-    console.error("Detail Error:", err);
-  }
-}
-
-    // PILIHAN TOTAL MEMBER DI CARD STATISTIK:
-    // Opsi A: Hanya menghitung member aktif dari sheet (Akurat dengan jumlah kartu di bawah)
-    document.getElementById("totalMembersCount").innerText = validMemberCount;
-
-    // Catatan: Jika ingin totalnya menggabungkan Admin (6) + Member Sheet (52 = 58),
-    // ubah baris di atas menjadi: 
-    // document.getElementById("totalMembersCount").innerText = validMemberCount + ADMIN_DATA.length;
-
-    document.getElementById("loading").classList.add("hidden");
-    grid.classList.remove("hidden");
-
-  } catch (err) {
-    console.error("Detail Error:", err);
-    document.getElementById("loading").innerHTML = `
-      <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-xl max-w-md mx-auto text-center">
-        <p class="text-red-400 font-bold mb-1">Gagal memuat data dari Sheet Member Aktif.</p>
-        <p class="text-xs text-neutral-400">Pastikan akses spreadsheet disetel ke "Anyone with the link / Siapa saja yang memiliki link".</p>
-      </div>`;
-  }
-}
+      } catch (err) {
+        console.error("Detail Error:", err);
+        document.getElementById("loading").innerHTML = `
+          <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-xl max-w-md mx-auto text-center">
+            <p class="text-red-400 font-bold mb-1">Gagal memuat data dari Sheet Member Aktif.</p>
+            <p class="text-xs text-neutral-400">Pastikan akses spreadsheet disetel ke "Anyone with the link / Siapa saja yang memiliki link".</p>
+          </div>`;
+      }
+    }
 
     // Fitur Pencarian Real-Time
     function filterMembers() {
