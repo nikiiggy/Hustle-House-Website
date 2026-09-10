@@ -191,20 +191,21 @@
           // Index 5 = Display Name (Kolom F)
           // Index 6 = Status (Kolom G)
           // Index 7 = User ID Roblox (Kolom H)
+          // Index 8 = Avatar CDN URL (Kolom I)
           const usnRoblox = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
           const displayName = (row.c[5] && row.c[5].v && row.c[5].v.toString().trim() !== "") 
                               ? row.c[5].v.toString().trim() 
                               : usnRoblox;
           const userId = row.c[7] && row.c[7].v ? row.c[7].v.toString().trim() : "";
+          
+          // Ambil Link Foto CDN Asli langsung dari Sheet Kolom I
+          const avatarUrl = (row.c[8] && row.c[8].v && row.c[8].v.toString().trim() !== "")
+                            ? row.c[8].v.toString().trim()
+                            : "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3E244791C39AC3F092ECADCFDDF546B6-Png/150/150/AvatarHeadshot/Webp/noFilter";
 
           if (!usnRoblox || usnRoblox.toLowerCase() === "username roblox" || usnRoblox.toLowerCase() === "usn roblox") return;
 
           validMemberCount++;
-
-          // Headshot Avatar Roblox CDN via User ID Dynamic
-          const avatarUrl = userId 
-            ? `https://tr.rbxcdn.com/30DAY-AvatarHeadshot-${userId}-Png/150/150/AvatarHeadshot/Webp/noFilter` 
-            : `https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3E244791C39AC3F092ECADCFDDF546B6-Png/150/150/AvatarHeadshot/Webp/noFilter`;
 
           const profileLink = userId 
             ? `https://www.roblox.com/users/${userId}/profile` 
