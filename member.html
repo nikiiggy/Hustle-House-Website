@@ -175,56 +175,61 @@
     }
 
     // Fetch Data Member Aktif & Update Total Count
-    async function fetchActiveMembers() {
-      try {
-        const response = await fetch(JSON_URL);
-        if (!response.ok) throw new Error("Gagal mengambil data dari Google Sheets");
-        
-        const text = await response.text();
-        const jsonString = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
-        const data = JSON.parse(jsonString);
-        const rows = data.table.rows;
+async function fetchActiveMembers() {
+  try {
+    const response = await fetch(JSON_URL);
+    if (!response.ok) throw new Error("Gagal mengambil data dari Google Sheets");
+    
+    const text = await response.text();
+    const jsonString = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
+    const data = JSON.parse(jsonString);
+    const rows = data.table.rows;
 
-        const grid = document.getElementById("galleryGrid");
-        grid.innerHTML = "";
+    const grid = document.getElementById("galleryGrid");
+    grid.innerHTML = "";
 
-        let validMemberCount = 0;
+    let validMemberCount = 0;
 
-        rows.forEach(row => {
-          if (!row.c) return;
+    rows.forEach(row => {
+      if (!row.c) return;
 
-          const usnRoblox = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
-          const displayName = row.c[5] && row.c[5].v ? row.c[5].v.toString().trim() : usnRoblox;
+      const usnRoblox = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
+      const displayName = row.c[5] && row.c[5].v ? row.c[5].v.toString().trim() : usnRoblox;
 
-          if (!usnRoblox) return;
+      // Abaikan jika USN kosong atau jika ini baris Header (misal teksnya "Username Roblox")
+      if (!usnRoblox || usnRoblox.toLowerCase() === "username roblox") return;
 
-          validMemberCount++;
+      validMemberCount++;
 
-          const cardHtml = `
-            <div class="member-card bg-neutral-900/90 border border-neutral-800/80 hover:border-yellow-400/60 rounded-xl p-3.5 shadow-md transition duration-200 hover:-translate-y-0.5 group text-center flex flex-col justify-center min-h-[75px]">
-              <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
-              <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
-            </div>
-          `;
-          grid.innerHTML += cardHtml;
-        });
+      const cardHtml = `
+        <div class="member-card bg-neutral-900/90 border border-neutral-800/80 hover:border-yellow-400/60 rounded-xl p-3.5 shadow-md transition duration-200 hover:-translate-y-0.5 group text-center flex flex-col justify-center min-h-[75px]">
+          <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
+          <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
+        </div>
+      `;
+      grid.innerHTML += cardHtml;
+    });
 
-        // Hitung total member (Active Members + 6 Admin/Owner)
-        const totalAllMembers = validMemberCount + ADMIN_DATA.length;
-        document.getElementById("totalMembersCount").innerText = totalAllMembers;
+    // PILIHAN TOTAL MEMBER DI CARD STATISTIK:
+    // Opsi A: Hanya menghitung member aktif dari sheet (Akurat dengan jumlah kartu di bawah)
+    document.getElementById("totalMembersCount").innerText = validMemberCount;
 
-        document.getElementById("loading").classList.add("hidden");
-        grid.classList.remove("hidden");
+    // Catatan: Jika ingin totalnya menggabungkan Admin (6) + Member Sheet (52 = 58),
+    // ubah baris di atas menjadi: 
+    // document.getElementById("totalMembersCount").innerText = validMemberCount + ADMIN_DATA.length;
 
-      } catch (err) {
-        console.error("Detail Error:", err);
-        document.getElementById("loading").innerHTML = `
-          <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-xl max-w-md mx-auto text-center">
-            <p class="text-red-400 font-bold mb-1">Gagal memuat data dari Sheet Member Aktif.</p>
-            <p class="text-xs text-neutral-400">Pastikan akses spreadsheet disetel ke "Anyone with the link / Siapa saja yang memiliki link".</p>
-          </div>`;
-      }
-    }
+    document.getElementById("loading").classList.add("hidden");
+    grid.classList.remove("hidden");
+
+  } catch (err) {
+    console.error("Detail Error:", err);
+    document.getElementById("loading").innerHTML = `
+      <div class="p-4 bg-red-500/10 border border-red-500/30 rounded-xl max-w-md mx-auto text-center">
+        <p class="text-red-400 font-bold mb-1">Gagal memuat data dari Sheet Member Aktif.</p>
+        <p class="text-xs text-neutral-400">Pastikan akses spreadsheet disetel ke "Anyone with the link / Siapa saja yang memiliki link".</p>
+      </div>`;
+  }
+}
 
     // Fitur Pencarian Real-Time
     function filterMembers() {
