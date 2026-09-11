@@ -92,24 +92,15 @@
         </div>
       </div>
 
-      <!-- KONTROL PENCARIAN & TOGGLE VIEW MODE -->
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-xl mx-auto">
-        
-        <!-- Input Search -->
-        <div class="relative w-full sm:w-2/3">
-          <i class="fas fa-search absolute left-4 top-3 text-neutral-500 text-sm"></i>
+      <!-- SEARCH BAR -->
+      <div class="flex justify-center max-w-md mx-auto">
+        <div class="relative w-full">
+          <i class="fas fa-search absolute left-4 top-3.5 text-neutral-500 text-sm"></i>
           <input type="text" id="searchInput" placeholder="Cari Nick / Username..." onkeyup="filterMembers()" 
-                 class="w-full bg-black border border-neutral-800 rounded-full pl-10 pr-4 py-2.5 text-xs md:text-sm text-white focus:outline-none focus:border-yellow-400 transition">
+                 class="w-full bg-black border border-neutral-800 rounded-full pl-11 pr-4 py-3 text-xs md:text-sm text-white focus:outline-none focus:border-yellow-400 transition">
         </div>
-
-        <!-- Tombol Toggle Mode View -->
-        <button id="toggleViewBtn" onclick="toggleCardMode()" type="button"
-                class="w-full sm:w-1/3 px-4 py-2.5 bg-yellow-400 hover:bg-yellow-300 text-black border border-yellow-400 rounded-full text-xs font-black transition flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer shadow-md">
-          <i class="fas fa-image" id="toggleIcon"></i>
-          <span id="toggleText">Banner Full</span>
-        </button>
-
       </div>
+
     </div>
   </section>
 
@@ -128,9 +119,19 @@
 
     <!-- SECTION MEMBER AKTIF -->
     <section>
-      <div class="flex items-center gap-2 mb-6 border-b border-neutral-800 pb-3">
-        <i class="fas fa-user-astronaut text-yellow-400 text-xl"></i>
-        <h2 class="text-xl font-black text-white uppercase tracking-wider">Active Members</h2>
+      <!-- HEADER MEMBER AKTIF & TOMBOL TOGGLE VIEW -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-neutral-800 pb-3">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-user-astronaut text-yellow-400 text-xl"></i>
+          <h2 class="text-xl font-black text-white uppercase tracking-wider">Active Members</h2>
+        </div>
+
+        <!-- TOMBOL TOGGLE VIEW MODE (DIPINDAH KE BAWAH LINE ADMIN/OWNER) -->
+        <button id="toggleViewBtn" onclick="toggleCardMode()" type="button"
+                class="px-4 py-2 bg-neutral-900 hover:bg-yellow-400 text-yellow-400 hover:text-black border border-yellow-400/40 hover:border-yellow-400 rounded-full text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md self-start sm:self-auto">
+          <i class="fas fa-image" id="toggleIcon"></i>
+          <span id="toggleText">Mode Banner Full</span>
+        </button>
       </div>
 
       <div id="loading" class="text-center py-12">
@@ -269,16 +270,19 @@
                 <div class="absolute inset-0 bg-gradient-to-b from-transparent via-neutral-900/30 to-neutral-900"></div>
               </div>
 
-              <!-- AVATAR PROFIL & INFO MEMBER -->
-              <div class="avatar-info-box flex flex-col items-center -mt-10 px-4 pb-4 z-10 transition-all duration-300">
+              <!-- FOTO PROFIL AVATAR (HANYA INI YANG DI-HIDE SAAT BANNER FULL) -->
+              <div class="avatar-circle-box flex justify-center -mt-10 z-10 transition-all duration-300">
                 <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-neutral-950 border-2 border-yellow-400/80 p-1 overflow-hidden flex-shrink-0 group-hover:border-yellow-400 group-hover:scale-105 transition duration-300 shadow-xl">
                   <img src="${avatarUrl}" 
                        alt="${displayName}" 
                        onerror="this.src='https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3E244791C39AC3F092ECADCFDDF546B6-Png/150/150/AvatarHeadshot/Webp/noFilter'"
                        class="w-full h-full object-cover rounded-full">
                 </div>
+              </div>
 
-                <div class="text-center w-full mt-2">
+              <!-- INFO MEMBER & TOMBOL PROFIL (TETAP TAMPIL SAAT BANNER FULL) -->
+              <div class="info-content-box flex flex-col items-center px-4 pb-4 pt-1 z-10 transition-all duration-300">
+                <div class="text-center w-full">
                   <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
                   <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
                 </div>
@@ -303,7 +307,6 @@
         document.getElementById("loading").classList.add("hidden");
         grid.classList.remove("hidden");
 
-        // Jika mode aktif sebelum data selesai loading
         if (isBannerFullMode) {
           applyBannerFullMode(true);
         }
@@ -322,7 +325,7 @@
     function applyBannerFullMode(full) {
       const bannerBoxes = document.querySelectorAll('.banner-box');
       const bannerImgs = document.querySelectorAll('.banner-img');
-      const avatarBoxes = document.querySelectorAll('.avatar-info-box');
+      const avatarCircleBoxes = document.querySelectorAll('.avatar-circle-box');
 
       const toggleText = document.getElementById('toggleText');
       const toggleIcon = document.getElementById('toggleIcon');
@@ -337,11 +340,14 @@
           img.classList.remove('opacity-35', 'blur-[0.3px]');
           img.classList.add('opacity-90');
         });
-        avatarBoxes.forEach(box => box.classList.add('hidden'));
+        
+        // Sembunyikan hanya lingkaran foto profil
+        avatarCircleBoxes.forEach(box => box.classList.add('hidden'));
 
-        toggleText.innerText = "Kartu Normal";
+        toggleText.innerText = "Mode Kartu Normal";
         toggleIcon.className = "fas fa-id-card";
-        toggleBtn.className = "w-full sm:w-1/3 px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-yellow-400 border border-yellow-400/40 rounded-full text-xs font-black transition flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer shadow-md";
+        toggleBtn.classList.replace('bg-neutral-900', 'bg-yellow-400');
+        toggleBtn.classList.replace('text-yellow-400', 'text-black');
       } else {
         bannerBoxes.forEach(box => {
           box.classList.remove('h-48');
@@ -351,11 +357,14 @@
           img.classList.remove('opacity-90');
           img.classList.add('opacity-35', 'blur-[0.3px]');
         });
-        avatarBoxes.forEach(box => box.classList.remove('hidden'));
 
-        toggleText.innerText = "Banner Full";
+        // Tampilkan kembali lingkaran foto profil
+        avatarCircleBoxes.forEach(box => box.classList.remove('hidden'));
+
+        toggleText.innerText = "Mode Banner Full";
         toggleIcon.className = "fas fa-image";
-        toggleBtn.className = "w-full sm:w-1/3 px-4 py-2.5 bg-yellow-400 hover:bg-yellow-300 text-black border border-yellow-400 rounded-full text-xs font-black transition flex items-center justify-center gap-2 flex-shrink-0 cursor-pointer shadow-md";
+        toggleBtn.classList.replace('bg-yellow-400', 'bg-neutral-900');
+        toggleBtn.classList.replace('text-black', 'text-yellow-400');
       }
     }
 
