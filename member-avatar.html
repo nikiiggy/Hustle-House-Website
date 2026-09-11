@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Member Avatar Gallery - Hustle House Family</title>
+  <title>Member Gallery - Hustle House Family</title>
   <!-- Tailwind CSS & FontAwesome Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -21,8 +21,7 @@
       <!-- MENU DESKTOP -->
       <div class="hidden md:flex items-center space-x-6 text-sm font-semibold">
         <a href="index.html" class="hover:text-yellow-400 transition">Home</a>
-        <a href="member.html" class="hover:text-yellow-400 transition">Member Gallery</a>
-        <a href="member-avatar.html" class="text-yellow-400 transition">Avatar Gallery</a>
+        <a href="member.html" class="text-yellow-400 transition">Member Gallery</a>
         <a href="birthday.html" class="hover:text-yellow-400 transition">Birthday Reminder</a>
         <a href="music.html" class="hover:text-yellow-400 transition">HSHO Music</a>
         <a href="index.html#register" class="hover:text-yellow-400 transition">Form Member</a>
@@ -37,8 +36,7 @@
     <!-- MENU MOBILE DROPDOWN -->
     <div id="mobileMenu" class="hidden md:hidden bg-neutral-950/95 border-b border-yellow-400/20 px-4 pt-2 pb-4 space-y-3 font-semibold text-sm">
       <a href="index.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">Home</a>
-      <a href="member.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">Member Gallery</a>
-      <a href="member-avatar.html" class="block py-2 border-b border-neutral-800 text-yellow-400 transition">Avatar Gallery</a>
+      <a href="member.html" class="block py-2 border-b border-neutral-800 text-yellow-400 transition">Member Gallery</a>
       <a href="birthday.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">Birthday Reminder</a>
       <a href="music.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">HSHO Music</a>
       <a href="index.html#register" class="block py-2 hover:text-yellow-400 transition">Form Member</a>
@@ -49,12 +47,12 @@
   <section class="py-12 bg-neutral-950 text-center border-b border-neutral-900">
     <div class="max-w-4xl mx-auto px-4">
       <span class="px-4 py-1.5 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs font-bold uppercase tracking-widest mb-4 inline-block">
-        <i class="fas fa-id-badge mr-1"></i> Visual Directory
+        <i class="fas fa-users mr-1"></i> Community Members
       </span>
       <h1 class="text-3xl md:text-5xl font-black text-white mb-3 uppercase tracking-tight">
-        HUSTLE HOUSE <span class="text-yellow-400">AVATAR GALLERY</span>
+        HUSTLE HOUSE <span class="text-yellow-400">MEMBER GALLERY</span>
       </h1>
-      <p class="text-neutral-400 text-sm md:text-base mb-8">Daftar Foto Profil & Avatar Roblox Anggota Active Hustle House Family</p>
+      <p class="text-neutral-400 text-sm md:text-base mb-8">Daftar Anggota Aktif & Struktur Kepengurusan Hustle House Family</p>
 
       <!-- CARD STATISTIK -->
       <div class="grid grid-cols-2 gap-4 max-w-lg mx-auto mb-8">
@@ -101,12 +99,12 @@
     <section>
       <div class="flex items-center gap-2 mb-6 border-b border-neutral-800 pb-3">
         <i class="fas fa-user-astronaut text-yellow-400 text-xl"></i>
-        <h2 class="text-xl font-black text-white uppercase tracking-wider">Active Member Avatars</h2>
+        <h2 class="text-xl font-black text-white uppercase tracking-wider">Active Members</h2>
       </div>
 
       <div id="loading" class="text-center py-12">
         <i class="fas fa-spinner fa-spin text-4xl text-yellow-400 mb-4"></i>
-        <p class="text-neutral-400">Memuat data avatar Roblox member...</p>
+        <p class="text-neutral-400">Memuat data member Hustle House...</p>
       </div>
 
       <div id="galleryGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 hidden">
@@ -192,16 +190,22 @@
           // Index 6 = Status (Kolom G)
           // Index 7 = User ID Roblox (Kolom H)
           // Index 8 = Avatar CDN URL (Kolom I)
+          // Index 9 = Primary Group Icon Banner (Kolom J)
           const usnRoblox = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
           const displayName = (row.c[5] && row.c[5].v && row.c[5].v.toString().trim() !== "") 
                               ? row.c[5].v.toString().trim() 
                               : usnRoblox;
           const userId = row.c[7] && row.c[7].v ? row.c[7].v.toString().trim() : "";
           
-          // Ambil Link Foto CDN Asli langsung dari Sheet Kolom I
+          // Link Foto Avatar CDN dari Kolom I
           const avatarUrl = (row.c[8] && row.c[8].v && row.c[8].v.toString().trim() !== "")
                             ? row.c[8].v.toString().trim()
                             : "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3E244791C39AC3F092ECADCFDDF546B6-Png/150/150/AvatarHeadshot/Webp/noFilter";
+
+          // Link Icon Primary Community Banner dari Kolom J
+          const groupBannerUrl = (row.c[9] && row.c[9].v && row.c[9].v.toString().trim() !== "")
+                                 ? row.c[9].v.toString().trim()
+                                 : "https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp";
 
           if (!usnRoblox || usnRoblox.toLowerCase() === "username roblox" || usnRoblox.toLowerCase() === "usn roblox") return;
 
@@ -212,25 +216,36 @@
             : `https://www.roblox.com/search/users?keyword=${encodeURIComponent(usnRoblox)}`;
 
           const cardHtml = `
-            <div class="member-card bg-neutral-900/90 border border-neutral-800/80 hover:border-yellow-400/60 rounded-2xl p-4 shadow-md transition duration-300 hover:-translate-y-1 group text-center flex flex-col items-center justify-between">
+            <div class="member-card bg-neutral-900 border border-neutral-800/80 hover:border-yellow-400/60 rounded-2xl overflow-hidden shadow-xl transition duration-300 hover:-translate-y-1 group flex flex-col justify-between relative">
               
-              <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-neutral-950 border-2 border-yellow-400/40 p-1 overflow-hidden my-1 flex-shrink-0 group-hover:border-yellow-400 group-hover:scale-105 transition duration-300 shadow-inner">
-                <img src="${avatarUrl}" 
-                     alt="${displayName}" 
-                     onerror="this.src='https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3E244791C39AC3F092ECADCFDDF546B6-Png/150/150/AvatarHeadshot/Webp/noFilter'"
-                     class="w-full h-full object-cover rounded-full">
+              <!-- BACKGROUND PRIMARY COMMUNITY BANNER -->
+              <div class="h-20 w-full relative overflow-hidden bg-neutral-950">
+                <img src="${groupBannerUrl}" alt="Primary Community" 
+                     onerror="this.src='https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp'"
+                     class="w-full h-full object-cover opacity-35 group-hover:opacity-55 group-hover:scale-110 transition duration-500 blur-[0.5px]">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-neutral-900/40 to-neutral-900"></div>
               </div>
 
-              <div class="w-full mt-2">
-                <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
-                <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
-              </div>
+              <!-- AVATAR PROFIL & INFO MEMBER -->
+              <div class="flex flex-col items-center -mt-10 px-4 pb-4 z-10">
+                <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-neutral-950 border-2 border-yellow-400/80 p-1 overflow-hidden flex-shrink-0 group-hover:border-yellow-400 group-hover:scale-105 transition duration-300 shadow-xl">
+                  <img src="${avatarUrl}" 
+                       alt="${displayName}" 
+                       onerror="this.src='https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3E244791C39AC3F092ECADCFDDF546B6-Png/150/150/AvatarHeadshot/Webp/noFilter'"
+                       class="w-full h-full object-cover rounded-full">
+                </div>
 
-              <a href="${profileLink}" target="_blank" rel="noopener noreferrer" 
-                 class="mt-3 text-[10px] font-extrabold text-neutral-400 hover:text-black bg-neutral-800 hover:bg-yellow-400 border border-neutral-700 hover:border-yellow-400 px-3 py-1 rounded-full transition duration-200 flex items-center gap-1.5">
-                <span>Profil</span>
-                <i class="fas fa-external-link-alt text-[8px]"></i>
-              </a>
+                <div class="text-center w-full mt-2">
+                  <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
+                  <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
+                </div>
+
+                <a href="${profileLink}" target="_blank" rel="noopener noreferrer" 
+                   class="mt-3 text-[10px] font-extrabold text-neutral-400 hover:text-black bg-neutral-800 hover:bg-yellow-400 border border-neutral-700 hover:border-yellow-400 px-3 py-1 rounded-full transition duration-200 flex items-center gap-1.5">
+                  <span>Profil</span>
+                  <i class="fas fa-external-link-alt text-[8px]"></i>
+                </a>
+              </div>
 
             </div>
           `;
