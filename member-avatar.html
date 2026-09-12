@@ -203,118 +203,115 @@
     }
 
     async function fetchActiveMembers() {
-      try {
-        const response = await fetch(JSON_URL);
-        if (!response.ok) throw new Error("Gagal mengambil data dari Google Sheets");
-        
-        const text = await response.text();
-        const jsonString = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
-        const data = JSON.parse(jsonString);
-        const rows = data.table.rows;
+  try {
+    const response = await fetch(JSON_URL);
+    if (!response.ok) throw new Error("Gagal mengambil data dari Google Sheets");
+    
+    const text = await response.text();
+    const jsonString = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
+    const data = JSON.parse(jsonString);
+    const rows = data.table.rows;
 
-        const grid = document.getElementById("galleryGrid");
-        grid.innerHTML = "";
+    const grid = document.getElementById("galleryGrid");
+    grid.innerHTML = "";
 
-        let validMemberCount = 0;
-        let maleCount = 0;
-        let femaleCount = 0;
+    let validMemberCount = 0;
 
-        rows.forEach(row => {
-          if (!row.c) return;
+    rows.forEach(row => {
+      if (!row.c) return;
 
-          // Indeks Kolom:
-          // Index 1 = Gender (Kolom B)
-          // Index 2 = USN Roblox (Kolom C)
-          // Index 5 = Display Name (Kolom F)
-          // Index 7 = User ID Roblox (Kolom H)
-          // Index 8 = Avatar CDN URL (Kolom I)
-          // Index 9 = Primary Group Icon Banner (Kolom J)
-          const gender = row.c[1] && row.c[1].v ? row.c[1].v.toString().trim() : "";
-          const usnRoblox = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
-          const displayName = (row.c[5] && row.c[5].v && row.c[5].v.toString().trim() !== "") 
-                              ? row.c[5].v.toString().trim() 
-                              : usnRoblox;
-          const userId = row.c[7] && row.c[7].v ? row.c[7].v.toString().trim() : "";
+      // PEMETAAN KOLOM:
+      // Index 2  = Username Roblox (Kolom C)
+      // Index 5  = Display Name (Kolom F)
+      // Index 7  = User ID (Kolom H)
+      // Index 8  = Avatar CDN URL (Kolom I)
+      // Index 9  = Primary Group Banner (Kolom J)
+      // Index 10 = Join Date Roblox (Kolom K) -> BARU
+      // Index 11 = Umur Akun Roblox (Kolom L) -> BARU
+      
+      const usnRoblox   = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
+      const displayName = (row.c[5] && row.c[5].v && row.c[5].v.toString().trim() !== "") 
+                          ? row.c[5].v.toString().trim() 
+                          : usnRoblox;
+      const userId      = row.c[7] && row.c[7].v ? row.c[7].v.toString().trim() : "";
+      
+      const avatarUrl   = (row.c[8] && row.c[8].v && row.c[8].v.toString().trim() !== "")
+                          ? row.c[8].v.toString().trim()
+                          : "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3E244791C39AC3F092ECADCFDDF546B6-Png/150/150/AvatarHeadshot/Webp/noFilter";
+
+      const groupBannerUrl = (row.c[9] && row.c[9].v && row.c[9].v.toString().trim() !== "")
+                             ? row.c[9].v.toString().trim()
+                             : "https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp";
+
+      // AMBIL JOIN DATE & UMUR AKUN
+      const joinDate   = (row.c[10] && row.c[10].v) ? row.c[10].v.toString().trim() : "-";
+      const accountAge = (row.c[11] && row.c[11].v) ? row.c[11].v.toString().trim() : "-";
+
+      if (!usnRoblox || usnRoblox.toLowerCase() === "username roblox" || usnRoblox.toLowerCase() === "usn roblox") return;
+
+      validMemberCount++;
+
+      const profileLink = userId 
+        ? `https://www.roblox.com/users/${userId}/profile` 
+        : `https://www.roblox.com/search/users?keyword=${encodeURIComponent(usnRoblox)}`;
+
+      const cardHtml = `
+        <div class="member-card bg-neutral-900 border border-neutral-800/80 hover:border-yellow-400/60 rounded-2xl overflow-hidden shadow-xl transition duration-300 hover:-translate-y-1 group flex flex-col justify-between relative">
           
-          const avatarUrl = (row.c[8] && row.c[8].v && row.c[8].v.toString().trim() !== "")
-                            ? row.c[8].v.toString().trim()
-                            : "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3E244791C39AC3F092ECADCFDDF546B6-Png/150/150/AvatarHeadshot/Webp/noFilter";
+          <!-- BACKGROUND PRIMARY COMMUNITY BANNER -->
+          <div class="h-20 w-full relative overflow-hidden bg-neutral-950">
+            <img src="${groupBannerUrl}" alt="Primary Community" 
+                 onerror="this.src='https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp'"
+                 class="w-full h-full object-cover opacity-35 group-hover:opacity-55 group-hover:scale-110 transition duration-500 blur-[0.5px]">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-neutral-900/40 to-neutral-900"></div>
+          </div>
 
-          const groupBannerUrl = (row.c[9] && row.c[9].v && row.c[9].v.toString().trim() !== "")
-                                 ? row.c[9].v.toString().trim()
-                                 : "https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp";
-
-          if (!usnRoblox || usnRoblox.toLowerCase() === "username roblox" || usnRoblox.toLowerCase() === "usn roblox") return;
-
-          validMemberCount++;
-
-          // Hitung Gender
-          if (gender.toLowerCase() === "cowok" || gender.toLowerCase() === "l" || gender.toLowerCase() === "laki-laki") {
-            maleCount++;
-          } else if (gender.toLowerCase() === "cewek" || gender.toLowerCase() === "p" || gender.toLowerCase() === "perempuan") {
-            femaleCount++;
-          }
-
-          const profileLink = userId 
-            ? `https://www.roblox.com/users/${userId}/profile` 
-            : `https://www.roblox.com/search/users?keyword=${encodeURIComponent(usnRoblox)}`;
-
-          const cardHtml = `
-            <div class="member-card bg-neutral-900 border border-neutral-800/80 hover:border-yellow-400/60 rounded-2xl overflow-hidden shadow-xl transition duration-300 hover:-translate-y-1 group flex flex-col justify-between relative">
-              
-              <!-- BACKGROUND PRIMARY COMMUNITY BANNER -->
-              <div class="banner-box h-24 w-full relative overflow-hidden bg-neutral-950 transition-all duration-300">
-                <img src="${groupBannerUrl}" alt="Primary Community" 
-                     onerror="this.src='https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp'"
-                     class="banner-img w-full h-full object-cover opacity-35 group-hover:opacity-60 group-hover:scale-105 transition duration-500 blur-[0.3px]">
-                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-neutral-900/30 to-neutral-900"></div>
-              </div>
-
-              <!-- FOTO PROFIL AVATAR (HANYA INI YANG DI-HIDE SAAT BANNER FULL) -->
-              <div class="avatar-circle-box flex justify-center -mt-10 z-10 transition-all duration-300">
-                <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-neutral-950 border-2 border-yellow-400/80 p-1 overflow-hidden flex-shrink-0 group-hover:border-yellow-400 group-hover:scale-105 transition duration-300 shadow-xl">
-                  <img src="${avatarUrl}" 
-                       alt="${displayName}" 
-                       onerror="this.src='https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3E244791C39AC3F092ECADCFDDF546B6-Png/150/150/AvatarHeadshot/Webp/noFilter'"
-                       class="w-full h-full object-cover rounded-full">
-                </div>
-              </div>
-
-              <!-- INFO MEMBER & TOMBOL PROFIL (TETAP TAMPIL SAAT BANNER FULL) -->
-              <div class="info-content-box flex flex-col items-center px-4 pb-4 pt-1 z-10 transition-all duration-300">
-                <div class="text-center w-full">
-                  <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
-                  <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
-                </div>
-
-                <a href="${profileLink}" target="_blank" rel="noopener noreferrer" 
-                   class="mt-3 text-[10px] font-extrabold text-neutral-400 hover:text-black bg-neutral-800 hover:bg-yellow-400 border border-neutral-700 hover:border-yellow-400 px-3 py-1 rounded-full transition duration-200 flex items-center gap-1.5">
-                  <span>Profil</span>
-                  <i class="fas fa-external-link-alt text-[8px]"></i>
-                </a>
-              </div>
-
+          <!-- AVATAR PROFIL & INFO MEMBER -->
+          <div class="flex flex-col items-center -mt-10 px-4 pb-4 z-10 flex-1 justify-between">
+            <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-neutral-950 border-2 border-yellow-400/80 p-1 overflow-hidden flex-shrink-0 group-hover:border-yellow-400 group-hover:scale-105 transition duration-300 shadow-xl">
+              <img src="${avatarUrl}" 
+                   alt="${displayName}" 
+                   onerror="this.src='https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3E244791C39AC3F092ECADCFDDF546B6-Png/150/150/AvatarHeadshot/Webp/noFilter'"
+                   class="w-full h-full object-cover rounded-full">
             </div>
-          `;
-          grid.innerHTML += cardHtml;
-        });
 
-        // Tampilkan Statistik Terupdate
-        document.getElementById("totalMembersCount").innerText = validMemberCount;
-        document.getElementById("maleCount").innerText = maleCount;
-        document.getElementById("femaleCount").innerText = femaleCount;
+            <div class="text-center w-full mt-2">
+              <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
+              <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
+            </div>
 
-        document.getElementById("loading").classList.add("hidden");
-        grid.classList.remove("hidden");
+            <!-- INFO TAMBAHAN: JOIN DATE & UMUR AKUN ROBLOX -->
+            <div class="w-full mt-3 pt-2.5 border-t border-neutral-800/80 grid grid-cols-2 gap-1 text-[10px] text-neutral-400 bg-black/40 p-2 rounded-xl">
+              <div class="text-center">
+                <span class="block text-neutral-500 font-medium">Join Roblox</span>
+                <span class="font-bold text-neutral-200 truncate block" title="${joinDate}">${joinDate}</span>
+              </div>
+              <div class="text-center border-l border-neutral-800">
+                <span class="block text-neutral-500 font-medium">Umur Akun</span>
+                <span class="font-bold text-yellow-400 truncate block" title="${accountAge}">${accountAge}</span>
+              </div>
+            </div>
 
-        if (isBannerFullMode) {
-          applyBannerFullMode(true);
-        }
+            <a href="${profileLink}" target="_blank" rel="noopener noreferrer" 
+               class="mt-3 text-[10px] font-extrabold text-neutral-400 hover:text-black bg-neutral-800 hover:bg-yellow-400 border border-neutral-700 hover:border-yellow-400 px-3 py-1 rounded-full transition duration-200 flex items-center gap-1.5">
+              <span>Profil</span>
+              <i class="fas fa-external-link-alt text-[8px]"></i>
+            </a>
+          </div>
 
-      } catch (err) {
-        console.error("Detail Error:", err);
-      }
-    }
+        </div>
+      `;
+      grid.innerHTML += cardHtml;
+    });
+
+    document.getElementById("totalMembersCount").innerText = validMemberCount;
+    document.getElementById("loading").classList.add("hidden");
+    grid.classList.remove("hidden");
+
+  } catch (err) {
+    console.error("Detail Error:", err);
+  }
+}
 
     // FUNGSI TOGGLE VIEW MODE
     function toggleCardMode() {
