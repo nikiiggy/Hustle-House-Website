@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROBLOX COMMUNITY IMAGE DOWNLOADER</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font modern & playful dari Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="card">
+        <div class="badge">PRO VERSION</div>
+        <h1>ROBLOX COMMUNITY<br><span>IMAGE DOWNLOADER</span></h1>
+        <p class="subtitle">Download logo Primary Community / Group Roblox cuma pakai Username atau Display Name!</p>
+
+        <div class="input-group">
+            <label for="username">USERNAME / DISPLAY NAME:</label>
+            <input type="text" id="username" placeholder="Masukkan username..." autocomplete="off">
+        </div>
+
+        <button id="searchBtn" class="btn btn-search" onclick="fetchCommunityLogo()">🚀 CARI LOGO COMMUNITY</button>
+
+        <div id="status" class="status">Status: Siap Beraksi!</div>
+
+        <div class="preview-box" id="previewBox">
+            <span id="previewText">Preview Logo Community bakal muncul di sini...</span>
+            <img id="previewImg" src="" alt="Preview Logo" style="display: none;">
+        </div>
+
+       <!-- Tombol Simpan -->
+        <button id="downloadBtn" class="btn btn-download" onclick="downloadImage()" disabled>💾 SIMPAN LOGO (PNG)</button>
+    </div> <!-- Penutup .card -->
+
+    <!-- Modal Lightbox (Letakkan di luar .card) -->
+    <div id="imageModal" class="modal">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="imgFull">
+        <div id="modalCaption" class="modal-caption"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

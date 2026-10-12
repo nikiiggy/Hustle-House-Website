@@ -8,246 +8,433 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-black text-white font-sans antialiased selection:bg-yellow-400 selection:text-black">
+<body class="bg-black text-white font-sans antialiased min-h-screen selection:bg-yellow-400 selection:text-black">
 
-  <!-- NAVBAR -->
-   <!-- NAVBAR WITH MOBILE BURGER MENU -->
+  <!-- NAVBAR UNIFIED -->
   <nav class="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-yellow-400/20">
     <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
       <!-- LOGO FAMILY -->
-      <a href="index.html" class="flex items-center gap-3">
+      <a href="#home" onclick="switchPage('home')" class="flex items-center gap-3">
         <img src="https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp" alt="HSHO Logo" class="h-9 md:h-11 object-contain">
       </a>
 
-      <!-- MENU DESKTOP (Tampil di Layar Sedang & Besar / md:) -->
+      <!-- MENU DESKTOP -->
       <div class="hidden md:flex items-center space-x-6 text-sm font-semibold">
-        <a href="index.html" class="hover:text-yellow-400 transition">Home</a>
-        <a href="member.html" class="hover:text-yellow-400 transition">Member Gallery</a>
-        <a href="music.html" class="hover:text-yellow-400 transition">HSHO Music</a>
-        <a href="index.html#register" class="hover:text-yellow-400 transition">Form Member</a>
+        <a href="#home" id="nav-home" onclick="switchPage('home')" class="nav-link text-yellow-400 transition">Home</a>
+        <a href="#member" id="nav-member" onclick="switchPage('member')" class="nav-link hover:text-yellow-400 transition">Member Gallery</a>
+        <a href="#birthday" id="nav-birthday" onclick="switchPage('birthday')" class="nav-link hover:text-yellow-400 transition">Birthday Reminder</a>
+        <a href="https://hshofamily.my.id/rcid" target="_blank" class="hover:text-yellow-400 transition flex items-center gap-1">
+          <span>RCID</span>
+          <i class="fas fa-external-link-alt text-[10px]"></i>
+        </a>
+        <a href="#register" onclick="switchPage('home', 'register')" class="hover:text-yellow-400 transition">Form Member</a>
       </div>
 
-      <!-- TOMBOL BURGER MENU (Hanya Tampil di Mobile) -->
+      <!-- TOMBOL BURGER MENU MOBILE -->
       <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden text-yellow-400 text-2xl focus:outline-none p-1">
         <i class="fas fa-bars" id="menuIcon"></i>
       </button>
     </div>
 
-    <!-- MENU MOBILE DROPDOWN (Sembunyi secara default) -->
+    <!-- MENU MOBILE DROPDOWN -->
     <div id="mobileMenu" class="hidden md:hidden bg-neutral-950/95 border-b border-yellow-400/20 px-4 pt-2 pb-4 space-y-3 font-semibold text-sm">
-      <a href="index.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">Home</a>
-      <a href="member.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">Member Gallery</a>
-      <a href="music.html" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">HSHO Music</a>
-      <a href="index.html#register" class="block py-2 hover:text-yellow-400 transition">Form Member</a>
+      <a href="#home" onclick="switchPage('home'); toggleMobileMenu()" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">Home</a>
+      <a href="#member" onclick="switchPage('member'); toggleMobileMenu()" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">Member Gallery</a>
+      <a href="#birthday" onclick="switchPage('birthday'); toggleMobileMenu()" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition">Birthday Reminder</a>
+      <a href="https://hshofamily.my.id/rcid" target="_blank" onclick="toggleMobileMenu()" class="block py-2 border-b border-neutral-800 hover:text-yellow-400 transition flex items-center justify-between">
+        <span>RCID</span>
+        <i class="fas fa-external-link-alt text-xs"></i>
+      </a>
+      <a href="#register" onclick="switchPage('home', 'register'); toggleMobileMenu()" class="block py-2 hover:text-yellow-400 transition">Form Member</a>
     </div>
   </nav>
 
-  <!-- SECTION 1: HOME (HERO SECTION) -->
-  <section id="home" class="relative min-h-screen flex items-center justify-center pt-10 pb-16 overflow-hidden">
-    <!-- Background Gradient Overlay -->
-    <div class="absolute inset-0 z-0 opacity-20">
-      <img src="https://i.ibb.co.com/WWtR2nz7/8936339878-73374675546497-1776178223404.webp" alt="HSHO Banner" class="w-full h-full object-cover grayscale">
-      <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
-    </div>
-
-    <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
-      <!-- LOGO BESAR DI HERO SECTION -->
-      <div class="flex justify-center mb-6">
-        <img src="https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp" alt="Hustle House Family" class="h-20 md:h-28 object-contain">
+  <!-- ================= PAGE 1: HOME PAGE ================= -->
+  <div id="page-home" class="page-content">
+    <!-- SECTION 1: HERO SECTION -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center pt-10 pb-16 overflow-hidden">
+      <div class="absolute inset-0 z-0 opacity-20">
+        <img src="https://i.ibb.co.com/WWtR2nz7/8936339878-73374675546497-1776178223404.webp" alt="HSHO Banner" class="w-full h-full object-cover grayscale">
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
       </div>
 
-      <span class="px-4 py-1.5 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs font-bold uppercase tracking-widest mb-4 inline-block">
-        Roblox Family
-      </span>
-      
-      <!-- HEADING REVISI: HUSTLE HOUSE FAMILY -->
-      <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-4 text-white uppercase">
-        HUSTLE HOUSE <span class="text-yellow-400">FAMILY</span>
-      </h1>
-      <p class="text-lg md:text-xl text-neutral-400 mb-6 max-w-2xl mx-auto leading-relaxed">
-        Official Family Website & Directory. Join our crew, explore our official maps, and hustle together in Roblox.
-      </p>
-
-      <!-- SOSIAL MEDIA (TIKTOK) -->
-      <div class="flex justify-center mb-8">
-        <a href="https://www.tiktok.com/@hsho_family" target="_blank" class="flex items-center gap-2 bg-neutral-900 border border-yellow-400/30 px-5 py-2.5 rounded-full hover:bg-yellow-400 hover:text-black hover:border-yellow-400 transition duration-300 font-bold text-sm">
-          <i class="fab fa-tiktok text-lg"></i>
-          <span>Follow TikTok HSHO</span>
-        </a>
-      </div>
-
-    <!-- DISCORD SERVER & ROBLOX COMMUNITY (SECTION BUTTONS) -->
-      <div class="max-w-md mx-auto mb-10">
-        <div class="bg-neutral-900/90 p-4 rounded-2xl border border-yellow-400/20 backdrop-blur-sm space-y-3">
-          <!-- Official Discord Server -->
-          <a href="https://discord.gg/YOUR_DISCORD" target="_blank" class="bg-yellow-400 hover:bg-yellow-300 text-black px-5 py-3 rounded-xl font-black transition flex justify-between items-center group">
-            <span class="flex items-center gap-2"><i class="fab fa-discord text-xl"></i> Official Discord Server</span> 
-            <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition"></i>
-          </a>
-
-          <!-- Roblox Community -->
-          <a href="https://www.roblox.com/communities/763416780/Hustle House Fams" target="_blank" class="bg-neutral-800 hover:bg-neutral-700 text-yellow-400 border border-yellow-400/30 px-5 py-3 rounded-xl font-black transition flex justify-between items-center group">
-            <span class="flex items-center gap-2"><i class="fas fa-users text-xl"></i> Roblox Community</span> 
-            <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition"></i>
-          </a>
-        </div>
-      </div>
-      
-      <!-- 3 ROBLOX MAPS WITH 1:1 THUMBNAILS -->
-      <div class="mt-8">
-        <h2 class="text-xs font-bold text-yellow-400 uppercase tracking-widest mb-4 flex items-center justify-center gap-2">
-          <i class="fas fa-gamepad text-base"></i> Official Roblox Maps
-        </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          
-          <!-- Map 1 -->
-          <a href="https://www.roblox.com/games/114288863983858/HUSTLE-PARK-VOICE" target="_blank" class="bg-neutral-900 border border-neutral-800 hover:border-yellow-400 rounded-2xl overflow-hidden group transition duration-300 flex flex-col text-left">
-            <div class="aspect-square w-full bg-black overflow-hidden relative">
-              <img src="https://tr.rbxcdn.com/180DAY-65a099a9767480fa3aaff0ad79980967/256/256/Image/Webp/noFilter" alt="Map 1 Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-              <span class="absolute top-2 right-2 bg-yellow-400 text-black font-extrabold text-[10px] px-2 py-0.5 rounded-full uppercase">Play</span>
-            </div>
-            <div class="p-3.5 flex justify-between items-center bg-neutral-900">
-              <span class="font-bold text-sm text-neutral-200 group-hover:text-yellow-400 transition truncate">Hustle Park Voice</span>
-              <i class="fas fa-play text-xs text-neutral-500 group-hover:text-yellow-400 transition"></i>
-            </div>
-          </a>
-
-          <!-- Map 2 -->
-          <a href="https://www.roblox.com/games/88639808043532/Hustle-House-Studio" target="_blank" class="bg-neutral-900 border border-neutral-800 hover:border-yellow-400 rounded-2xl overflow-hidden group transition duration-300 flex flex-col text-left">
-            <div class="aspect-square w-full bg-black overflow-hidden relative">
-              <img src="https://tr.rbxcdn.com/180DAY-9de5b22ce121b0a32d62c23d078bf612/256/256/Image/Webp/noFilter" alt="Map 2 Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-              <span class="absolute top-2 right-2 bg-yellow-400 text-black font-extrabold text-[10px] px-2 py-0.5 rounded-full uppercase">Play</span>
-            </div>
-            <div class="p-3.5 flex justify-between items-center bg-neutral-900">
-              <span class="font-bold text-sm text-neutral-200 group-hover:text-yellow-400 transition truncate">Hustle House Studio</span>
-              <i class="fas fa-play text-xs text-neutral-500 group-hover:text-yellow-400 transition"></i>
-            </div>
-          </a>
-
-          <!-- Map 3 -->
-          <a href="https://www.roblox.com/games/83110598548929/STORY-SORE" target="_blank" class="bg-neutral-900 border border-neutral-800 hover:border-yellow-400 rounded-2xl overflow-hidden group transition duration-300 flex flex-col text-left">
-            <div class="aspect-square w-full bg-black overflow-hidden relative">
-              <img src="https://tr.rbxcdn.com/180DAY-9324b93ed27e84702dbc4960b9276ae2/256/256/Image/Webp/noFilter" alt="Map 3 Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-              <span class="absolute top-2 right-2 bg-yellow-400 text-black font-extrabold text-[10px] px-2 py-0.5 rounded-full uppercase">Play</span>
-            </div>
-            <div class="p-3.5 flex justify-between items-center bg-neutral-900">
-              <span class="font-bold text-sm text-neutral-200 group-hover:text-yellow-400 transition truncate">Story Sore</span>
-              <i class="fas fa-play text-xs text-neutral-500 group-hover:text-yellow-400 transition"></i>
-            </div>
-          </a>
-
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 2: SLIDER FOTO / CAROUSEL -->
-  <section class="py-12 bg-neutral-950 border-y border-neutral-900 overflow-hidden">
-    <div class="max-w-5xl mx-auto px-4">
-      <h2 class="text-center text-xs font-bold text-yellow-400 uppercase tracking-widest mb-6">
-        <i class="fas fa-images mr-1"></i> Community Gallery Highlights
-      </h2>
-
-      <!-- Image Slider Container -->
-      <div class="relative group max-w-4xl mx-auto rounded-2xl overflow-hidden border border-yellow-400/20 shadow-2xl">
-        <div id="slider" class="flex transition-transform duration-500 ease-out">
-          <img src="https://i.ibb.co.com/5x6TjmwM/1549785549-77871918191131-1776260778433.webp" class="w-full h-64 md:h-96 object-cover flex-shrink-0" alt="Slide 1">
-          <img src="https://i.ibb.co.com/jdG00P7/8936339878-133943904733338-1786290870223.webp" class="w-full h-64 md:h-96 object-cover flex-shrink-0" alt="Slide 2">
-          <img src="https://i.ibb.co.com/LhvXrhkL/10340686654-11694307960-1781188660476.webp" class="w-full h-64 md:h-96 object-cover flex-shrink-0" alt="Slide 3">
+      <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
+        <div class="flex justify-center mb-6">
+          <img src="https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp" alt="Hustle House Family" class="h-20 md:h-28 object-contain">
         </div>
 
-        <!-- Tombol Panah Slider -->
-        <button onclick="prevSlide()" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/80 hover:bg-yellow-400 hover:text-black text-white p-3 rounded-full transition border border-yellow-400/20">
-          <i class="fas fa-chevron-left"></i>
-        </button>
-        <button onclick="nextSlide()" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/80 hover:bg-yellow-400 hover:text-black text-white p-3 rounded-full transition border border-yellow-400/20">
-          <i class="fas fa-chevron-right"></i>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 3: CALL TO ACTION (JOIN DISCORD NOW) -->
-  <section class="py-16 bg-black text-center border-b border-neutral-900">
-    <div class="max-w-2xl mx-auto px-4">
-      <div class="bg-neutral-900 border border-yellow-400/30 rounded-3xl p-8 backdrop-blur-md">
-        <i class="fab fa-discord text-5xl text-yellow-400 mb-4 inline-block"></i>
-        <h2 class="text-3xl font-black text-white mb-2">Ready to Join Hustle House?</h2>
+        <span class="px-4 py-1.5 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs font-bold uppercase tracking-widest mb-4 inline-block">
+          Roblox Family
+        </span>
         
-        <!-- Keterangan Wajib Isi Form Dahulu -->
-        <p class="text-yellow-400 text-sm font-semibold mb-6 flex items-center justify-center gap-2">
-          <i class="fas fa-exclamation-circle"></i>
-          Harap isi form pendaftaran di bawah ini terlebih dahulu sebelum bergabung ke Discord.
+        <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-4 text-white uppercase">
+          HUSTLE HOUSE <span class="text-yellow-400">FAMILY</span>
+        </h1>
+        <p class="text-lg md:text-xl text-neutral-400 mb-6 max-w-2xl mx-auto leading-relaxed">
+          Official Family Website & Directory. Join our crew, explore our official maps, and hustle together in Roblox.
         </p>
 
-        <a href="https://discord.gg/WksdytZvhj" target="_blank" class="inline-flex items-center gap-3 bg-yellow-400 hover:bg-yellow-300 text-black font-black text-lg px-8 py-4 rounded-2xl transition duration-300 shadow-lg shadow-yellow-400/20 hover:scale-105">
-          <span>JOIN DISCORD NOW</span>
-          <i class="fas fa-arrow-right text-sm"></i>
-        </a>
-      </div>
-    </div>
-  </section>
+        <div class="flex justify-center mb-8">
+          <a href="https://www.tiktok.com/@hsho_family" target="_blank" class="flex items-center gap-2 bg-neutral-900 border border-yellow-400/30 px-5 py-2.5 rounded-full hover:bg-yellow-400 hover:text-black hover:border-yellow-400 transition duration-300 font-bold text-sm">
+            <i class="fab fa-tiktok text-lg"></i>
+            <span>Follow TikTok HSHO</span>
+          </a>
+        </div>
 
-  <!-- SECTION 4: GOOGLE FORM REMAKE -->
-  <section id="register" class="py-20 bg-neutral-950">
-  <div class="max-w-xl mx-auto px-4">
-    <div class="bg-neutral-900 border border-yellow-400/20 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
-      <div class="absolute -right-10 -top-10 w-32 h-32 bg-yellow-400/10 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="max-w-md mx-auto mb-10">
+          <div class="bg-neutral-900/90 p-4 rounded-2xl border border-yellow-400/20 backdrop-blur-sm space-y-3">
+            <a href="https://discord.gg/YOUR_DISCORD" target="_blank" class="bg-yellow-400 hover:bg-yellow-300 text-black px-5 py-3 rounded-xl font-black transition flex justify-between items-center group">
+              <span class="flex items-center gap-2"><i class="fab fa-discord text-xl"></i> Official Discord Server</span> 
+              <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition"></i>
+            </a>
 
-      <h2 class="text-3xl font-black text-white text-center mb-2">Formulir Pendaftaran Member</h2>
-      <p class="text-neutral-400 text-sm text-center mb-8">Isi data di bawah ini dengan benar untuk terdata di sistem HSHO</p>
-
-      <form action="https://docs.google.com/forms/d/e/1FAIpQLScqGp9ctodkl0qMGDd7K3LGzPX0kDIvKSD8mUxhB75uaSuwxw/formResponse" method="POST" target="_blank" class="space-y-5">
+            <a href="https://www.roblox.com/communities/763416780/Hustle House Fams" target="_blank" class="bg-neutral-800 hover:bg-neutral-700 text-yellow-400 border border-yellow-400/30 px-5 py-3 rounded-xl font-black transition flex justify-between items-center group">
+              <span class="flex items-center gap-2"><i class="fas fa-users text-xl"></i> Roblox Community</span> 
+              <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition"></i>
+            </a>
+          </div>
+        </div>
         
-        <div>
-          <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Gender</label>
-          <select name="entry.614551911" required class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white focus:outline-none focus:border-yellow-400 transition">
-            <option value="" disabled selected>Pilih Gender</option>
-            <option value="Cowok">Cowok</option>
-            <option value="Cewek">Cewek</option>
-          </select>
-        </div>
+        <!-- MAPS SECTION -->
+        <div class="mt-8">
+          <h2 class="text-xs font-bold text-yellow-400 uppercase tracking-widest mb-4 flex items-center justify-center gap-2">
+            <i class="fas fa-gamepad text-base"></i> Official Roblox Maps
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <a href="https://www.roblox.com/games/114288863983858/HUSTLE-PARK-VOICE" target="_blank" class="bg-neutral-900 border border-neutral-800 hover:border-yellow-400 rounded-2xl overflow-hidden group transition duration-300 flex flex-col text-left">
+              <div class="aspect-square w-full bg-black overflow-hidden relative">
+                <img src="https://tr.rbxcdn.com/180DAY-65a099a9767480fa3aaff0ad79980967/256/256/Image/Webp/noFilter" alt="Map 1 Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                <span class="absolute top-2 right-2 bg-yellow-400 text-black font-extrabold text-[10px] px-2 py-0.5 rounded-full uppercase">Play</span>
+              </div>
+              <div class="p-3.5 flex justify-between items-center bg-neutral-900">
+                <span class="font-bold text-sm text-neutral-200 group-hover:text-yellow-400 transition truncate">Hustle Park Voice</span>
+                <i class="fas fa-play text-xs text-neutral-500 group-hover:text-yellow-400 transition"></i>
+              </div>
+            </a>
 
-        <div>
-          <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Username Roblox</label>
-          <input type="text" name="entry.380187341" placeholder="Masukkan Username Roblox" required 
-                 class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-yellow-400 transition">
-        </div>
+            <a href="https://www.roblox.com/games/88639808043532/Hustle-House-Studio" target="_blank" class="bg-neutral-900 border border-neutral-800 hover:border-yellow-400 rounded-2xl overflow-hidden group transition duration-300 flex flex-col text-left">
+              <div class="aspect-square w-full bg-black overflow-hidden relative">
+                <img src="https://tr.rbxcdn.com/180DAY-9de5b22ce121b0a32d62c23d078bf612/256/256/Image/Webp/noFilter" alt="Map 2 Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                <span class="absolute top-2 right-2 bg-yellow-400 text-black font-extrabold text-[10px] px-2 py-0.5 rounded-full uppercase">Play</span>
+              </div>
+              <div class="p-3.5 flex justify-between items-center bg-neutral-900">
+                <span class="font-bold text-sm text-neutral-200 group-hover:text-yellow-400 transition truncate">Hustle House Studio</span>
+                <i class="fas fa-play text-xs text-neutral-500 group-hover:text-yellow-400 transition"></i>
+              </div>
+            </a>
 
-        <div>
-          <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Username Discord</label>
-          <input type="text" name="entry.822188879" placeholder="Masukkan Username Discord" required 
-                 class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-yellow-400 transition">
+            <a href="https://www.roblox.com/games/83110598548929/STORY-SORE" target="_blank" class="bg-neutral-900 border border-neutral-800 hover:border-yellow-400 rounded-2xl overflow-hidden group transition duration-300 flex flex-col text-left">
+              <div class="aspect-square w-full bg-black overflow-hidden relative">
+                <img src="https://tr.rbxcdn.com/180DAY-9324b93ed27e84702dbc4960b9276ae2/256/256/Image/Webp/noFilter" alt="Map 3 Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                <span class="absolute top-2 right-2 bg-yellow-400 text-black font-extrabold text-[10px] px-2 py-0.5 rounded-full uppercase">Play</span>
+              </div>
+              <div class="p-3.5 flex justify-between items-center bg-neutral-900">
+                <span class="font-bold text-sm text-neutral-200 group-hover:text-yellow-400 transition truncate">Story Sore</span>
+                <i class="fas fa-play text-xs text-neutral-500 group-hover:text-yellow-400 transition"></i>
+              </div>
+            </a>
+          </div>
         </div>
+      </div>
+    </section>
 
-        <div>
-          <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Tanggal dan Bulan Lahir</label>
-          <input type="date" name="entry.1925608994" required 
-                 class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white focus:outline-none focus:border-yellow-400 transition">
-          <p class="text-xs text-neutral-500 mt-1">*Untuk tahun isi dengan tahun saat ini</p>
+    <!-- SECTION 2: CAROUSEL -->
+    <section class="py-12 bg-neutral-950 border-y border-neutral-900 overflow-hidden">
+      <div class="max-w-5xl mx-auto px-4">
+        <h2 class="text-center text-xs font-bold text-yellow-400 uppercase tracking-widest mb-6">
+          <i class="fas fa-images mr-1"></i> Community Gallery Highlights
+        </h2>
+
+        <div class="relative group max-w-4xl mx-auto rounded-2xl overflow-hidden border border-yellow-400/20 shadow-2xl">
+          <div id="slider" class="flex transition-transform duration-500 ease-out">
+            <img src="https://i.ibb.co.com/5x6TjmwM/1549785549-77871918191131-1776260778433.webp" class="w-full h-64 md:h-96 object-cover flex-shrink-0" alt="Slide 1">
+            <img src="https://i.ibb.co.com/jdG00P7/8936339878-133943904733338-1786290870223.webp" class="w-full h-64 md:h-96 object-cover flex-shrink-0" alt="Slide 2">
+            <img src="https://i.ibb.co.com/LhvXrhkL/10340686654-11694307960-1781188660476.webp" class="w-full h-64 md:h-96 object-cover flex-shrink-0" alt="Slide 3">
+          </div>
+
+          <button onclick="prevSlide()" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/80 hover:bg-yellow-400 hover:text-black text-white p-3 rounded-full transition border border-yellow-400/20">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button onclick="nextSlide()" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/80 hover:bg-yellow-400 hover:text-black text-white p-3 rounded-full transition border border-yellow-400/20">
+            <i class="fas fa-chevron-right"></i>
+          </button>
         </div>
+      </div>
+    </section>
 
-        <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-black p-4 rounded-xl transition duration-300 shadow-lg shadow-yellow-400/10 mt-6 flex justify-center items-center gap-2">
-          <span>Kirim Pendaftaran</span>
-          <i class="fas fa-paper-plane text-xs"></i>
-        </button>
-      </form>
-    </div>
+    <!-- SECTION 3: CALL TO ACTION -->
+    <section class="py-16 bg-black text-center border-b border-neutral-900">
+      <div class="max-w-2xl mx-auto px-4">
+        <div class="bg-neutral-900 border border-yellow-400/30 rounded-3xl p-8 backdrop-blur-md">
+          <i class="fab fa-discord text-5xl text-yellow-400 mb-4 inline-block"></i>
+          <h2 class="text-3xl font-black text-white mb-2">Ready to Join Hustle House?</h2>
+          <p class="text-yellow-400 text-sm font-semibold mb-6 flex items-center justify-center gap-2">
+            <i class="fas fa-exclamation-circle"></i>
+            Harap isi form pendaftaran di bawah ini terlebih dahulu sebelum bergabung ke Discord.
+          </p>
+          <a href="https://discord.gg/WksdytZvhj" target="_blank" class="inline-flex items-center gap-3 bg-yellow-400 hover:bg-yellow-300 text-black font-black text-lg px-8 py-4 rounded-2xl transition duration-300 shadow-lg shadow-yellow-400/20 hover:scale-105">
+            <span>JOIN DISCORD NOW</span>
+            <i class="fas fa-arrow-right text-sm"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: GOOGLE FORM -->
+    <section id="register" class="py-20 bg-neutral-950">
+      <div class="max-w-xl mx-auto px-4">
+        <div class="bg-neutral-900 border border-yellow-400/20 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+          <div class="absolute -right-10 -top-10 w-32 h-32 bg-yellow-400/10 rounded-full blur-2xl pointer-events-none"></div>
+          <h2 class="text-3xl font-black text-white text-center mb-2">Formulir Pendaftaran Member</h2>
+          <p class="text-neutral-400 text-sm text-center mb-8">Isi data di bawah ini dengan benar untuk terdata di sistem HSHO</p>
+
+          <form action="https://docs.google.com/forms/d/e/1FAIpQLScqGp9ctodkl0qMGDd7K3LGzPX0kDIvKSD8mUxhB75uaSuwxw/formResponse" method="POST" target="_blank" class="space-y-5">
+            <div>
+              <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Gender</label>
+              <select name="entry.614551911" required class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white focus:outline-none focus:border-yellow-400 transition">
+                <option value="" disabled selected>Pilih Gender</option>
+                <option value="Cowok">Cowok</option>
+                <option value="Cewek">Cewek</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Username Roblox</label>
+              <input type="text" name="entry.380187341" placeholder="Masukkan Username Roblox" required class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-yellow-400 transition">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Username Discord</label>
+              <input type="text" name="entry.822188879" placeholder="Masukkan Username Discord" required class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-yellow-400 transition">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">Tanggal dan Bulan Lahir</label>
+              <input type="date" name="entry.1925608994" required class="w-full bg-black border border-neutral-800 rounded-xl p-3.5 text-sm text-white focus:outline-none focus:border-yellow-400 transition">
+              <p class="text-xs text-neutral-500 mt-1">*Untuk tahun isi dengan tahun saat ini</p>
+            </div>
+            <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-black p-4 rounded-xl transition duration-300 shadow-lg shadow-yellow-400/10 mt-6 flex justify-center items-center gap-2">
+              <span>Kirim Pendaftaran</span>
+              <i class="fas fa-paper-plane text-xs"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
   </div>
-</section>
-  
-  <!-- FOOTER -->
-  <footer class="py-8 bg-black border-t border-neutral-900 text-center text-xs text-neutral-500">
+
+  <!-- ================= PAGE 2: MEMBER GALLERY ================= -->
+  <div id="page-member" class="page-content hidden">
+    <section class="py-10 bg-neutral-950 text-center border-b border-neutral-900">
+      <div class="max-w-6xl mx-auto px-4">
+        <h1 class="text-3xl md:text-5xl font-black text-white mb-2 uppercase tracking-tight">
+          HUSTLE HOUSE <span class="text-yellow-400">FAMILY GALLERY</span>
+        </h1>
+        <p class="text-neutral-400 text-xs md:text-sm mb-6">Daftar Anggota Aktif & Struktur Admin Hustle House Family</p>
+
+        <!-- STATISTIK -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 max-w-4xl mx-auto mb-8">
+          <div class="bg-neutral-900/80 border border-neutral-800 p-3 rounded-2xl">
+            <span class="block text-[10px] text-neutral-400 uppercase font-bold">Total Member</span>
+            <span id="statTotal" class="text-xl font-black text-yellow-400">0</span>
+          </div>
+          <div class="bg-neutral-900/80 border border-neutral-800 p-3 rounded-2xl">
+            <span class="block text-[10px] text-neutral-400 uppercase font-bold">Cowok</span>
+            <span id="statCowok" class="text-xl font-black text-blue-400">0</span>
+          </div>
+          <div class="bg-neutral-900/80 border border-neutral-800 p-3 rounded-2xl">
+            <span class="block text-[10px] text-neutral-400 uppercase font-bold">Cewek</span>
+            <span id="statCewek" class="text-xl font-black text-pink-400">0</span>
+          </div>
+          <div class="bg-neutral-900/80 border border-neutral-800 p-3 rounded-2xl">
+            <span class="block text-[10px] text-neutral-400 uppercase font-bold">Owner</span>
+            <span id="statOwner" class="text-xl font-black text-amber-300">2</span>
+          </div>
+          <div class="bg-neutral-900/80 border border-neutral-800 p-3 rounded-2xl col-span-2 sm:col-span-1">
+            <span class="block text-[10px] text-neutral-400 uppercase font-bold">Admin</span>
+            <span id="statAdmin" class="text-xl font-black text-neutral-200">4</span>
+          </div>
+        </div>
+
+        <div class="flex justify-center max-w-md mx-auto">
+          <div class="relative w-full">
+            <i class="fas fa-search absolute left-4 top-3.5 text-neutral-500"></i>
+            <input type="text" id="searchInput" placeholder="Cari Nick / Username..." onkeyup="filterMembers()" class="w-full bg-black border border-neutral-800 rounded-full pl-11 pr-4 py-3 text-sm text-white focus:outline-none focus:border-yellow-400 transition">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-4 py-12 space-y-12">
+      <section>
+        <div class="flex items-center gap-2 mb-6 border-b border-yellow-400/20 pb-3">
+          <i class="fas fa-crown text-yellow-400 text-xl"></i>
+          <h2 class="text-xl font-black text-white uppercase tracking-wider">Family Structures & Admins</h2>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4" id="adminGrid"></div>
+      </section>
+
+      <section>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-neutral-800 pb-3">
+          <div class="flex items-center gap-2">
+            <i class="fas fa-users text-neutral-400 text-xl"></i>
+            <h2 class="text-xl font-black text-white uppercase tracking-wider">Active Members (<span id="totalMembersCount">0</span>)</h2>
+          </div>
+          <button id="toggleViewBtn" onclick="toggleBannerMode()" class="px-4 py-2 bg-yellow-400 hover:bg-yellow-300 text-black font-extrabold text-xs rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-lg shadow-yellow-400/10">
+            <i class="fas fa-expand" id="toggleIcon"></i>
+            <span id="toggleText">Mode Banner Full</span>
+          </button>
+        </div>
+
+        <div id="loadingMember" class="text-center py-12">
+          <i class="fas fa-spinner fa-spin text-4xl text-yellow-400 mb-4"></i>
+          <p class="text-neutral-400">Memuat data dari sheet Member Aktif...</p>
+        </div>
+
+        <div id="galleryGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 hidden"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ================= PAGE 3: BIRTHDAY REMINDER ================= -->
+  <div id="page-birthday" class="page-content hidden">
+    <section class="py-12 bg-neutral-950 text-center border-b border-neutral-900">
+      <div class="max-w-4xl mx-auto px-4">
+        <span class="px-4 py-1.5 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs font-bold uppercase tracking-widest mb-4 inline-block">
+          <i class="fas fa-cake-candles mr-1"></i> Family Celebration
+        </span>
+        <h1 class="text-3xl md:text-5xl font-black text-white mb-3 uppercase tracking-tight">
+          HUSTLE HOUSE <span class="text-yellow-400">BIRTHDAY REMINDER</span>
+        </h1>
+        <p class="text-neutral-400 text-sm md:text-base">Jadwal Ulang Tahun Anggota Hustle House Family Berdasarkan Bulan</p>
+      </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-4 py-12 space-y-12">
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-neutral-900 border border-yellow-400/40 rounded-2xl p-6 shadow-xl relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute -right-6 -top-6 w-24 h-24 bg-yellow-400/10 rounded-full blur-xl pointer-events-none"></div>
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-xl bg-yellow-400 text-black flex items-center justify-center font-black text-lg">
+                <i class="fas fa-gift"></i>
+              </div>
+              <div>
+                <h2 class="text-lg font-black text-white uppercase tracking-wider">Ulang Tahun Hari Ini 🎉</h2>
+                <p class="text-xs text-neutral-400" id="currentDateText">...</p>
+              </div>
+            </div>
+            <div id="todayBirthdayList" class="space-y-2 mt-2"></div>
+          </div>
+        </div>
+
+        <div class="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-xl bg-neutral-800 text-yellow-400 border border-yellow-400/30 flex items-center justify-center font-black text-lg">
+                <i class="fas fa-calendar-day"></i>
+              </div>
+              <div>
+                <h2 class="text-lg font-black text-white uppercase tracking-wider">Ulang Tahun Bulan Ini 🎂</h2>
+                <p class="text-xs text-neutral-400" id="currentMonthText">...</p>
+              </div>
+            </div>
+            <div id="thisMonthBirthdayList" class="flex flex-wrap gap-2 mt-2"></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="flex items-center justify-between mb-8 border-b border-neutral-800 pb-4">
+          <div class="flex items-center gap-2">
+            <i class="fas fa-layer-group text-yellow-400 text-xl"></i>
+            <h2 class="text-xl font-black text-white uppercase tracking-wider">Daftar Bulan Lahir</h2>
+          </div>
+        </div>
+
+        <div id="loadingBirthday" class="text-center py-12">
+          <i class="fas fa-spinner fa-spin text-4xl text-yellow-400 mb-4"></i>
+          <p class="text-neutral-400">Memuat data ulang tahun member...</p>
+        </div>
+
+        <div id="monthlyGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden"></div>
+      </section>
+
+      <section id="unknownSection" class="hidden">
+        <div class="flex items-center gap-2 mb-6 border-b border-neutral-800 pb-4">
+          <i class="fas fa-question-circle text-neutral-500 text-xl"></i>
+          <div>
+            <h2 class="text-xl font-black text-white uppercase tracking-wider">Belum Mengisi Tanggal Lahir</h2>
+            <p class="text-xs text-neutral-500">Daftar member yang data tanggal lahirnya belum terdata di sistem</p>
+          </div>
+        </div>
+
+        <div class="bg-neutral-900 border border-neutral-800/80 rounded-2xl p-6 shadow-xl">
+          <div id="unknownBirthdayGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- FOOTER UNIFIED -->
+  <footer class="py-8 bg-black border-t border-neutral-900 text-center text-xs text-neutral-500 relative z-10">
     <p>&copy; Hustle House Family. All rights reserved.</p>
   </footer>
 
-  <!-- SCRIPT UNTUK SLIDER FOTO AUTOMATIS -->
+  <!-- GLOBAL / SINGLE PAGE NAVIGATION SCRIPT -->
+  <script>
+    function switchPage(pageId, scrollToId = null) {
+      document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+      const targetPage = document.getElementById(`page-${pageId}`);
+      if (targetPage) targetPage.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-link').forEach(el => {
+        el.classList.remove('text-yellow-400');
+        el.classList.add('hover:text-yellow-400');
+      });
+      const activeNav = document.getElementById(`nav-${pageId}`);
+      if (activeNav) {
+        activeNav.classList.add('text-yellow-400');
+      }
+
+      if (scrollToId) {
+        setTimeout(() => {
+          const section = document.getElementById(scrollToId);
+          if (section) section.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById("mobileMenu");
+      const menuIcon = document.getElementById("menuIcon");
+      mobileMenu.classList.toggle("hidden");
+      if (mobileMenu.classList.contains("hidden")) {
+        menuIcon.className = "fas fa-bars";
+      } else {
+        menuIcon.className = "fas fa-xmark";
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'member' || hash === 'birthday') {
+        switchPage(hash);
+      } else if (hash === 'register') {
+        switchPage('home', 'register');
+      } else {
+        switchPage('home');
+      }
+    });
+  </script>
+
+  <!-- HOME CAROUSEL SCRIPT -->
   <script>
     let currentSlide = 0;
     const slider = document.getElementById("slider");
-    const totalSlides = slider.children.length;
+    const totalSlides = slider ? slider.children.length : 0;
 
     function showSlide(index) {
+      if (!slider) return;
       if (index >= totalSlides) currentSlide = 0;
       else if (index < 0) currentSlide = totalSlides - 1;
       else currentSlide = index;
@@ -257,27 +444,406 @@
     function nextSlide() { showSlide(currentSlide + 1); }
     function prevSlide() { showSlide(currentSlide - 1); }
 
-    // Auto-play slider setiap 4 detik
     setInterval(nextSlide, 4000);
-    
-    // Fungsi Toggle Mobile Burger Menu
-    function toggleMobileMenu() {
-      const mobileMenu = document.getElementById("mobileMenu");
-      const menuIcon = document.getElementById("menuIcon");
-      
-      mobileMenu.classList.toggle("hidden");
-      
-      // Ubah ikon burger (fa-bars) menjadi silang (fa-xmark) saat terbuka
-      if (mobileMenu.classList.contains("hidden")) {
-        menuIcon.classList.remove("fa-xmark");
-        menuIcon.classList.add("fa-bars");
-      } else {
-        menuIcon.classList.remove("fa-bars");
-        menuIcon.classList.add("fa-xmark");
-      }
-    }
-    
   </script>
 
+  <!-- MEMBER GALLERY SCRIPT -->
+  <script>
+    let isBannerFull = false;
+
+    const ADMIN_DATA = [
+      { displayName: "HSHOxMoraa", username: "PhoenixSoul02", tag: "OWNER", imgUrl: "https://i.ibb.co.com/rGjh03D2/HSHO-Dashboard.webp" },
+      { displayName: "HSHOxMiraa", username: "Miraaachans2", tag: "OWNER", imgUrl: "https://i.ibb.co.com/TxrKtZHJ/HSHO-Dashboard-1.webp" },
+      { displayName: "HSHOxNodi", username: "Nodi_0610", tag: "ADMIN", imgUrl: "https://i.ibb.co.com/b085r21/HSHO-Dashboard-2.webp" },
+      { displayName: "HSHOxVelyn", username: "velynthea", tag: "ADMIN", imgUrl: "https://i.ibb.co.com/gMdP9vPC/HSHO-Dashboard-3.webp" },
+      { displayName: "HSHOxJoJo", username: "enallll666", tag: "ADMIN", imgUrl: "https://i.ibb.co.com/76rh7tT/HSHO-Dashboard-4.webp" },
+      { displayName: "HSHOxOink", username: "iniioinkk", tag: "ADMIN", imgUrl: "https://i.ibb.co.com/9m88QJZc/HSHO-Dashboard-5.webp" }
+    ];
+
+    const SPREADSHEET_ID = "1ho6plozyfwxbtvkcFXFF6mRkc_rpW8IuXV_TIsXh6w4";
+    const SHEET_NAME = "Member Aktif";
+    const JSON_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&headers=0&t=${new Date().getTime()}`;
+
+    function formatDateString(rawVal) {
+      if (!rawVal) return "-";
+      let str = rawVal.toString().trim();
+      if (str.startsWith("Date(") && str.endsWith(")")) {
+        let parts = str.replace("Date(", "").replace(")", "").split(",");
+        if (parts.length >= 3) {
+          let year = parts[0].trim();
+          let month = String(parseInt(parts[1].trim()) + 1).padStart(2, '0');
+          let day = String(parseInt(parts[2].trim())).padStart(2, '0');
+          return `${day}.${month}.${year}`;
+        }
+      }
+      if (str.includes("-")) {
+        let parts = str.split("-");
+        if (parts.length === 3) return `${parts[2].padStart(2, '0')}.${parts[1].padStart(2, '0')}.${parts[0]}`;
+      }
+      if (str.includes("/")) {
+        let parts = str.split("/");
+        if (parts.length === 3) return `${parts[0].padStart(2, '0')}.${parts[1].padStart(2, '0')}.${parts[2]}`;
+      }
+      return str;
+    }
+
+    function renderAdmins() {
+      const adminContainer = document.getElementById("adminGrid");
+      if (!adminContainer) return;
+      adminContainer.innerHTML = "";
+      ADMIN_DATA.forEach(adm => {
+        const isOwner = adm.tag === "OWNER";
+        const badgeColor = isOwner ? "bg-yellow-400 text-black font-black" : "bg-neutral-800 text-yellow-400 border border-yellow-400/30";
+        adminContainer.innerHTML += `
+          <div class="member-card bg-neutral-900 border ${isOwner ? 'border-yellow-400' : 'border-neutral-800'} rounded-2xl overflow-hidden shadow-xl text-center relative group flex flex-col">
+            <span class="absolute top-2 right-2 z-10 px-2 py-0.5 rounded-full text-[9px] uppercase tracking-wider ${badgeColor}">${adm.tag}</span>
+            <div class="aspect-[9/16] w-full bg-neutral-950 overflow-hidden relative">
+              <img src="${adm.imgUrl}" alt="${adm.username}" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=500'" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            </div>
+            <div class="p-3 bg-neutral-900">
+              <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${adm.displayName}">${adm.displayName}</h3>
+              <p class="text-neutral-500 text-[11px] truncate member-usn">@${adm.username}</p>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    async function fetchActiveMembers() {
+      try {
+        const response = await fetch(JSON_URL);
+        if (!response.ok) throw new Error("Gagal mengambil data dari Google Sheets");
+        
+        const text = await response.text();
+        const jsonString = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
+        const data = JSON.parse(jsonString);
+        const rows = data.table.rows;
+
+        const grid = document.getElementById("galleryGrid");
+        if (!grid) return;
+        grid.innerHTML = "";
+
+        let validMemberCount = 0;
+        let countCowok = 0;
+        let countCewek = 0;
+
+        rows.forEach(row => {
+          if (!row.c) return;
+
+          const gender      = row.c[1] && row.c[1].v ? row.c[1].v.toString().trim() : "";
+          const usnRoblox   = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
+          const displayName = (row.c[5] && row.c[5].v && row.c[5].v.toString().trim() !== "") ? row.c[5].v.toString().trim() : usnRoblox;
+          const userId      = row.c[7] && row.c[7].v ? row.c[7].v.toString().trim() : "";
+          
+          const avatarUrl   = (row.c[8] && row.c[8].v && row.c[8].v.toString().trim() !== "")
+                              ? row.c[8].v.toString().trim()
+                              : "https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3E244791C39AC3F092ECADCFDDF546B6-Png/150/150/AvatarHeadshot/Webp/noFilter";
+
+          const groupBannerUrl = (row.c[9] && row.c[9].v && row.c[9].v.toString().trim() !== "")
+                                 ? row.c[9].v.toString().trim()
+                                 : "https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp";
+
+          const rawJoinDate = (row.c[10] && (row.c[10].f || row.c[10].v)) ? (row.c[10].f || row.c[10].v) : "-";
+          const joinDate    = formatDateString(rawJoinDate);
+          const accountAge  = (row.c[11] && row.c[11].v) ? row.c[11].v.toString().trim() : "-";
+
+          if (!usnRoblox || usnRoblox.toLowerCase() === "username roblox" || usnRoblox.toLowerCase() === "usn roblox") return;
+
+          validMemberCount++;
+          if (gender.toLowerCase() === "cowok") countCowok++;
+          if (gender.toLowerCase() === "cewek") countCewek++;
+
+          const profileLink = userId 
+            ? `https://www.roblox.com/users/${userId}/profile` 
+            : `https://www.roblox.com/search/users?keyword=${encodeURIComponent(usnRoblox)}`;
+
+          grid.innerHTML += `
+            <div class="member-card bg-neutral-900 border border-neutral-800/80 hover:border-yellow-400/60 rounded-2xl overflow-hidden shadow-xl transition duration-300 hover:-translate-y-1 group flex flex-col justify-between relative">
+              <div class="banner-container h-24 w-full relative overflow-hidden bg-neutral-950 transition-all duration-300">
+                <img src="${groupBannerUrl}" alt="Primary Community" onerror="this.src='https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp'" class="banner-img w-full h-full object-cover opacity-35 group-hover:opacity-60 transition duration-500 blur-[0.5px]">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-neutral-900/40 to-neutral-900"></div>
+              </div>
+              <div class="flex flex-col items-center -mt-10 px-3 pb-3 z-10 flex-1 justify-between">
+                <div class="avatar-box w-16 h-16 md:w-20 md:h-20 rounded-full bg-neutral-950 border-2 border-yellow-400/80 p-1 overflow-hidden flex-shrink-0 group-hover:border-yellow-400 group-hover:scale-105 transition duration-300 shadow-xl">
+                  <img src="${avatarUrl}" alt="${displayName}" onerror="this.src='https://tr.rbxcdn.com/30DAY-AvatarHeadshot-3E244791C39AC3F092ECADCFDDF546B6-Png/150/150/AvatarHeadshot/Webp/noFilter'" class="w-full h-full object-cover rounded-full">
+                </div>
+                <div class="text-center w-full mt-2">
+                  <h3 class="font-bold text-yellow-400 text-sm truncate member-name" title="${displayName}">${displayName}</h3>
+                  <p class="text-neutral-400 text-[11px] truncate member-usn mt-0.5">@${usnRoblox}</p>
+                </div>
+                <div class="w-full mt-3 pt-2 border-t border-neutral-800/80 grid grid-cols-2 gap-1 text-[9px] text-neutral-400 bg-black/50 p-1.5 rounded-xl">
+                  <div class="text-center">
+                    <span class="block text-neutral-500 font-medium">Join Roblox</span>
+                    <span class="font-bold text-neutral-200 truncate block" title="${joinDate}">${joinDate}</span>
+                  </div>
+                  <div class="text-center border-l border-neutral-800">
+                    <span class="block text-neutral-500 font-medium">Umur Akun</span>
+                    <span class="font-bold text-yellow-400 truncate block" title="${accountAge}">${accountAge}</span>
+                  </div>
+                </div>
+                <a href="${profileLink}" target="_blank" rel="noopener noreferrer" class="mt-3 text-[10px] font-extrabold text-neutral-400 hover:text-black bg-neutral-800 hover:bg-yellow-400 border border-neutral-700 hover:border-yellow-400 px-3 py-1 rounded-full transition duration-200 flex items-center gap-1.5">
+                  <span>Profil</span>
+                  <i class="fas fa-external-link-alt text-[8px]"></i>
+                </a>
+              </div>
+            </div>
+          `;
+        });
+
+        document.getElementById("statTotal").innerText = validMemberCount;
+        document.getElementById("statCowok").innerText = countCowok;
+        document.getElementById("statCewek").innerText = countCewek;
+        document.getElementById("totalMembersCount").innerText = validMemberCount;
+
+        document.getElementById("loadingMember").classList.add("hidden");
+        grid.classList.remove("hidden");
+
+        if (isBannerFull) applyBannerFullMode();
+      } catch (err) {
+        console.error("Detail Error:", err);
+      }
+    }
+
+    function toggleBannerMode() {
+      isBannerFull = !isBannerFull;
+      applyBannerFullMode();
+    }
+
+    function applyBannerFullMode() {
+      const bannerContainers = document.querySelectorAll('.banner-container');
+      const bannerImgs = document.querySelectorAll('.banner-img');
+      const avatarBoxes = document.querySelectorAll('.avatar-box');
+      const toggleText = document.getElementById('toggleText');
+      const toggleIcon = document.getElementById('toggleIcon');
+
+      if (isBannerFull) {
+        bannerContainers.forEach(el => el.classList.replace('h-24', 'h-44'));
+        bannerImgs.forEach(el => {
+          el.classList.remove('opacity-35', 'blur-[0.5px]');
+          el.classList.add('opacity-90');
+        });
+        avatarBoxes.forEach(el => el.classList.add('hidden'));
+        if (toggleText) toggleText.innerText = "Mode Kartu Normal";
+        if (toggleIcon) toggleIcon.className = "fas fa-compress";
+      } else {
+        bannerContainers.forEach(el => el.classList.replace('h-44', 'h-24'));
+        bannerImgs.forEach(el => {
+          el.classList.remove('opacity-90');
+          el.classList.add('opacity-35', 'blur-[0.5px]');
+        });
+        avatarBoxes.forEach(el => el.classList.remove('hidden'));
+        if (toggleText) toggleText.innerText = "Mode Banner Full";
+        if (toggleIcon) toggleIcon.className = "fas fa-expand";
+      }
+    }
+
+    function filterMembers() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.getElementsByClassName('member-card');
+      Array.from(cards).forEach(card => {
+        const nameEl = card.querySelector('.member-name');
+        const usnEl = card.querySelector('.member-usn');
+        if (nameEl && usnEl) {
+          const name = nameEl.textContent.toLowerCase();
+          const usn = usnEl.textContent.toLowerCase();
+          card.style.display = (name.includes(input) || usn.includes(input)) ? "" : "none";
+        }
+      });
+    }
+
+    renderAdmins();
+    fetchActiveMembers();
+  </script>
+
+  <!-- BIRTHDAY REMINDER SCRIPT -->
+  <script>
+    const MONTH_NAMES = [
+      "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+      "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+    ];
+
+    const birthdayData = Array.from({ length: 12 }, () => []);
+    const unknownBirthdayData = [];
+
+    async function fetchBirthdays() {
+      try {
+        const response = await fetch(JSON_URL);
+        if (!response.ok) throw new Error("Gagal mengambil data dari Google Sheets");
+
+        const text = await response.text();
+        const jsonString = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
+        const data = JSON.parse(jsonString);
+        const rows = data.table.rows;
+
+        const now = new Date();
+        const currentDay = now.getDate();
+        const currentMonthIndex = now.getMonth();
+
+        document.getElementById("currentDateText").innerText = `${currentDay} ${MONTH_NAMES[currentMonthIndex]} ${now.getFullYear()}`;
+        document.getElementById("currentMonthText").innerText = `Bulan ${MONTH_NAMES[currentMonthIndex]}`;
+
+        let todayBirthdays = [];
+        let thisMonthBirthdays = [];
+
+        rows.forEach(row => {
+          if (!row.c) return;
+          const usnRoblox = row.c[2] && row.c[2].v ? row.c[2].v.toString().trim() : "";
+          let rawDateStr = "";
+          if (row.c[4]) {
+            rawDateStr = row.c[4].f ? row.c[4].f.toString().trim() : (row.c[4].v ? row.c[4].v.toString().trim() : "");
+          }
+          const displayName = (row.c[5] && row.c[5].v && row.c[5].v.toString().trim() !== "") ? row.c[5].v.toString().trim() : usnRoblox;
+
+          if (!usnRoblox || usnRoblox.toLowerCase() === "username roblox" || usnRoblox.toLowerCase() === "usn roblox") return;
+
+          if (!rawDateStr || rawDateStr === "-" || rawDateStr.toLowerCase() === "tanggal lahir") {
+            unknownBirthdayData.push({ displayName, usnRoblox });
+            return;
+          }
+
+          let day = null;
+          let monthIndex = null;
+
+          if (rawDateStr.includes("Date(")) {
+            const matches = rawDateStr.match(/\d+/g);
+            if (matches && matches.length >= 3) {
+              monthIndex = parseInt(matches[1]);
+              day = parseInt(matches[2]);
+            }
+          } else if (/\d{1,2}[\/\.-]\d{1,2}/.test(rawDateStr)) {
+            const parts = rawDateStr.split(/[\/\.-]/);
+            if (parts.length >= 2) {
+              day = parseInt(parts[0]);
+              monthIndex = parseInt(parts[1]) - 1;
+            }
+          } else {
+            MONTH_NAMES.forEach((mName, idx) => {
+              if (rawDateStr.toLowerCase().includes(mName.toLowerCase())) monthIndex = idx;
+            });
+            const dayMatch = rawDateStr.match(/\d+/);
+            if (dayMatch) day = parseInt(dayMatch[0]);
+          }
+
+          if (monthIndex !== null && !isNaN(monthIndex) && monthIndex >= 0 && monthIndex < 12) {
+            const memberObj = { displayName, usnRoblox, day: day || "?" };
+            birthdayData[monthIndex].push(memberObj);
+
+            if (monthIndex === currentMonthIndex) {
+              thisMonthBirthdays.push(memberObj);
+              if (day === currentDay) todayBirthdays.push(memberObj);
+            }
+          } else {
+            unknownBirthdayData.push({ displayName, usnRoblox });
+          }
+        });
+
+        renderTodayHighlight(todayBirthdays);
+        renderThisMonthHighlight(thisMonthBirthdays);
+        renderMonthlyGrid(currentMonthIndex);
+        renderUnknownSection();
+
+        document.getElementById("loadingBirthday").classList.add("hidden");
+        document.getElementById("monthlyGrid").classList.remove("hidden");
+      } catch (err) {
+        console.error("Error Loading Birthdays:", err);
+      }
+    }
+
+    function renderTodayHighlight(list) {
+      const container = document.getElementById("todayBirthdayList");
+      if (!container) return;
+      if (list.length === 0) {
+        container.innerHTML = `<p class="text-sm text-neutral-500 italic py-2">Tidak ada member yang ulang tahun hari ini.</p>`;
+        return;
+      }
+      container.innerHTML = list.map(m => `
+        <div class="flex items-center justify-between bg-yellow-400/10 border border-yellow-400/30 rounded-xl p-3">
+          <div>
+            <h4 class="font-bold text-yellow-400 text-sm">${m.displayName}</h4>
+            <p class="text-xs text-neutral-400">@${m.usnRoblox}</p>
+          </div>
+          <span class="px-3 py-1 bg-yellow-400 text-black text-xs font-black rounded-full uppercase">Happy Birthday! 🎂</span>
+        </div>
+      `).join("");
+    }
+
+    function renderThisMonthHighlight(list) {
+      const container = document.getElementById("thisMonthBirthdayList");
+      if (!container) return;
+      if (list.length === 0) {
+        container.innerHTML = `<p class="text-sm text-neutral-500 italic py-2">Tidak ada ulang tahun di bulan ini.</p>`;
+        return;
+      }
+      list.sort((a, b) => (a.day || 0) - (b.day || 0));
+      container.innerHTML = list.map(m => `
+        <div class="bg-black/60 border border-neutral-800 rounded-xl px-3 py-2 flex items-center gap-2">
+          <span class="text-xs font-bold text-yellow-400 bg-yellow-400/10 px-2 py-0.5 rounded-md">${m.day}</span>
+          <div>
+            <p class="font-bold text-xs text-white truncate max-w-[120px]">${m.displayName}</p>
+            <p class="text-[10px] text-neutral-500 truncate">@${m.usnRoblox}</p>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderMonthlyGrid(activeMonthIdx) {
+      const container = document.getElementById("monthlyGrid");
+      if (!container) return;
+      container.innerHTML = "";
+
+      MONTH_NAMES.forEach((mName, idx) => {
+        const isCurrentMonth = idx === activeMonthIdx;
+        const members = birthdayData[idx];
+        members.sort((a, b) => (a.day || 0) - (b.day || 0));
+
+        let membersListHtml = members.length === 0 
+          ? `<p class="text-xs text-neutral-600 italic py-2">Belum ada data member</p>`
+          : members.map(m => `
+            <div class="flex items-center justify-between py-1.5 border-b border-neutral-800/50 last:border-0">
+              <div class="truncate mr-2">
+                <p class="text-xs font-bold text-white truncate">${m.displayName}</p>
+                <p class="text-[10px] text-neutral-500 truncate">@${m.usnRoblox}</p>
+              </div>
+              <span class="text-xs font-bold text-yellow-400 bg-neutral-950 border border-yellow-400/20 px-2.5 py-1 rounded-lg flex-shrink-0">
+                ${m.day} ${mName.substring(0, 3)}
+              </span>
+            </div>
+          `).join("");
+
+        container.innerHTML += `
+          <div class="bg-neutral-900 border ${isCurrentMonth ? 'border-yellow-400/60 shadow-yellow-400/5' : 'border-neutral-800'} rounded-2xl p-5 shadow-lg flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4 border-b border-neutral-800 pb-2">
+                <h3 class="font-black text-base uppercase tracking-wider ${isCurrentMonth ? 'text-yellow-400' : 'text-white'}">${mName}</h3>
+                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full ${isCurrentMonth ? 'bg-yellow-400 text-black font-black' : 'bg-neutral-800 text-neutral-400'}">
+                  ${members.length} Member
+                </span>
+              </div>
+              <div class="space-y-1">${membersListHtml}</div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function renderUnknownSection() {
+      const section = document.getElementById("unknownSection");
+      const container = document.getElementById("unknownBirthdayGrid");
+      if (!section || !container) return;
+      if (unknownBirthdayData.length === 0) {
+        section.classList.add("hidden");
+        return;
+      }
+      container.innerHTML = unknownBirthdayData.map(m => `
+        <div class="bg-black/50 border border-neutral-800 rounded-xl p-3 text-center">
+          <p class="font-bold text-xs text-neutral-300 truncate" title="${m.displayName}">${m.displayName}</p>
+          <p class="text-[10px] text-neutral-500 truncate mt-0.5">@${m.usnRoblox}</p>
+        </div>
+      `).join("");
+      section.classList.remove("hidden");
+    }
+
+    fetchBirthdays();
+  </script>
 </body>
 </html>
