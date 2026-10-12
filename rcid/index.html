@@ -1,44 +1,115 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROBLOX COMMUNITY IMAGE DOWNLOADER</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Font modern & playful dari Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RCID - Hustle House Family</title>
+  <!-- Tailwind CSS & FontAwesome Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
-    <div class="card">
-        <div class="badge">PRO VERSION</div>
-        <h1>ROBLOX COMMUNITY<br><span>IMAGE DOWNLOADER</span></h1>
-        <p class="subtitle">Download logo Primary Community / Group Roblox cuma pakai Username atau Display Name!</p>
+<body class="bg-black text-white font-sans antialiased min-h-screen selection:bg-yellow-400 selection:text-black flex flex-col justify-between">
 
-        <div class="input-group">
-            <label for="username">USERNAME / DISPLAY NAME:</label>
-            <input type="text" id="username" placeholder="Masukkan username..." autocomplete="off">
-        </div>
-
-        <button id="searchBtn" class="btn btn-search" onclick="fetchCommunityLogo()">🚀 CARI LOGO COMMUNITY</button>
-
-        <div id="status" class="status">Status: Siap Beraksi!</div>
-
-        <div class="preview-box" id="previewBox">
-            <span id="previewText">Preview Logo Community bakal muncul di sini...</span>
-            <img id="previewImg" src="" alt="Preview Logo" style="display: none;">
-        </div>
-
-       <!-- Tombol Simpan -->
-        <button id="downloadBtn" class="btn btn-download" onclick="downloadImage()" disabled>💾 SIMPAN LOGO (PNG)</button>
-    </div> <!-- Penutup .card -->
-
-    <!-- Modal Lightbox (Letakkan di luar .card) -->
-    <div id="imageModal" class="modal">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="imgFull">
-        <div id="modalCaption" class="modal-caption"></div>
+  <!-- NAVBAR -->
+  <nav class="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-yellow-400/20">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+      <a href="https://hshofamily.my.id" class="flex items-center gap-3">
+        <img src="https://i.ibb.co.com/0VRm92gd/LOGO-HSHO-LANDSCAPEa-optimized.webp" alt="HSHO Logo" class="h-9 md:h-11 object-contain">
+      </a>
+      <div class="hidden md:flex items-center space-x-6 text-sm font-semibold">
+        <a href="https://hshofamily.my.id/#home" class="hover:text-yellow-400 transition">Home</a>
+        <a href="https://hshofamily.my.id/#member" class="hover:text-yellow-400 transition">Member Gallery</a>
+        <a href="https://hshofamily.my.id/#birthday" class="hover:text-yellow-400 transition">Birthday Reminder</a>
+        <a href="#" class="text-yellow-400 font-bold border-b-2 border-yellow-400 pb-0.5">RCID</a>
+        <a href="https://hshofamily.my.id/#register" class="hover:text-yellow-400 transition">Form Member</a>
+      </div>
     </div>
+  </nav>
 
-    <script src="script.js"></script>
+  <!-- MAIN CARD SECTION -->
+  <main class="flex-1 flex items-center justify-center p-4 py-12">
+    <div class="w-full max-w-lg bg-neutral-900 border border-yellow-400/30 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden text-center">
+      
+      <!-- BADGE -->
+      <div class="inline-block px-4 py-1 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-xs font-bold uppercase tracking-widest mb-4">
+        <i class="fas fa-shield-halved mr-1"></i> Roblox Utility Tool
+      </div>
+
+      <!-- TITLE -->
+      <h1 class="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight mb-2">
+        ROBLOX COMMUNITY <br><span class="text-yellow-400">IMAGE DOWNLOADER</span>
+      </h1>
+      <p class="text-neutral-400 text-xs sm:text-sm mb-6">
+        Download logo Primary Community / Group Roblox cukup dengan Username atau Display Name!
+      </p>
+
+      <!-- INPUT GROUP -->
+      <div class="text-left mb-4">
+        <label for="username" class="block text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">
+          Username / Display Name
+        </label>
+        <div class="relative">
+          <i class="fas fa-user absolute left-4 top-3.5 text-neutral-500"></i>
+          <input type="text" id="username" placeholder="Masukkan username Roblox..." autocomplete="off"
+                 class="w-full bg-black border border-neutral-800 rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder-neutral-600 focus:outline-none focus:border-yellow-400 transition">
+        </div>
+      </div>
+
+      <!-- SEARCH BUTTON -->
+      <button id="searchBtn" onclick="fetchCommunityLogo()" 
+              class="w-full bg-yellow-400 hover:bg-yellow-300 disabled:bg-neutral-800 disabled:text-neutral-500 text-black font-black py-3.5 rounded-xl transition duration-300 shadow-lg shadow-yellow-400/10 uppercase tracking-wider text-sm flex justify-center items-center gap-2 mb-4">
+        <i class="fas fa-rocket"></i>
+        <span>Cari Logo Community</span>
+      </button>
+
+      <!-- STATUS BAR -->
+      <div id="status" class="bg-black/60 border border-neutral-800 rounded-xl p-3 text-xs font-semibold text-neutral-400 mb-6 text-center truncate">
+        Status: Siap Beraksi!
+      </div>
+
+      <!-- PREVIEW BOX -->
+      <div id="previewBox" class="w-full h-56 bg-black border-2 border-dashed border-neutral-800 rounded-2xl flex items-center justify-center p-3 mb-6 relative overflow-hidden group">
+        <span id="previewText" class="text-neutral-600 text-xs font-medium">
+          Preview Logo Community bakal muncul di sini...
+        </span>
+        
+        <!-- Gambar Preview dengan Efek Zoom Saat Hover & Klik Modal -->
+        <div id="imgContainer" class="relative max-w-full max-h-full hidden cursor-pointer" onclick="openModal()">
+          <img id="previewImg" src="" alt="Preview Logo" class="max-w-full max-h-52 rounded-xl object-contain hover:scale-105 transition duration-300">
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 rounded-xl flex items-center justify-center">
+            <span class="bg-yellow-400 text-black font-extrabold text-[10px] px-3 py-1 rounded-full uppercase flex items-center gap-1 shadow-lg">
+              <i class="fas fa-search-plus"></i> Klik untuk memperbesar
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOWNLOAD BUTTON -->
+      <button id="downloadBtn" onclick="downloadImage()" disabled
+              class="w-full bg-neutral-800 hover:bg-yellow-400 hover:text-black border border-neutral-700 hover:border-yellow-400 disabled:bg-neutral-800/50 disabled:text-neutral-600 disabled:border-neutral-800 text-yellow-400 font-black py-3.5 rounded-xl transition duration-300 uppercase tracking-wider text-sm flex justify-center items-center gap-2">
+        <i class="fas fa-download"></i>
+        <span>Simpan Logo (PNG HD)</span>
+      </button>
+    </div>
+  </main>
+
+  <!-- MODAL LIGHTBOX / FULLSCREEN PREVIEW -->
+  <div id="imageModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-4 flex-col transition-all duration-300" onclick="closeModalOnOuterClick(event)">
+    <button onclick="closeModal()" class="absolute top-5 right-6 text-neutral-400 hover:text-yellow-400 text-3xl font-black transition p-2 focus:outline-none">
+      <i class="fas fa-xmark"></i>
+    </button>
+    
+    <div class="relative max-w-4xl w-full flex flex-col items-center justify-center">
+      <img id="imgFull" class="max-w-full max-h-[75vh] rounded-2xl border-2 border-yellow-400/50 shadow-2xl object-contain">
+      <div id="modalCaption" class="mt-4 text-white text-sm font-bold text-center bg-neutral-900/80 border border-yellow-400/20 px-4 py-2 rounded-xl"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="py-6 bg-black border-t border-neutral-900 text-center text-xs text-neutral-500">
+    <p>&copy; Hustle House Family. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>

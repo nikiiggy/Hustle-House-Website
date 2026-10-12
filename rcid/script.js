@@ -11,6 +11,7 @@ async function fetchCommunityLogo() {
     const downloadBtn = document.getElementById("downloadBtn");
     const previewImg = document.getElementById("previewImg");
     const previewText = document.getElementById("previewText");
+    const imgContainer = document.getElementById("imgContainer");
 
     if (!input) {
         alert("Silakan masukkan Username terlebih dahulu!");
@@ -19,15 +20,15 @@ async function fetchCommunityLogo() {
 
     searchBtn.disabled = true;
     downloadBtn.disabled = true;
-    status.style.color = "#fbbf24";
-    status.innerText = "Status: Memproses via Google Apps Script...";
+    status.className = "bg-black/60 border border-yellow-400/30 rounded-xl p-3 text-xs font-semibold text-yellow-400 mb-6 text-center truncate";
+    status.innerText = "Status: Memproses data...";
 
     try {
         const response = await fetch(`${GAS_URL}?username=${encodeURIComponent(input)}`);
         const data = await response.json();
 
         if (data.error) {
-            status.style.color = "#f43f5e";
+            status.className = "bg-black/60 border border-red-500/30 rounded-xl p-3 text-xs font-semibold text-red-400 mb-6 text-center truncate";
             status.innerText = `Status: ${data.error}`;
             searchBtn.disabled = false;
             return;
@@ -37,22 +38,16 @@ async function fetchCommunityLogo() {
         currentGroupName = data.groupName;
         currentImageUrl = data.imageUrl;
 
-        // Render Gambar Preview
         previewImg.src = currentImageUrl;
-        previewImg.style.display = "block";
-        previewText.style.display = "none";
+        imgContainer.classList.remove("hidden");
+        previewText.classList.add("hidden");
 
-        // Pasang event click langsung ke gambar agar pasti bisa diklik zoom
-        previewImg.onclick = function() {
-            openModal(currentImageUrl);
-        };
-
-        status.style.color = "#22c55e";
-        status.innerText = `Grup: ${currentGroupName} (${currentUsername})`;
+        status.className = "bg-black/60 border border-green-500/30 rounded-xl p-3 text-xs font-semibold text-green-400 mb-6 text-center truncate";
+        status.innerText = `Grup: ${currentGroupName} (@${currentUsername})`;
         downloadBtn.disabled = false;
 
     } catch (err) {
-        status.style.color = "#f43f5e";
+        status.className = "bg-black/60 border border-red-500/30 rounded-xl p-3 text-xs font-semibold text-red-400 mb-6 text-center truncate";
         status.innerText = "Status: Terjadi kesalahan koneksi!";
         console.error(err);
     } finally {
@@ -60,36 +55,40 @@ async function fetchCommunityLogo() {
     }
 }
 
-// Fungsi Modal Zoom
-function openModal(imageSrc) {
+// FUNGSI MODAL LIGHTBOX
+function openModal() {
+    if (!currentImageUrl) return;
+
     const modal = document.getElementById("imageModal");
     const imgFull = document.getElementById("imgFull");
     const caption = document.getElementById("modalCaption");
 
-    modal.style.display = "flex";
-    imgFull.src = imageSrc;
-    caption.innerText = `Logo Community: ${currentGroupName} (${currentUsername})`;
+    imgFull.src = currentImageUrl;
+    caption.innerText = `Logo Community: ${currentGroupName} (@${currentUsername})`;
+
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
 }
 
 function closeModal() {
-    document.getElementById("imageModal").style.display = "none";
+    const modal = document.getElementById("imageModal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
 }
 
-// Tutup modal jika area luar gambar atau latar belakang diklik
-document.getElementById("imageModal").addEventListener("click", function(e) {
-    if (e.target === this) {
+function closeModalOnOuterClick(event) {
+    if (event.target.id === "imageModal") {
         closeModal();
     }
-});
+}
 
-// Tutup modal pakai tombol Esc
 document.addEventListener("keydown", function(e) {
     if (e.key === "Escape") {
         closeModal();
     }
 });
 
-// Fungsi Download 2000x2000px
+// FUNGSI DOWNLOAD HD 2000x2000px
 async function downloadImage() {
     if (!currentImageUrl) return;
 
