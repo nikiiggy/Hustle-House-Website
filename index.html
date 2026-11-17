@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hustle House Family — Kenangan Terakhir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --accent:#f5c77e;
+    --text:#f6f1e9;
+    --dim:rgba(246,241,233,.6);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#050505;color:var(--text);font-family:'Inter',system-ui,sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+
+  /* ===== DINDING FOTO (10 foto sekaligus) ===== */
+  #wall{position:fixed;inset:0;display:grid;
+    gap:0;padding:0;
+    
+    background:#050505;transition:filter 1.4s ease}
+  #wall.dim{filter:brightness(.18)}
+
+  .tile{position:relative;overflow:hidden;border-radius:0;background:#14111a;
+    opacity:0;transform:scale(.88);transition:opacity 1s ease,transform 1s cubic-bezier(.2,.8,.2,1);
+    contain:paint}
+  .tile.in{opacity:1;transform:none}
+  .tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;
+    transition:opacity 2.4s ease-in-out;will-change:opacity}
+  .tile img.show{opacity:1;z-index:2}
+  .tile img:not(.show){transition-delay:2.4s}
+  .tile::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:3}
+  .tile.pulse::after{animation:ring 2.4s ease-out}
+  @keyframes ring{
+    0%{box-shadow:inset 0 0 0 3px rgba(245,199,126,.6),inset 0 0 40px rgba(245,199,126,.25)}
+    100%{box-shadow:inset 0 0 0 3px rgba(245,199,126,0),inset 0 0 40px rgba(245,199,126,0)}
+  }
+
+  /* ===== KARTU KATA-KATA ===== */
+  #card{position:fixed;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;text-align:center;padding:10vmin;
+    pointer-events:none;opacity:0;transition:opacity 1.2s ease;
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.8rem,5vw,3.8rem);line-height:1.3;
+    text-shadow:0 4px 40px rgba(0,0,0,.9)}
+  #card.show{opacity:1}
+  #card span{transform:translateY(16px);transition:transform 1.6s ease}
+  #card.show span{transform:none}
+
+  #vignette{position:fixed;inset:0;pointer-events:none;z-index:4;
+    background:radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.5) 100%),
+               linear-gradient(to top,rgba(0,0,0,.45),transparent 16%),
+               linear-gradient(to bottom,rgba(0,0,0,.4),transparent 12%)}
+  #sparkles{position:fixed;inset:0;pointer-events:none;z-index:4}
+
+  /* ===== HUD ===== */
+  #hud{position:fixed;inset:0;pointer-events:none;opacity:0;transition:opacity 1s;z-index:6}
+  body.started #hud{opacity:1}
+  #title{position:absolute;top:max(14px,env(safe-area-inset-top));left:20px;font-family:'Cormorant Garamond',serif;font-size:1.05rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text);text-shadow:0 2px 12px rgba(0,0,0,.9)}
+  #title b{color:var(--accent);font-weight:600}
+  #counter{position:absolute;top:max(14px,env(safe-area-inset-top));right:20px;font-size:.75rem;letter-spacing:.2em;color:var(--text);text-shadow:0 2px 12px rgba(0,0,0,.9);font-variant-numeric:tabular-nums}
+  #controls{position:absolute;bottom:max(20px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;gap:8px;pointer-events:auto;
+    padding:6px 10px;border-radius:99px;background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.12);
+    opacity:0;transition:opacity .4s}
+  body.show-ui #controls,#controls:hover{opacity:1}
+  #controls button{width:42px;height:42px;border-radius:50%;border:0;background:transparent;color:var(--text);cursor:pointer;display:grid;place-items:center;transition:background .2s,transform .2s}
+  #controls button:hover{background:rgba(255,255,255,.16);transform:scale(1.08)}
+  #controls svg{width:20px;height:20px;fill:currentColor}
+  .hide{display:none}
+
+  /* ===== INTRO & OUTRO ===== */
+  .screen{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;
+    background:radial-gradient(ellipse at 50% 40%,#2a1c3a 0%,#0b0812 55%,#050505 100%);transition:opacity 1.6s ease,visibility 1.6s}
+  .screen.off{opacity:0;visibility:hidden;pointer-events:none}
+  .screen .kicker{font-size:.75rem;letter-spacing:.5em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;opacity:0;animation:rise 1.4s .3s forwards}
+  .screen h1{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(2.8rem,10vw,7rem);line-height:1;letter-spacing:.02em;opacity:0;animation:rise 1.6s .7s forwards}
+  .screen h1 em{font-style:italic;color:var(--accent);font-weight:400}
+  .screen p{max-width:34ch;margin-top:22px;font-weight:300;color:var(--dim);line-height:1.7;opacity:0;animation:rise 1.6s 1.2s forwards}
+  .screen button{margin-top:44px;padding:16px 38px;border-radius:99px;border:1px solid var(--accent);background:transparent;color:var(--accent);
+    font:500 .85rem 'Inter',sans-serif;letter-spacing:.3em;text-transform:uppercase;cursor:pointer;transition:all .35s;opacity:0;animation:rise 1.6s 1.7s forwards, pulse 3s 3.5s infinite}
+  .screen button:hover{background:var(--accent);color:#111;box-shadow:0 0 40px rgba(245,199,126,.5)}
+  .screen button:disabled{opacity:.4!important;cursor:wait;animation:none}
+  .hint{margin-top:18px;font-size:.7rem;letter-spacing:.2em;color:rgba(255,255,255,.35);opacity:0;animation:rise 1.6s 2.1s forwards}
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,199,126,.35)}50%{box-shadow:0 0 0 14px rgba(245,199,126,0)}}
+  #outro{background:radial-gradient(ellipse at 50% 50%,#1d1230 0%,#050505 70%)}
+</style>
+</head>
+<body>
+
+<div id="wall"></div>
+<div id="card"><span></span></div>
+<canvas id="sparkles"></canvas>
+<div id="vignette"></div>
+
+<div id="hud">
+  <div id="title"></div>
+  <div id="counter"></div>
+  <div id="controls">
+    <button id="bPlay" aria-label="Jeda"><svg id="icPause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg><svg id="icPlay" class="hide" viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg></button>
+    <button id="bMute" aria-label="Musik"><svg id="icSound" viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9zM16.5 12A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg><svg id="icMute" class="hide" viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0 0 14 8v2.2l2.5 2.5zM19 12a7 7 0 0 1-.9 3.4l1.5 1.5A9 9 0 0 0 21 12a9 9 0 0 0-7-8.8v2.1A7 7 0 0 1 19 12zM4.3 3 3 4.3 7.7 9H3v6h4l5 4v-6.7l4.2 4.2c-.7.5-1.4.9-2.2 1.1v2.1a9 9 0 0 0 3.6-1.7l2.1 2.1 1.3-1.3L4.3 3zM12 5 9.9 7.1 12 9.2z"/></svg></button>
+    <button id="bFull" aria-label="Layar penuh"><svg viewBox="0 0 24 24"><path d="M5 5h5v2H7v3H5zM14 5h5v5h-2V7h-3zM5 14h2v3h3v2H5zM17 14h2v5h-5v-2h3z"/></svg></button>
+  </div>
+</div>
+
+<div class="screen" id="intro">
+  <div class="kicker" id="iKicker"></div>
+  <h1 id="iTitle"></h1>
+  <p id="iSub"></p>
+  <button id="startBtn">Mulai</button>
+  <div class="hint">🎧 nyalakan suara untuk pengalaman terbaik</div>
+</div>
+
+<div class="screen off" id="outro">
+  <div class="kicker" id="oKicker"></div>
+  <h1 id="oTitle"></h1>
+  <p id="oSub"></p>
+  <button id="replayBtn">Ulangi kenangan</button>
+</div>
+
+<audio id="music" src="https://files.catbox.moe/2gtyst.ogg" preload="auto" loop></audio>
+
+<script>
+/* =====================================================
+   ✏️  EDIT BAGIAN INI SAJA
+   ===================================================== */
+const CONFIG = {
+  clanName: "Hustle House Family",
+  introKicker: "Sebuah perjalanan",
+  introTitle: "Terima kasih,<br><em>untuk semuanya</em>",
+  introSub: "Setiap tawa, setiap kemenangan, setiap kekalahan — semuanya jadi cerita yang tak akan hilang.",
+  outroKicker: "Sampai jumpa",
+  outroTitle: "Hustle House boleh tutup,<br><em>kenangan abadi</em>",
+  outroSub: "Terima kasih sudah jadi bagian dari keluarga ini. Sampai bertemu lagi di lain cerita. 🤍",
+
+  swapEverySec: 3.2,     // tiap berapa detik 1 foto di dinding diganti (makin besar = makin pelan)
+  gridLandscape: { cols: 5, rows: 4 },   // layar laptop/landscape → 20 foto sekaligus
+  gridPortrait:  { cols: 2, rows: 7 },   // layar HP/portrait → 14 foto sekaligus
+  textSeconds: 5,        // durasi kartu kata-kata
+  musicVolume: 0.85,
+  shuffle: false,        // true = urutan foto diacak
+
+  // Kartu kata-kata muncul saat foto ke-N sudah ditampilkan. Bebas diubah / dihapus.
+  interludes: {
+    28: "Awalnya kita cuma sekumpulan orang asing…",
+    38: "…lalu jadi keluarga.",
+    48: "Ada tawa. Ada drama. Ada begadang bareng.",
+    58: "Dan semuanya berharga."
+  }
+};
+
+const PHOTO_IDS = `
+13O98ZyVHs6vX-d-tcDWnZwIP2hpYzIE5
+1rK5uSc_1ARLIsNztOFcLpLpNmaJ47Pfe
+1H5m0TcMwKoAx8JM-2vyEfhAM34QQnKet
+1DrXboxiaM5xN7aiZq9wUAmLkNzr4V-69
+1K-WEGLI9AsFKs0vHi416go4lxyESxsq6
+1-UXgDH9ZDoxVH4awgZBbqTl-b1gpaSAS
+1mN0tcsjPGCFqB1FD_WhmybqeAVA66N8W
+1I8paZ9WS6QjiyX3q_77l9eN_FKqY79JR
+13IKe1dodNtrxq5H4ctJ8GSP5DyMIuyeR
+18NtxHyGsEqENrXyGmQBhsm6zRsf3h8lJ
+10xuutQwdVuwVYDphAckOkPf9ZugXMzn9
+1AqC0VEHxPf1bDjr72jDLCTAl57usXxOm
+1XAMmQp38Bhm81_jc--U7e8fpipBVVYpm
+1JDZYJ5ktW2kKvXyIFZrKgWffIYXVThEV
+1TPW9sGRttAR-EMktaDWICiaKgvfKNqVV
+1iJPtTCJ3DrwUKJb6eQP2vDLRgz__13cz
+12SEbxfXapqsqX5gVnnie_zP4QC1hrVHA
+1jmjVJefsrZNoFTULSsdLnFAzNL6UcoLA
+1HXGiowcaaXQ1Q7xSVaFxpNv9q-NCpd5Y
+184fePAzuaDK8A2zMhoUxN66mk-75Z9EU
+1s1LcT4Rm4kvN_GCY4WovkAyW9kpV7eFk
+1aVVGEPdNdZsMLC23lyNlH3hUhE5xgcd4
+192uQWzjJCz4aGzq0QcwotTcfDNJLoVQT
+1XQ2lvRo_h6LrCAiqusPIF4gLQPSevc6K
+1ipAJSE3EFffZAjJInYjpiiZ8RJKJxeC4
+1Y0tSYskW7ALwzJjg78-xzkcorY0kTmSf
+1V5BIXdMMUaq7vw_nftiec6Tijp_xohDI
+1pQVGT9HITts2X1roFMYvBW-vx_aU3oWZ
+18IFqTRJxkoir_2lIA8G-ENOjexbbsqeW
+1L2bElQqHclhlBR92xqQ6-d0PzktJy6tq
+1CSAnnO4trO1JHFVcztUYDxizwdVuYzd5
+19Rr35usC4bnk0q5FboR_RN6WNoela2xd
+1h8ekW6vfLzvI9EcN3RHun8kBTH6AVEmq
+11KHqRs0xoRYF_cegVJEqZXfC-YnasPe8
+1y5k-LOmdgvlvlWlkf5xI8Yu2eKjZwboZ
+1E6Q_f_p-nvqbkIggJn138KbgK5Mknnib
+1iFA8Jk4yQx3j14D6w3gIn_qFMkA1hZXJ
+1PMNRC47ivoIIEXMT8c77fqxdDB8uesa8
+1_sTzJeM8ghtKOh40e9lrxF_09bPoS2cW
+1Uosxb6QUjG4Q8dMvY7sCkPi5osZlgWu8
+1zIeDHWtZOH-ttveCZrNUfbxuHyzCB_B0
+1JtDihoI1sj471vNF9A8qtdferJM00JYu
+1iDLQPZzJhYSu7ToCYvKY7kMf3Ozr-t61
+1_CajsGNC734neVZQxqWfULQY3UNxPQbT
+1n70PCdAU7YDuaC1GXDfd0b3RjezAG1d6
+1mjrSZ6c5MKP7071SPplIUP0O-KtWCiwD
+1q-0rP2OUC9cJ58qj3hsqJZy-zo9VOEls
+1mdQcZMRpHZaPPuGyT59kid_5eLkRMPMa
+1VtVMGcgfwswrIl3vlRwTulp2Vjbob01O
+1vg4KK3cYVDsPqPxIdCblPIDsGF5LYVGX
+1MnFpQiGS00K6qFLmTUDBAUZFs8ZVYf13
+1lxbQFkGz64F99KGB1klY0_dy84KiLF_s
+1P7vKIbe5lWP1CYqmZXBkr07HMv1pBCQU
+1MuDTLmuHL16a5CJYVn5UIBDWuZ22XpZ2
+1KU_y0tnacu95O_mhrPhSyutejhF7hHUp
+1d1tf3liKSHx0FRYbDMYmz9R6rW7HHJgR
+1PzXWOtpJe6dX87FtqrfRtdcuGKE7QsT5
+1LYzWfT81Akv2TZgqR98MaQvdbia6jgUf
+1wKVL58cLzoIivmY136g34bZmZyHcpqyz
+1rCJcQVp8kDcpsb4wnOfA-zROU2PrDn2s
+1MSTNMuqvPNOvu0DexSWKCi5J3fher6th
+10CqZYaOFx-CwG82gX-s3axeAn5BR5VpV
+1PNXdNbyxTAdQxd8cIO_lfouVj7ewf_bG
+1Z5W7-QfYpEEMNdCJLFu--LPYZkT2YzPl
+1SMpFeMCAX3dxgvR7eHTrd6YqbJiMbUCL
+1yvszw_GMEGKI7Eo4EOGbdvhTe81_KJ0N
+1VoE4GQm7bUPakxI5MJa2v-ukUxbO8u1C
+`.trim().split(/\s+/);
+
+/* =====================================================
+   MESIN (tidak perlu diubah)
+   ===================================================== */
+const $ = s => document.querySelector(s);
+const url = id => `https://lh3.googleusercontent.com/d/${id}=s800`;
+const music = $('#music');
+let N = 20, cols = 5, rows = 4, ORDER = [];
+
+let photos = PHOTO_IDS.map(url);
+if (CONFIG.shuffle) photos.sort(() => Math.random() - .5);
+
+document.title = `${CONFIG.clanName} — Kenangan Terakhir`;
+$('#title').innerHTML = `<b>${CONFIG.clanName}</b>`;
+$('#iKicker').textContent = CONFIG.introKicker;
+$('#iTitle').innerHTML = CONFIG.introTitle;
+$('#iSub').textContent = CONFIG.introSub;
+$('#oKicker').textContent = CONFIG.outroKicker;
+$('#oTitle').innerHTML = CONFIG.outroTitle;
+$('#oSub').textContent = CONFIG.outroSub;
+
+function rnd(a, b){ return a + Math.random() * (b - a); }
+
+// ---- Preload ----
+const cache = new Map();
+function tryImg(src){
+  return new Promise(res => {
+    const im = new Image();
+    im.onload = () => res({ ok: true, src });
+    im.onerror = () => res({ ok: false, src });
+    im.src = src;
+  });
+}
+function load(src){
+  if (cache.has(src)) return cache.get(src);
+  const p = tryImg(src).then(r => r.ok ? r : tryImg(src.replace(/=s\d+$/, '=s0')));
+  cache.set(src, p);
+  return p;
+}
+
+// ---- Bangun dinding ----
+const wall = $('#wall');
+let tiles = [];
+const gcd = (a, b) => b ? gcd(b, a % b) : a;
+function computeLayout(){
+  const land = innerWidth >= innerHeight;
+  const g = land ? CONFIG.gridLandscape : CONFIG.gridPortrait;
+  cols = g.cols; rows = g.rows; N = cols * rows;
+  let stride = Math.max(1, Math.round(N * .38));
+  while (gcd(stride, N) !== 1) stride++;
+  ORDER = Array.from({ length: N }, (_, k) => (k * stride) % N);   // urutan ganti selang-seling & berjauhan
+}
+function buildWall(){
+  computeLayout();
+  wall.innerHTML = '';
+  wall.style.gridTemplateColumns = `repeat(${cols},1fr)`;
+  wall.style.gridTemplateRows = `repeat(${rows},1fr)`;
+  tiles = [];
+  for (let i = 0; i < N; i++){
+    const el = document.createElement('div');
+    el.className = 'tile';
+    const a = document.createElement('img'), b = document.createElement('img');
+    a.alt = b.alt = '';
+    a.decoding = b.decoding = 'async';
+    el.append(a, b);
+    wall.appendChild(el);
+    tiles.push({ el, imgs: [a, b], cur: 1 });   // cur=1 → foto pertama masuk ke imgs[0]
+  }
+}
+computeLayout();
+
+async function setTile(t, src){
+  const r = await load(src);
+  if (!r.ok) return false;
+  const nxt = t.imgs[1 - t.cur], old = t.imgs[t.cur];
+  nxt.src = r.src;
+  try { await nxt.decode(); } catch (e) {}
+  nxt.classList.add('show');
+  old.classList.remove('show');
+  t.cur = 1 - t.cur;
+  t.el.classList.remove('pulse'); void t.el.offsetWidth; t.el.classList.add('pulse');
+  return true;
+}
+
+// ---- State ----
+let phase = 'idle';        // idle | reveal | run | card | ending
+let paused = false;
+let qi = 0, swapIdx = 0, acc = 0, cardAcc = 0, endAcc = 0, busy = false, lastT = 0;
+let doneInter = new Set();
+const counter = $('#counter');
+const card = $('#card');
+
+function updateCounter(){
+  counter.textContent = String(Math.min(qi, photos.length)).padStart(2, '0') + ' / ' + String(photos.length).padStart(2, '0');
+}
+
+function preloadAhead(){
+  for (let k = 0; k < 6; k++){ const s = photos[qi + k]; if (s) load(s); }
+}
+
+async function doSwap(){
+  if (busy) return;
+  if (qi >= photos.length){ phase = 'ending'; endAcc = 0; return; }
+  const kk = Object.keys(CONFIG.interludes).map(Number).sort((a, b) => a - b).find(k => qi >= k && !doneInter.has(k));
+  const key = kk !== undefined ? CONFIG.interludes[kk] : null;
+  if (key){
+    doneInter.add(kk);
+    card.querySelector('span').textContent = key;
+    card.classList.add('show');
+    wall.classList.add('dim');
+    phase = 'card'; cardAcc = 0;
+    return;
+  }
+  busy = true;
+  const t = tiles[ORDER[swapIdx++ % N]];
+  const src = photos[qi++];
+  preloadAhead();
+  const ok = await setTile(t, src);
+  if (!ok){ swapIdx--; }      // foto gagal → coba foto berikutnya di tile yang sama
+  updateCounter();
+  busy = false;
+}
+
+function tick(t){
+  requestAnimationFrame(tick);
+  const dt = Math.min(.1, (t - lastT) / 1000 || 0);
+  lastT = t;
+  if (paused) return;
+  if (phase === 'run'){
+    acc += dt;
+    if (acc >= CONFIG.swapEverySec){ acc = 0; doSwap(); }
+  } else if (phase === 'card'){
+    cardAcc += dt;
+    if (cardAcc >= CONFIG.textSeconds){
+      card.classList.remove('show');
+      wall.classList.remove('dim');
+      phase = 'run'; acc = -1;       // jeda sedikit sebelum lanjut
+    }
+  } else if (phase === 'ending'){
+    endAcc += dt;
+    if (endAcc >= 5) finale();
+  }
+}
+
+// ---- Musik ----
+function fadeTo(vol, ms = 1500){
+  const from = music.volume, t0 = performance.now();
+  (function step(now){
+    const k = Math.min(1, (now - t0) / ms);
+    music.volume = Math.max(0, Math.min(1, from + (vol - from) * k));
+    if (k < 1) requestAnimationFrame(step);
+  })(performance.now());
+}
+let muted = false;
+function setMute(m){
+  muted = m;
+  $('#icSound').classList.toggle('hide', m);
+  $('#icMute').classList.toggle('hide', !m);
+  fadeTo(m ? 0 : CONFIG.musicVolume, 500);
+}
+
+// ---- Alur ----
+async function start(){
+  paused = false; applyPause();
+  phase = 'reveal';
+  qi = 0; swapIdx = 0; acc = 0; busy = false; doneInter = new Set();
+  card.classList.remove('show'); wall.classList.remove('dim');
+  buildWall();
+
+  $('#intro').classList.add('off');
+  $('#outro').classList.add('off');
+  document.body.classList.add('started');
+  music.volume = 0; music.currentTime = 0;
+  music.play().catch(() => {});
+  fadeTo(muted ? 0 : CONFIG.musicVolume, 3000);
+
+  // 10 foto pertama muncul bergantian (stagger)
+  const first = Math.min(N, photos.length);
+  for (let k = 0; k < first; k++){
+    const t = tiles[ORDER[k]];
+    const src = photos[qi++];
+    await new Promise(r => setTimeout(r, 200));
+    setTile(t, src).then(() => { t.el.classList.add('in'); updateCounter(); });
+  }
+  swapIdx = first;
+  preloadAhead();
+  await new Promise(r => setTimeout(r, 2200));
+  phase = 'run'; acc = 0;
+}
+
+function finale(){
+  phase = 'idle';
+  document.body.classList.remove('started');
+  tiles.forEach(t => t.el.classList.remove('in'));
+  $('#outro').classList.remove('off');
+  burst();
+}
+
+function applyPause(){
+  document.body.classList.toggle('paused', paused);
+  $('#icPause').classList.toggle('hide', paused);
+  $('#icPlay').classList.toggle('hide', !paused);
+}
+const toggle = () => {
+  if (phase === 'idle') return;
+  paused = !paused; applyPause();
+  paused ? music.pause() : music.play().catch(() => {});
+};
+
+$('#startBtn').addEventListener('click', async e => {
+  const b = e.currentTarget;
+  b.disabled = true; b.textContent = 'Memuat…';
+  const first = photos.slice(0, N).map(load);
+  await Promise.race([Promise.all(first), new Promise(r => setTimeout(r, 8000))]);
+  b.disabled = false; b.textContent = 'Mulai';
+  start();
+});
+$('#replayBtn').addEventListener('click', start);
+$('#bPlay').onclick = toggle;
+$('#bMute').onclick = () => setMute(!muted);
+const toggleFull = () => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.();
+$('#bFull').onclick = toggleFull;
+
+addEventListener('keydown', e => {
+  if (e.key === ' '){ e.preventDefault(); toggle(); }
+  else if (e.key.toLowerCase() === 'm') setMute(!muted);
+  else if (e.key.toLowerCase() === 'f') toggleFull();
+});
+
+let uiTimer;
+function pokeUI(){
+  document.body.classList.add('show-ui');
+  clearTimeout(uiTimer);
+  uiTimer = setTimeout(() => document.body.classList.remove('show-ui'), 3000);
+}
+['mousemove', 'touchstart', 'keydown'].forEach(ev => addEventListener(ev, pokeUI, { passive: true }));
+
+// ---- Sparkles (ringan) ----
+const cv = $('#sparkles'), cx = cv.getContext('2d');
+let W, H, parts = [];
+function resize(){ W = cv.width = innerWidth; H = cv.height = innerHeight; }
+addEventListener('resize', resize); resize();
+const count = innerWidth < 700 ? 16 : 30;
+function mk(b){
+  return {
+    x: b ? W / 2 : Math.random() * W,
+    y: b ? H / 2 : H + 10,
+    r: rnd(.6, 2.2),
+    vx: b ? rnd(-6, 6) : rnd(-.15, .15),
+    vy: b ? rnd(-6, 6) : -rnd(.15, .6),
+    a: rnd(.2, .8), tw: rnd(0, 6.28), life: b ? 1 : 0
+  };
+}
+for (let i = 0; i < count; i++){ const p = mk(false); p.y = Math.random() * H; parts.push(p); }
+function burst(){ for (let i = 0; i < 100; i++) parts.push(mk(true)); }
+const sprite = document.createElement('canvas');
+sprite.width = sprite.height = 32;
+(function(){
+  const g = sprite.getContext('2d');
+  const gr = g.createRadialGradient(16, 16, 0, 16, 16, 16);
+  gr.addColorStop(0, 'rgba(255,230,180,1)');
+  gr.addColorStop(.3, 'rgba(255,205,125,.55)');
+  gr.addColorStop(1, 'rgba(255,200,120,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 32, 32);
+})();
+function draw(){
+  cx.clearRect(0, 0, W, H);
+  for (let i = parts.length - 1; i >= 0; i--){
+    const p = parts[i];
+    p.x += p.vx; p.y += p.vy; p.tw += .04;
+    if (p.life){ p.vx *= .97; p.vy *= .97; p.life -= .006; if (p.life <= 0){ parts.splice(i, 1); continue; } }
+    else if (p.y < -10){ p.y = H + 10; p.x = Math.random() * W; }
+    cx.globalAlpha = p.a * (.6 + .4 * Math.sin(p.tw)) * (p.life || 1);
+    const z = p.r * 7;
+    cx.drawImage(sprite, p.x - z / 2, p.y - z / 2, z, z);
+  }
+  cx.globalAlpha = 1;
+  requestAnimationFrame(draw);
+}
+draw();
+requestAnimationFrame(tick);
+
+// preload 10 foto pertama selagi di layar intro
+photos.slice(0, N).forEach(load);
+</script>
+</body>
+</html>
