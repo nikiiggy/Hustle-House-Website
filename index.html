@@ -2,6 +2,8 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hustle House Family — Kenangan Terakhir</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -437,8 +439,23 @@ $('#startBtn').addEventListener('click', async e => {
 $('#replayBtn').addEventListener('click', start);
 $('#bPlay').onclick = toggle;
 $('#bMute').onclick = () => setMute(!muted);
-const toggleFull = () => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.();
-$('#bFull').onclick = toggleFull;
+const root = document.documentElement;
+const fsEl = () => document.fullscreenElement || document.webkitFullscreenElement || null;
+const canFS = !!(root.requestFullscreen || root.webkitRequestFullscreen);
+function toggleFull(){
+  try {
+    if (fsEl()){
+      (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    } else {
+      const req = root.requestFullscreen || root.webkitRequestFullscreen;
+      const r = req.call(root);
+      if (r && r.catch) r.catch(() => {});
+    }
+  } catch (e) {}
+}
+if (!canFS) $('#bFull').classList.add('hide');   // iPhone Safari tidak mendukung fullscreen
+$('#bFull').addEventListener('click', toggleFull);
+wall.addEventListener('dblclick', toggleFull);
 
 addEventListener('keydown', e => {
   if (e.key === ' '){ e.preventDefault(); toggle(); }
